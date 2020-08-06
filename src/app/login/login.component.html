@@ -1,3 +1,36 @@
-<p>
-  login works!
-</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <section class="conteiner-fluid">
+        <section class="row justify-content-center bg">
+            <form class="form-container">
+                <h5>Sistema De Control Politico</h5>
+                <div class="form-group">
+                    <b>Escoja Su Rol Administrativo</b><br>
+                    <select [(ngModel)]="seletedTipoUsuario.id_tipo_usuario" class="form-control" name="tipo.id_tipo_usuario">
+                            <option *ngFor="let tipo of tipoUsuario" [value]="tipo.id_tipo_usuario">{{tipo.nom_tipo_usuario}}</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <b>Usuario</b>
+                    <input type="email" [(ngModel)]="seletedUsuario.login" name="login" class="form-control" placeholder="Escriba Aqui">
+                </div>
+                <div class="form-group">
+                    <b>Contraseña</b>
+                    <input type="password" [(ngModel)]="seletedUsuario.contrasena" name="contrasena" class="form-control" placeholder="Escriba Aqui">
+                </div>
+                <button class="btn btn-danger btn-block" (click)="login()">Ingresar</button>
+            </form>
+        </section>
+    </section>
+</body>
+
+</html>
