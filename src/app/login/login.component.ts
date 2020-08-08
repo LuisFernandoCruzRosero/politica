@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
     });
 
     /* Se inicializa el tipo de usuario con 1 para que tome un tipo valido por defecto */
-    this.seletedTipoUsuario.id_tipo_usuario=1;
+    this.seletedTipoUsuario.id_tipo_usuario = 1;
   }
 
   login() {
@@ -77,9 +77,9 @@ export class LoginComponent implements OnInit {
     let encontradoUsuarioContrasena:boolean = false;
     let encontradoUsuarioTipoUsuario:boolean = false;
     if (this.seletedUsuario.login == '') {
-      alert('Llene el campo usuario');
+      alert('Llene el campo usuari@');
     } else if (this.seletedUsuario.contrasena == '') {
-      alert('llene el campo Contraseña');
+      alert('llene el campo Contraseñ@');
     } else {
       for(let i = 0; i < this.usuario.length; i++) {
         if(this.seletedUsuario.login == this.usuario[i].login) {
@@ -123,8 +123,11 @@ export class LoginComponent implements OnInit {
       
       if (encontradoUsuarioLogin == false) {
         alert('Usuario invalid@');
+        this.seletedUsuario.login = '';
+        this.seletedUsuario.contrasena = '';
       } else if (encontradoUsuarioContrasena == false) {
         alert('Contraseña invalid@');
+        this.seletedUsuario.contrasena = '';
       } else if (encontradoUsuarioTipoUsuario) {
         alert('Tipo Usuario invalid@');
       }
