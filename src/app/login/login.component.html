@@ -1,36 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head>-width
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 
 <body>
-    <section class="conteiner-fluid">
-        <section class="row justify-content-center bg">
-            <form class="form-container">
-                <h5>Sistema De Control Politico</h5>
-                <div class="form-group">
-                    <b>Escoja Su Rol Administrativo</b><br>
-                    <select [(ngModel)]="seletedTipoUsuario.id_tipo_usuario" class="form-control" name="tipo.id_tipo_usuario">
-                            <option *ngFor="let tipo of tipoUsuario" [value]="tipo.id_tipo_usuario">{{tipo.nom_tipo_usuario}}</option>
-                        </select>
+    <br><br><br><br><br><br>
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Iniciar Sesion </h3>
+                    <div class="d-flex justify-content-end social_icon">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <b>Usuario</b>
-                    <input type="email" [(ngModel)]="seletedUsuario.login" name="login" class="form-control" placeholder="Escriba Aqui">
+                <div class="card-body">
+                    <form>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="usuario">
+
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" class="form-control" placeholder="contraseña">
+                        </div>
+                        <div class="form-group">
+                            <select [(ngModel)]="seletedTipoUsuario.id_tipo_usuario" class="form-control" name="tipo.id_tipo_usuario">
+                                <option *ngFor="let tipo of tipoUsuario" [value]="tipo.id_tipo_usuario">{{tipo.nom_tipo_usuario}}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="btn" (click)="login()">Ingresar</button>
+                        </div>
+
+
+                    </form>
                 </div>
-                <div class="form-group">
-                    <b>Contraseña</b>
-                    <input type="password" [(ngModel)]="seletedUsuario.contrasena" name="contrasena" class="form-control" placeholder="Escriba Aqui">
+                <div class="card-footer">
+                    <div class="d-flex justify-content-center">
+                        <a href="#">¿olvidaste tu contraseña?</a>
+                    </div>
                 </div>
-                <button class="btn btn-danger btn-block" (click)="login()">Ingresar</button>
-            </form>
-        </section>
-    </section>
+            </div>
+        </div>
+    </div>
+    <br><br><br><br><br><br><br>
 </body>
 
 </html>
+
+<router-outlet></router-outlet>
