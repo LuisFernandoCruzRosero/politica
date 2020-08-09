@@ -28,6 +28,8 @@ import { LugarMesaComponent } from './lugar-mesa/lugar-mesa.component';
 import { RegistraduriaComponent } from './registraduria/registraduria.component';
 import { ErrorComponent } from './error/error.component';
 import { RecuperarPasswordComponent } from './recuperar-password/recuperar-password.component';
+import { SalirComponent } from './salir/salir.component';
+import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { RecuperarPasswordComponent } from './recuperar-password/recuperar-passw
     LugarMesaComponent,
     RegistraduriaComponent,
     ErrorComponent,
-    RecuperarPasswordComponent
+    RecuperarPasswordComponent,
+    SalirComponent,
+    GeolocalizacionComponent
   ],
   imports: [
     BrowserModule,

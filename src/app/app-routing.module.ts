@@ -21,6 +21,8 @@ import { MesaComponent } from './mesa/mesa.component';
 import { RegistraduriaComponent } from './registraduria/registraduria.component';
 import { VotanteComponent } from './votante/votante.component';
 import { ErrorComponent } from './error/error.component';
+import { SalirComponent } from './salir/salir.component';
+import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 
 /* inicializa rutas */
 const routes: Routes = [
@@ -42,6 +44,8 @@ const routes: Routes = [
   { path : 'mesa', component: MesaComponent },
   { path : 'registraduria', component: RegistraduriaComponent },
   { path : 'votante', component: VotanteComponent },
+  { path : 'geolocalizacion', component: GeolocalizacionComponent },
+  { path : 'salir', component: SalirComponent },
   { path : '**', component: ErrorComponent },
 ];
 

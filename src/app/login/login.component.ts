@@ -92,11 +92,11 @@ export class LoginComponent implements OnInit {
                     user_usu:this.seletedUsuario.login, tipo_usuario:this.seletedTipoUsuario.id_tipo_usuario
                   });
                 if (this.seletedTipoUsuario.id_tipo_usuario == 1) {
-                  this.route.navigateByUrl('/');
+                  this.route.navigateByUrl('/perfilAdministrador');
                 } else if (this.seletedTipoUsuario.id_tipo_usuario == 2) {
-                  this.route.navigateByUrl('/');
+                  this.route.navigateByUrl('/perfilCandidato');
                 } else if (this.seletedTipoUsuario.id_tipo_usuario == 3) {
-                  this.route.navigateByUrl('/');
+                  this.route.navigateByUrl('/perfilCoordinador');
                 }
               }
             }
@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit {
                 this.loginServi.InsertToken({
                   user_usu:this.seletedUsuario.login,tipo_usuario:this.seletedTipoUsuario.id_tipo_usuario
                 });
-                this.route.navigateByUrl('/');
+                this.route.navigateByUrl('/perfilAdministrador');
               }
             }
          }
