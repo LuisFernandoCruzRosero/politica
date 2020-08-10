@@ -72,6 +72,7 @@ export class LoginComponent implements OnInit {
     this.seletedTipoUsuario.id_tipo_usuario = 1;
   }
 
+  /* Llama al evento del boton en la vista html */
   login() {
     let encontradoUsuarioLogin:boolean = false;
     let encontradoUsuarioContrasena:boolean = false;
@@ -88,9 +89,6 @@ export class LoginComponent implements OnInit {
               encontradoUsuarioContrasena = true;
               if (this.seletedTipoUsuario.id_tipo_usuario == this.usuario[i].id_tipo_usuario) {
                 encontradoUsuarioTipoUsuario = true;
-                this.loginServi.InsertToken({
-                    user_usu:this.seletedUsuario.login, tipo_usuario:this.seletedTipoUsuario.id_tipo_usuario
-                  });
                 if (this.seletedTipoUsuario.id_tipo_usuario == 1) {
                   this.route.navigateByUrl('/perfilAdministrador');
                 } else if (this.seletedTipoUsuario.id_tipo_usuario == 2) {
@@ -111,9 +109,6 @@ export class LoginComponent implements OnInit {
             if (this.seletedTipoUsuario.id_tipo_usuario == this.digitador[i].id_tipo_usuario) {
               encontradoUsuarioTipoUsuario = true;
               if (this.seletedTipoUsuario.id_tipo_usuario == 4) {
-                this.loginServi.InsertToken({
-                  user_usu:this.seletedUsuario.login,tipo_usuario:this.seletedTipoUsuario.id_tipo_usuario
-                });
                 this.route.navigateByUrl('/perfilAdministrador');
               }
             }
@@ -130,6 +125,10 @@ export class LoginComponent implements OnInit {
         this.seletedUsuario.contrasena = '';
       } else if (encontradoUsuarioTipoUsuario) {
         alert('Tipo Usuario invalid@');
+      } else {
+        this.loginServi.InsertToken({
+          user_usu:this.seletedUsuario.login, tipo_usuario: this.seletedTipoUsuario.id_tipo_usuario
+        });
       }
     }
   }

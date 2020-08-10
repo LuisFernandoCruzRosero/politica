@@ -1,4 +1,15 @@
+/* Servicios */
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../servicios/login.service';
+import { Router } from '@angular/router';
+import { MesaService } from '../servicios/mesa.service';
+import { HttpErrorResponse } from '@angular/common/http';
+
+/* Clases */
+import { Mesa } from '../modelos/mesa';
+import { UsuarioFindAll } from '../modelos/usuario-find-all';
+import { DigitadorFindAll } from '../modelos/digitador-find-all';
+import { Token } from '../modelos/token';
 
 @Component({
   selector: 'app-mesa',
@@ -7,9 +18,94 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MesaComponent implements OnInit {
 
-  constructor() { }
+  /* Total de Mesas Ingresadas */
+  totalMesa:Number = 0;
+
+  /* Inicializo un arreglo del objeto Mesa */
+  mesas:Mesa[] = [];
+
+  /* Inicializamos un arreglo del objeto Usuaio */
+  usuario:UsuarioFindAll[] = [];
+
+  /* Inicializamos un arreglo del objeto Digitador */
+  digitador:DigitadorFindAll[] = [];
+
+  /* Inicializo el objeto Mesa Vavio */
+  mesa:Mesa = new Mesa(null, '');
+
+  /* Verificar la Ayutenticidad */
+  encontrado:Boolean = false;
+
+  /* Para bloquear desdel ts la viste del HTML dependiendo el tipo de usuario */
+  vista:Number;
+
+  token:Token;
+
+  /* Se llama a login service para verificar la autenticidad de usuario */
+  /* Se llama a router para poder navegar del ts a un html deacuerdo ala autenticidad */
+  /* Se llama a Mesa service para poder realizar la funciones del CRUD del modulo de las mesas */
+  constructor(private loginServi:LoginService, private route:Router, private mesaService:MesaService) {}
 
   ngOnInit() {
+
+    /* Consulto los Datos de la tabla usuario */
+    this.loginServi.findAllUsuario().then(resultado => {
+      /* Asigno los datos de la tabla usuario al arreglo usuario */
+      this.usuario = resultado;
+      /* Consulto los Datos de la tabla digitador */
+      this.loginServi.findAllDigitador().then(resultado => {
+        /* Asigno los datos de la tabla digitador al arreglo digitador */
+        this.digitador = resultado;
+        try {
+          /* Consulto Tokent de Autenticidad */
+          this.token=this.loginServi.findAllToken();
+          /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
+          this.vista = this.token.tipo_usuario;
+          /* Busco el usuario logueado */
+          for (let i = 0; i < this.usuario.length; i++) {
+            if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == 1) {
+              /* Si la encuentro cambio el estado a true */
+              this.encontrado = true;
+            }
+          }
+           /* Busco el digitador logueado */
+          for (let i = 0; i< this.digitador.length; i++) {
+            if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == 4) {
+              /* Si la encuentro cambio el estado a true */
+              this.encontrado = true;
+            }
+          }
+          /* Si el usuario logueado existe */
+          if (this.encontrado == true) {
+            /* Consulto Los datos de la tabla Mesa */
+            this.mesaService.findAllMesa().then( resultado => {
+              /* Asigno al arreglo Mesas todas las existenten en la tabla */
+              this.mesas = resultado;
+            })
+          }
+        } catch (e) {
+          /* Si no encuentra el usuario */
+          if(this.encontrado == false){
+            /* Navega al login */
+            this.route.navigate(['/']);
+          }
+        }
+      }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
+        } else {
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }, (err:HttpErrorResponse) => {
+      if (err.error instanceof Error) {
+        alert("a ocurrido un errror cliente");
+      } else {
+        alert("a ocurrido un errror servidor");
+      }
+    });
+
   }
 
+  
 }
