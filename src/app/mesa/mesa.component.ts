@@ -30,8 +30,12 @@ export class MesaComponent implements OnInit {
   /* Inicializamos un arreglo del objeto Digitador */
   digitador:DigitadorFindAll[] = [];
 
-  /* Inicializo el objeto Mesa Vavio */
-  mesa:Mesa = new Mesa(null, '');
+  /* Inicializo el objeto Mesa Vavio Para formulario Agregar*/
+  seletedMesaAgregar:Mesa = new Mesa(null, '');
+
+  /* Inicializo el objeto Mesa Vavio Para formulario Actualizar*/
+  seletedMesaActualizar:Mesa = new Mesa(null, '');
+
 
   /* Verificar la Ayutenticidad */
   encontrado:Boolean = false;
@@ -52,44 +56,50 @@ export class MesaComponent implements OnInit {
     this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
       this.usuario = resultado;
+      console.log(this.usuario);
       /* Consulto los Datos de la tabla digitador */
       this.loginServi.findAllDigitador().then(resultado => {
         /* Asigno los datos de la tabla digitador al arreglo digitador */
         this.digitador = resultado;
-        try {
-          /* Consulto Tokent de Autenticidad */
-          this.token=this.loginServi.findAllToken();
-          /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
-          this.vista = this.token.tipo_usuario;
-          /* Busco el usuario logueado */
-          for (let i = 0; i < this.usuario.length; i++) {
-            if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == 1) {
+        /* Consulto Los datos de la tabla Mesa */
+        this.mesaService.findAllMesa().then(resultado => {
+          /* Asigno al arreglo Mesas todas las existenten en la tabla */
+          this.mesas = resultado;
+          console.log(this.mesas);
+          console.log(this.digitador);
+          try {
+            /* Consulto Tokent de Autenticidad */
+            this.token=this.loginServi.findAllToken();
+            /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
+            this.vista = this.token.tipo_usuario;
+            /* Busco el usuario logueado */
+            for (let i = 0; i < this.usuario.length; i++) {
+              if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == 1) {
               /* Si la encuentro cambio el estado a true */
               this.encontrado = true;
+              }
             }
-          }
-           /* Busco el digitador logueado */
-          for (let i = 0; i< this.digitador.length; i++) {
-            if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == 4) {
+            /* Busco el digitador logueado */
+            for (let i = 0; i< this.digitador.length; i++) {
+              if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == 4) {
               /* Si la encuentro cambio el estado a true */
               this.encontrado = true;
+              }
             }
-          }
-          /* Si el usuario logueado existe */
-          if (this.encontrado == true) {
-            /* Consulto Los datos de la tabla Mesa */
-            this.mesaService.findAllMesa().then( resultado => {
-              /* Asigno al arreglo Mesas todas las existenten en la tabla */
-              this.mesas = resultado;
-            })
-          }
-        } catch (e) {
-          /* Si no encuentra el usuario */
-          if(this.encontrado == false){
+          } catch (e) {
+            /* Si no encuentra el usuario */
+            if(this.encontrado == false){
             /* Navega al login */
-            this.route.navigate(['/']);
+            //this.route.navigate(['/']);
+            }
           }
+      }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
+        } else {
+          alert("a ocurrido un errror servidor");
         }
+      });
       }, (err:HttpErrorResponse) => {
         if (err.error instanceof Error) {
           alert("a ocurrido un errror cliente");
@@ -107,5 +117,50 @@ export class MesaComponent implements OnInit {
 
   }
 
-  
+  guardar() {
+    this.mesaService.insertMesa({
+      id_mesa: this.seletedMesaAgregar.id_mesa,
+      nom_mesa: this.seletedMesaAgregar.nom_mesa,
+    }).subscribe((resultado) =>{
+      alert("Se Agrego la Mesa");
+      this.ngOnInit();
+      this.seletedMesaAgregar.nom_mesa = '';
+    })
+  }
+
+  actualizar(mesa:Mesa){
+    this.seletedMesaActualizar = mesa;
+  }
+
+  actualizacion(){
+    this.mesaService.updateMesa({
+      id_mesa: this.seletedMesaActualizar.id_mesa,
+      nom_mesa:this.seletedMesaActualizar.nom_mesa
+    }).subscribe((modificado) =>{
+      alert("Se actualizo la mesa con exito");
+      this.ngOnInit();
+    },(err:HttpErrorResponse)=>{
+      if(err.error instanceof Error){
+        alert("a ocurrido un errror cliente");
+      }else{
+        alert("a ocurrido un errror servidor");
+      }
+   });
+   this.seletedMesaActualizar.id_mesa = null;
+  }
+
+  eliminar(id_mesa:Number){
+    if(confirm('estas seguro de querer eliminarlo')){
+      this.mesaService.deleteByIdMesa(id_mesa).subscribe((modificado) =>{
+        alert('Registro Eliminado Exito');
+        this.ngOnInit();
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
 }

@@ -66,12 +66,12 @@
 
     <div>
         <h4>Agregar Mesa </h4>
-        <input type="text">
-        <button>Agregar</button>
+        <input type="text" [(ngModel)]="seletedMesaAgregar.nom_mesa" placeholder="NUMERO DE MESA" name="nom_mesa">
+        <button (click)="guardar()">Agregar</button>
 
         <h4>Buscar </h4>
         <input type="text" placeholder="ID">
-        <input type="text" placeholder="N° MESA">
+        <input type="text" placeholder="NUMERO DE MESA">
         <button>Aceptar</button>
 
         <h4>Lista de Mesas </h4>
@@ -88,29 +88,26 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- cuerpo de la tabla  -->
-                <tr>
-                    <td>1</td>
-                    <td>01</td>
+                <tr *ngFor="let item of mesas">
+                    <td>{{item.id_mesa}}</td>
                     <td>
-                        <button>Actualizar</button>
-
-                        <button>Eliminar</button>
+                        <div *ngIf="seletedMesaActualizar.id_mesa!=item.id_mesa; else falso">
+                            {{item.nom_mesa}}
+                        </div>
+                        <ng-template #falso>
+                            <input type="text" [(ngModel)]="seletedMesaActualizar.nom_mesa" placeholder="NUMERO DE MESA" name="nom_mesa">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedMesaActualizar.id_mesa==item.id_mesa; else falso1">
+                            <button (click)="actualizacion()">Guardar</button>
+                        </div>
+                        <ng-template #falso1>
+                            <button (click)="actualizar(item)">Actualizar</button>
+                            <button (click)="eliminar(item.id_mesa)">Eliminar</button>
+                        </ng-template>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-
             </tbody>
         </table>
 
