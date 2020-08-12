@@ -19,6 +19,11 @@ export class MesaService {
     return this.http.get<Mesa[]>(ApiUrl + 'mesa').toPromise();
   }
 
+  /* Consulta una de las mesas registradas de la tabla mesa */
+  findByIdMesa(id_mesa:Number):Promise<Mesa[]>{
+    return this.http.get<Mesa[]>(ApiUrl + 'mesa/' + id_mesa).toPromise();
+  }
+
   /* Inserta un dato ala tabla Mesa */
   insertMesa(mesa:Mesa){
     return this.http.post<Mesa>(ApiUrl + 'mesa', mesa)
