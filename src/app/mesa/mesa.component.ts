@@ -50,6 +50,7 @@ export class MesaComponent implements OnInit {
   /* Se llama a Mesa service para poder realizar la funciones del CRUD del modulo de las mesas */
   constructor(private loginServi:LoginService, private route:Router, private mesaService:MesaService) {}
 
+  /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
 
     /* Consulto los Datos de la tabla usuario */
@@ -117,27 +118,39 @@ export class MesaComponent implements OnInit {
 
   }
 
+  /* Funcion Guardar Mesa */
   guardar() {
+    /* llama al Servicio de Mesa y la funcion de insertar mesa */
     this.mesaService.insertMesa({
+      /* Agrega a los datos del objeto los que se ponen en la caja de testo de agregar */
       id_mesa: this.seletedMesaAgregar.id_mesa,
       nom_mesa: this.seletedMesaAgregar.nom_mesa,
     }).subscribe((resultado) =>{
+      /* Se da respuesta Exitosa del servidor */
       alert("Se Agrego la Mesa");
+      /* se llama la funcion inicial para que recargue la pagina */
       this.ngOnInit();
+      /* se limpia el input de agregar */
       this.seletedMesaAgregar.nom_mesa = '';
     })
   }
 
+  /* se llena el objeto actualizar de tipo mesa deacuerdo ala seleccionada en la lista */
   actualizar(mesa:Mesa){
     this.seletedMesaActualizar = mesa;
   }
 
+  /* Funcion que actualiza lo seleccionado en base de datos */
   actualizacion(){
+    /* se llama el servicio mesa la funcion Update mesa */
     this.mesaService.updateMesa({
+      /* Agrega a los datos del objeto los que se ponen en la caja de testo de Actualizar  */
       id_mesa: this.seletedMesaActualizar.id_mesa,
-      nom_mesa:this.seletedMesaActualizar.nom_mesa
+      nom_mesa: this.seletedMesaActualizar.nom_mesa
     }).subscribe((modificado) =>{
+      /* Se da respuesta Exitosa del servidor */
       alert("Se actualizo la mesa con exito");
+      /* se llama la funcion inicial para que recargue la pagina */
       this.ngOnInit();
     },(err:HttpErrorResponse)=>{
       if(err.error instanceof Error){
@@ -146,13 +159,19 @@ export class MesaComponent implements OnInit {
         alert("a ocurrido un errror servidor");
       }
    });
+   /* se limpia el input de actualizar */
    this.seletedMesaActualizar.id_mesa = null;
   }
 
-  eliminar(id_mesa:Number){
-    if(confirm('estas seguro de querer eliminarlo')){
-      this.mesaService.deleteByIdMesa(id_mesa).subscribe((modificado) =>{
+  /* Funcion que elimina lo seleccionado en base de datos */
+  eliminar(mesa:Mesa){
+    /* dialogo de confirmacion de eliminar los datos */
+    if(confirm('estas seguro de querer eliminarlo id_mesa: ' + mesa.id_mesa + ' nombre mesa: ' + mesa.nom_mesa)){
+      /* se llama el servicio mesa la funcion eliminar */
+      this.mesaService.deleteByIdMesa(mesa.id_mesa).subscribe((modificado) =>{
+        /* Se da respuesta Exitosa del servidor */
         alert('Registro Eliminado Exito');
+        /* se llama la funcion inicial para que recargue la pagina */
         this.ngOnInit();
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
