@@ -74,6 +74,10 @@ button {
     font-weight: 50%;
 }
 
+.btn_Buscar button {
+    margin-left: 10px;
+}
+
 h4 {
     color: white;
     text-align: center;

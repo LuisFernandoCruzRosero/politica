@@ -20,8 +20,8 @@ export class MesaService {
   }
 
   /* Consulta una de las mesas registradas de la tabla mesa */
-  findByIdMesa(id_mesa:Number):Promise<Mesa[]>{
-    return this.http.get<Mesa[]>(ApiUrl + 'mesa/' + id_mesa).toPromise();
+  findByIdMesa(nom_mesa:String):Promise<Mesa[]>{
+    return this.http.get<Mesa[]>(ApiUrl + 'mesa/' + nom_mesa).toPromise();
   }
 
   /* Inserta un dato ala tabla Mesa */

@@ -69,11 +69,11 @@
         <input type="text" [(ngModel)]="seletedMesaAgregar.nom_mesa" placeholder="NUMERO DE MESA" name="nom_mesa">
         <button (click)="guardar()">Agregar</button>
 
-        <div>
-            <h4>Buscar </h4>
-            <input type="text" placeholder="ID">
-            <input type="text" placeholder="NUMERO DE MESA">
-            <button>Aceptar</button>
+        <div class="btn_Buscar">
+            <h4>Buscar</h4>
+            <input type="text" [(ngModel)]="seletedMesaBuscar.nom_mesa" placeholder="NUMERO DE MESA">
+            <button (click)="buscar()">Buscar</button>
+            <button (click)="listar()">listar</button>
         </div>
 
 

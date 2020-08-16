@@ -30,12 +30,14 @@ export class MesaComponent implements OnInit {
   /* Inicializamos un arreglo del objeto Digitador */
   digitador:DigitadorFindAll[] = [];
 
-  /* Inicializo el objeto Mesa Vavio Para formulario Agregar*/
+  /* Inicializo el objeto Mesa Para formulario Agregar*/
   seletedMesaAgregar:Mesa = new Mesa(null, '');
 
-  /* Inicializo el objeto Mesa Vavio Para formulario Actualizar*/
+  /* Inicializo el objeto Mesa Para formulario Actualizar*/
   seletedMesaActualizar:Mesa = new Mesa(null, '');
 
+  /* Inicializo el objeto Mesa Para formulario Buscar*/
+  seletedMesaBuscar:Mesa = new Mesa(null, '');
 
   /* Verificar la Ayutenticidad */
   encontrado:Boolean = false;
@@ -43,6 +45,7 @@ export class MesaComponent implements OnInit {
   /* Para bloquear desdel ts la viste del HTML dependiendo el tipo de usuario */
   vista:Number;
 
+  /* Token de verificacion de logueo */
   token:Token;
 
   /* Se llama a login service para verificar la autenticidad de usuario */
@@ -125,7 +128,7 @@ export class MesaComponent implements OnInit {
       /* Agrega a los datos del objeto los que se ponen en la caja de testo de agregar */
       id_mesa: this.seletedMesaAgregar.id_mesa,
       nom_mesa: this.seletedMesaAgregar.nom_mesa,
-    }).subscribe((resultado) =>{
+    }).subscribe((resultado) => {
       /* Se da respuesta Exitosa del servidor */
       alert("Se Agrego la Mesa");
       /* se llama la funcion inicial para que recargue la pagina */
@@ -147,12 +150,12 @@ export class MesaComponent implements OnInit {
       /* Agrega a los datos del objeto los que se ponen en la caja de testo de Actualizar  */
       id_mesa: this.seletedMesaActualizar.id_mesa,
       nom_mesa: this.seletedMesaActualizar.nom_mesa
-    }).subscribe((modificado) =>{
+    }).subscribe((modificado) => {
       /* Se da respuesta Exitosa del servidor */
       alert("Se actualizo la mesa con exito");
       /* se llama la funcion inicial para que recargue la pagina */
       this.ngOnInit();
-    },(err:HttpErrorResponse)=>{
+    },(err:HttpErrorResponse) => {
       if(err.error instanceof Error){
         alert("a ocurrido un errror cliente");
       }else{
@@ -173,7 +176,7 @@ export class MesaComponent implements OnInit {
         alert('Registro Eliminado Exito');
         /* se llama la funcion inicial para que recargue la pagina */
         this.ngOnInit();
-      },(err:HttpErrorResponse)=>{
+      },(err:HttpErrorResponse) => {
         if(err.error instanceof Error){
           alert("a ocurrido un errror cliente");
         }else{
@@ -181,5 +184,28 @@ export class MesaComponent implements OnInit {
         }
       });
     }
+  }
+
+  /* Funcion que busca lo escrito en el formulario buscar */
+  buscar(){
+    if (this.seletedMesaBuscar.nom_mesa != '') {
+      this.mesaService.findByIdMesa(this.seletedMesaBuscar.nom_mesa).then(resultado => {
+        this.mesas = resultado;
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+  /* Para volver a listar la data existente en la tabla mesa */
+  listar() {
+    /* Se llimpia el formulario buscar */
+    this.seletedMesaBuscar.nom_mesa = '';
+    /* esta funcion llena los arreglos de la data de la base de datos */
+    this.ngOnInit();
   }
 }
