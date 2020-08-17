@@ -21,8 +21,8 @@ export class ComunaService {
   }
 
   /*Consulta una de comuna de la tabla comunas*/
-  findByIdComuna(id_comuna:Number):Promise<Comuna[]>{
-    return this.http.get<Comuna[]>(ApiUrl + 'comuna/' + id_comuna).toPromise();
+  findByIdComuna(nom_comuna:String):Promise<Comuna[]>{
+    return this.http.get<Comuna[]>(ApiUrl + 'comuna/' + nom_comuna).toPromise();
   }
 
   /* Inserta un dato ala tabla Comuna */
@@ -38,6 +38,11 @@ export class ComunaService {
    /* Actualiza un dato de la tabla Comuna por id */
    updateComuna(comuna:Comuna){
     return this.http.put<Comuna>(ApiUrl + 'comuna/' + comuna.id_comuna, comuna);
+  }
+
+  /* Cuenta el total de todas las comunas */
+  findByIdTotalComuna(){
+    return this.http.get<any>(ApiUrl + 'comunaContar');
   }
 }
 
