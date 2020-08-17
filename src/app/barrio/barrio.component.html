@@ -64,15 +64,21 @@
         </div>
     </nav>
     <div>
-        <h4>Agregar Barrio </h4>
-        <input type="text">
-        <h4>Agregar Comuna </h4>
-        <input type="text">
+        <h4>AGREGAR BARRIO</h4>
+        <input type="text" [(ngModel)]="seletedBarrioAgregar.nom_barrio" placeholder="NOMBRE BARRIO" name="nom_barrio">
+        <input type="text" [(ngModel)]="seletedBarrioAgregar.latitud" placeholder="LATITUD" name="latitud">
+        <input type="text" [(ngModel)]="seletedBarrioAgregar.longitud" placeholder="LONGITUD" name="longitud">
+        <input type="text" [(ngModel)]="seletedBarrioAgregar.zona_roja" placeholder="ZONA ROJA" name="zona_roja">
+        <h4>SELECCIONE COMUNA:</h4>
+        <select [(ngModel)]="seletedComunaAgregar.id_comuna" (ngModelChange)="selectSectorBuscar($event)" name="item.id_comuna">
+            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+        </select>
         <button>Agregar</button>
 
-        <h4>Buscar </h4>
+        <h4>BUSCAR BARRIO </h4>
         <input type="text" placeholder="ID">
         <input type="text" placeholder="BARRIO">
+        <input type="text" placeholder="ZONA ROJA">
         <input type="text" placeholder="N° COMUNA">
         <button>Aceptar</button>
 
@@ -86,39 +92,85 @@
                 <tr>
                     <th>ID</th>
                     <th>BARRIO</th>
+                    <th>LATITUD</th>
+                    <th>LONGITUD</th>
+                    <th>ZONA ROJA</th>
                     <th>COMUNA</th>
                     <th>OPERACIÓN</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- cuerpo de la tabla  -->
-                <tr>
-                    <td>1</td>
-                    <td>union victoria</td>
-                    <td>01</td>
+                <tr *ngFor="let item of barriosAux">
+                    <td>{{item.id_barrio}}</td>
                     <td>
-                        <button>Actualizar</button>
+                        <div *ngIf="seletedBarrioActualizar.id_barrio != item.id_barrio; else falso">
+                            {{item.nom_barrio}}
+                        </div>
+                        <ng-template #falso>
+                            <input type="text" [(ngModel)]="seletedBarrioActualizar.nom_barrio" placeholder="NOMBRE DEL BARRIO" name="nom_barrio">
+                        </ng-template>
+                    </td>
 
-                        <button>Eliminar</button>
+                    <td>
+                        <div *ngIf="seletedBarrioActualizar.id_barrio != item.id_barrio; else falso1">
+                            {{item.latitud}}
+                        </div>
+                        <ng-template #falso1>
+                            <input type="text" [(ngModel)]="seletedBarrioActualizar.latitud" placeholder="LATITUD" name="latitud">
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedBarrioActualizar.id_barrio != item.id_barrio; else falso2">
+                            {{item.longitud}}
+                        </div>
+                        <ng-template #falso2>
+                            <input type="text" [(ngModel)]="seletedBarrioActualizar.longitud" placeholder="LONGITUD" name="longitud">
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedBarrioActualizar.id_barrio != item.id_barrio; else falso3">
+                            <div *ngIf="item.zona_roja != false; else falso10">
+                                SI
+                            </div>
+                            <ng-template #falso10>
+                                NO
+                            </ng-template>
+                        </div>
+                        <ng-template #falso3>
+                            <input type="text" [(ngModel)]="seletedBarrioActualizar.zona_roja" placeholder="ZONA ROJA" name="zona_roja">
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedBarrioActualizar.id_barrio != item.id_barrio; else falso4">
+                            {{item.nom_comuna}}
+                        </div>
+                        <ng-template #falso4>
+                            <select [(ngModel)]="seletedListarBarrioComuna.nom_comuna" (ngModelChange)="SelectBarrio($event)" class="form-control" name="item.nom_comuna">
+                                    <option *ngFor="let item of comunas" [value]="item.nom_comuna">{{item.nom_comuna}}</option>
+                                </select>
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedBarrioActualizar.id_barrio == item.id_barrio; else falso9">
+                            <button type="button" (click)="actualizacion()">Guardar</button>
+
+                        </div>
+                        <ng-template #falso9>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" (click)="actualizar(item)">Actualizar</button>
+                                <button type="button" (click)="eliminar(item)">Eliminar</button>
+                            </div>
+                        </ng-template>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-
             </tbody>
         </table>
-
     </div>
+
     <br><br><br><br><br>
 </body>
 

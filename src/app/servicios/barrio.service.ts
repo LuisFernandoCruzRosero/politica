@@ -44,4 +44,9 @@ export class BarrioService {
     return this.http.put<Barrio>(ApiUrl + 'barrio/' + barrio.id_barrio, barrio);
   }
 
+  /* Cuenta el total de todas los Barrios */
+  findByIdTotalBarrio(){
+    return this.http.get<any>(ApiUrl + 'barrioContar');
+  } 
+
 }
