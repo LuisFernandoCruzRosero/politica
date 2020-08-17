@@ -38,4 +38,9 @@ export class MesaService {
   updateMesa(mesa:Mesa){
     return this.http.put<Mesa>(ApiUrl + 'mesa/' + mesa.id_mesa, mesa);
   }
+
+  /* Cuenta el total de todas las mesas */
+  findByIdTotalMesa(){
+    return this.http.get<any>(ApiUrl + 'mesaContar');
+  } 
 }
