@@ -20,13 +20,18 @@ export class BarrioService {
   }
 
   /*Consulta un barrio de tabla barrio*/
-  findByIdBarrio(id_barrio:Number):Promise<Barrio[]>{
-    return this.http.get<Barrio[]>(ApiUrl + 'barrio/' + id_barrio).toPromise();
+  findByIdBarrio(nom_barrio:String):Promise<Barrio[]>{
+    return this.http.get<Barrio[]>(ApiUrl + 'barrio/' + nom_barrio).toPromise();
+  }
+
+  /*Consulta un barrio de tabla barrio*/
+  findAllByIdBarrioZona(zona_roja:Boolean):Promise<Barrio[]>{
+    return this.http.get<Barrio[]>(ApiUrl + 'barrioZona/' + zona_roja).toPromise();
   }
 
   /*Consulta Barrios por comuna*/
   findAllBarrioComuna(id_comunaB:Number):Promise<Barrio[]>{
-    return this.http.get<Barrio[]>(ApiUrl + 'barrio/' + id_comunaB).toPromise();
+    return this.http.get<Barrio[]>(ApiUrl + 'barrioComuna/' + id_comunaB).toPromise();
   }
 
   /* Inserta un dato ala tabla barrio */

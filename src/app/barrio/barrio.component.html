@@ -68,19 +68,28 @@
         <input type="text" [(ngModel)]="seletedBarrioAgregar.nom_barrio" placeholder="NOMBRE BARRIO" name="nom_barrio">
         <input type="text" [(ngModel)]="seletedBarrioAgregar.latitud" placeholder="LATITUD" name="latitud">
         <input type="text" [(ngModel)]="seletedBarrioAgregar.longitud" placeholder="LONGITUD" name="longitud">
-        <input type="text" [(ngModel)]="seletedBarrioAgregar.zona_roja" placeholder="ZONA ROJA" name="zona_roja">
+        <h4>SELECCIONE ZONA ROJA:</h4>
+        <select [(ngModel)]="seletedZonaAgregar.id_zona" (ngModelChange)="selectZonaAgregar($event)" name="item.id_zona">
+            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+        </select>
         <h4>SELECCIONE COMUNA:</h4>
-        <select [(ngModel)]="seletedComunaAgregar.id_comuna" (ngModelChange)="selectSectorBuscar($event)" name="item.id_comuna">
+        <select [(ngModel)]="seletedComunaAgregar.id_comuna" name="item.id_comuna">
             <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
         </select>
-        <button>Agregar</button>
+        <button (click)="guardar()">Agregar</button>
 
         <h4>BUSCAR BARRIO </h4>
-        <input type="text" placeholder="ID">
-        <input type="text" placeholder="BARRIO">
-        <input type="text" placeholder="ZONA ROJA">
-        <input type="text" placeholder="N° COMUNA">
-        <button>Aceptar</button>
+        <input [(ngModel)]="seletedBarrioBuscar.nom_barrio" name="nom_barrio" type="text" placeholder="BARRIO">
+        <h4>SELECCIONE ZONA ROJA:</h4>
+        <select [(ngModel)]="seletedZonaBuscar.id_zona" (ngModelChange)="selectZonaBuscar($event)" name="id_zona">
+            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+        </select>
+        <h4>SELECCIONE COMUNA:</h4>
+        <select [(ngModel)]="seletedComunaBuscar.id_comuna" (ngModelChange)="selectComunaBuscar($event)" name="id_comuna">
+            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+        </select>
+        <button (click)="buscar()">Buscar</button>
+        <button (click)="listar()">listar</button>
 
         <h4>Lista de Barrios </h4>
 

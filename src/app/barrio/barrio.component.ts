@@ -13,6 +13,8 @@ import { Token } from '../modelos/token';
 import { Barrio } from '../modelos/barrio';
 import { Comuna } from '../modelos/comuna';
 import { BarrioAux } from '../modelos/barrio-aux';
+import { Validaciones } from '../modelos/validaciones';
+import { Zona } from '../modelos/zona';
 
 @Component({
   selector: 'app-barrio',
@@ -21,11 +23,23 @@ import { BarrioAux } from '../modelos/barrio-aux';
 })
 export class BarrioComponent implements OnInit {
 
+  /* Llamo ala clase validaciones */
+  validaciones = new Validaciones();
+
   /* Total de Barrios Ingresados */
-  totalBarrio:any = 0;
+  totalBarrio:Number = this.validaciones.INT_NUMBER_0;
 
   /* Inicializo un arreglo del objeto Barrio */
   barrios:Barrio[] = [];
+
+  /* Inicializo un arreglo del objeto Barrio */
+  barrio:Barrio[] = [];
+
+  /* Si o No */
+  zona:Zona[] = [
+    {id_zona:this.validaciones.INT_NUMBER_2, name_zona:this.validaciones.STR_LETTER_SI}, 
+    {id_zona:this.validaciones.INT_NUMBER_1, name_zona:this.validaciones.STR_LETTER_NO}
+  ];
 
   /* Inicializo un arreglo del objeto Barrio Para la busqueda*/
   barriosBuscar:Barrio[] = [];
@@ -43,19 +57,31 @@ export class BarrioComponent implements OnInit {
   comunas:Comuna [] = [];
 
   /* Inicializo el objeto Barrio Para formulario Agregar*/
-  seletedBarrioAgregar:Barrio = new Barrio(null, '', '', '', '', null);
+  seletedBarrioAgregar:Barrio = new Barrio(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
 
   /* Inicializo el objeto barrio Para formulario Actualizar*/
-  seletedBarrioActualizar:Barrio = new Barrio(null, '', '', '', '', null);
+  seletedBarrioActualizar:Barrio = new Barrio(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
+     this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
 
   /* Inicializo el objeto barrio Para formulario Buscar*/
-  seletedBarrioBuscar:Barrio = new Barrio(null, '', '', '', '', null);
+  seletedBarrioBuscar:Barrio = new Barrio(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
 
   /* Inicializo el objeto barrio Para formulario Agregar Comuna*/
-  seletedComunaAgregar:Comuna = new Comuna(null, '');
+  seletedComunaAgregar:Comuna = new Comuna(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
+
+  /* Inicializo objeto zona para formulario Agregar zona */
+  seletedZonaAgregar:Zona = new Zona(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
+
+  /* Inicializo objeto zona para formulario Buscar zona */
+  seletedZonaBuscar:Zona = new Zona(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
+
+    /* Inicializo objeto zona para formulario Buscar Comuna */
+  seletedComunaBuscar:Comuna = new Comuna(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
   /* Verificar la Ayutenticidad */
-  encontrado:Boolean = false;
+  encontrado:Boolean = this.validaciones.FALSE;
 
   /* Para bloquear desdel ts la viste del HTML dependiendo el tipo de usuario */
   vista:Number;
@@ -70,11 +96,16 @@ export class BarrioComponent implements OnInit {
               private comunaService:ComunaService) { this.barriosAux = [] }
 
   ngOnInit() {
+    /* Se limpia arreglo auxiliar para volver a llenar */
+    this.barriosAux = [];
+     /* inicializo zona en html */
+     this.seletedZonaAgregar.id_zona = this.validaciones.INT_NUMBER_2;
+     /* inicializo zona en html */
+     this.seletedBarrioAgregar.zona_roja = false;
      /* Consulto los Datos de la tabla usuario */
      this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
       this.usuario = resultado;
-      console.log(this.usuario);
       /* Consulto los Datos de la tabla digitador */
       this.loginServi.findAllDigitador().then(resultado => {
         /* Asigno los datos de la tabla digitador al arreglo digitador */
@@ -92,8 +123,9 @@ export class BarrioComponent implements OnInit {
             this.totalBarrio = resultado;
 
              //if (this.encontrado == true) {
-              for(let i = 0; i < this.barrios.length; i++){
-                for (let j = 0; j < this.comunas.length; j++) {
+              /* Se llena un arreglo auxiliar para listar correctamente los datos de la tabla barrio */
+              for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
+                for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
                   if (this.comunas[j].id_comuna == this.barrios[i].id_comunaB) {
                     this.addBarrioAux({
                       id_barrio:this.barrios[i].id_barrio,
@@ -106,6 +138,8 @@ export class BarrioComponent implements OnInit {
                   }
                 }
               }
+              /* inicializa el select de la comuna para colocar valor por defecto */
+              this.seletedComunaAgregar.id_comuna = this.validaciones.INT_NUMBER_1;
             //}
             
             try {
@@ -114,22 +148,22 @@ export class BarrioComponent implements OnInit {
               /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
               this.vista = this.token.tipo_usuario;
               /* Busco el usuario logueado */
-              for (let i = 0; i < this.usuario.length; i++) {
-                if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == 1) {
+              for (let i = this.validaciones.INT_NUMBER_0; i < this.usuario.length; i++) {
+                if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_1) {
                 /* Si la encuentro cambio el estado a true */
-                this.encontrado = true;
+                this.encontrado = this.validaciones.TRUE;
                 }
               }
               /* Busco el digitador logueado */
-              for (let i = 0; i< this.digitador.length; i++) {
-                if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == 4) {
+              for (let i = this.validaciones.INT_NUMBER_0; i< this.digitador.length; i++) {
+                if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_4) {
                 /* Si la encuentro cambio el estado a true */
-                this.encontrado = true;
+                this.encontrado = this.validaciones.TRUE;
                 }
               }
             } catch (e) {
               /* Si no encuentra el usuario */
-              if(this.encontrado == false){
+              if(this.encontrado == this.validaciones.FALSE){
               /* Navega al login */
               //this.route.navigate(['/']);
               }
@@ -176,4 +210,244 @@ export class BarrioComponent implements OnInit {
     this.barriosAux.push(item);
   }
 
+  /*  Funcion Guardar Barrio */
+  guardar() {
+    /* Validacion de Campos Obligatorios y invalidos */
+    if (this.validaciones.validaCampoObligatorio(this.seletedBarrioAgregar.nom_barrio) == this.validaciones.TRUE) {
+      alert('CAMPO NOMBRE BARRIO OBLIGATORIO..');
+    } else if (this.validaciones.validacionNombre(this.seletedBarrioAgregar.nom_barrio) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO NOMBRE BARRIO INVALIDO: ' + this.seletedBarrioAgregar.nom_barrio);
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedBarrioAgregar.latitud) == this.validaciones.TRUE) {
+      alert('CAMPO LATITUD OBLIGATORIO..');
+    } else if (this.validaciones.validacionNumerico(this.seletedBarrioAgregar.latitud) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO LATITUD INVALIDO: ' + this.seletedBarrioAgregar.latitud);
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedBarrioAgregar.longitud) == this.validaciones.TRUE) {
+      alert('CAMPO LONGITUD OBLIGATORIO..');
+    } else if (this.validaciones.validacionNumerico(this.seletedBarrioAgregar.longitud) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO LONGITUD INVALIDO: ' + this.seletedBarrioAgregar.longitud);
+    }
+    
+    /* LLamo al servivoi barrio para buscar los barrios existentes */
+    this.barrioService.findByIdBarrio(this.seletedBarrioAgregar.nom_barrio).then(resultado =>{
+      this.barrios = resultado;
+      if (this.barrios.length == this.validaciones.INT_NUMBER_0) {
+        /* llama el servivio de agregar un barrio en la tabla barrio */
+        this.barrioService.insertBarrio({
+          id_barrio:this.seletedBarrioAgregar.id_barrio,
+          nom_barrio: this.seletedBarrioAgregar.nom_barrio,
+          latitud : this.seletedBarrioAgregar.latitud,
+          longitud : this.seletedBarrioAgregar.longitud,
+          zona_roja: this.seletedBarrioAgregar.zona_roja,
+          id_comunaB: this.seletedComunaAgregar.id_comuna
+        }).subscribe((resultado) => {
+          /* Se da respuesta Exitosa del servidor */
+          alert("Se Agrego la Mesa");
+          /* se llama la funcion inicial para que recargue la pagina */
+          this.ngOnInit();
+          /* se limpia el input de agregar nombre de barrio */
+          this.seletedBarrioAgregar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+          /* se limpia el input de latitud */
+          this.seletedBarrioAgregar.latitud = this.validaciones.STR_LETTER_WITHOUT;
+            /* se limpia el input de longitud */
+          this.seletedBarrioAgregar.longitud = this.validaciones.STR_LETTER_WITHOUT;
+        });
+      } else {
+        /* Respuesta de mesa a agregar ya encontrada */
+        alert('nombre de barrio :' + this.seletedBarrioAgregar.nom_barrio + ' Ya Existe');
+      }
+    })
+    
+  }
+
+  /* Busqueda de Campos */
+  buscar() {
+    /* valida si el campo nombre del barrio del formulario buscar no esta vacio */
+    if (this.validaciones.validaCampoObligatorio(this.seletedBarrioBuscar.nom_barrio) == this.validaciones.FALSE) {
+      /* Limpia los otros campos de busqueda */
+      this.seletedComunaBuscar.id_comuna = this.validaciones.NULL;
+      this.seletedZonaBuscar.id_zona = this.validaciones.NULL;
+      /* llama el servicio para buscar todos los nombres y redtificar de que si exite */
+      this.barrioService.findByIdBarrio(this.seletedBarrioBuscar.nom_barrio).then(resultado => {
+        this.barrio = resultado;
+        /* se pregunta si existen datos */
+        if (this.barrio.length == this.validaciones.INT_NUMBER_0) {
+          /* Se llimpia el formulario Buscar */
+          this.seletedComunaBuscar.id_comuna = this.validaciones.NULL;
+          this.seletedZonaBuscar.id_zona = this.validaciones.NULL;
+          this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+          alert('no existe campo de la busqueda..');
+          this.ngOnInit();
+        } else {
+          /* inicializo arreglo que se muestra en el html para llenarlo de los datos de la busqueda */
+          this.barriosAux = [];
+          /* llena los datos del arreglo barrios con los de la busqueda */
+          this.barrios = this.barrio;
+          /* LLena el arreglo auxiliar para llenarlo con datos validos */
+          for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
+              if (this.comunas[j].id_comuna == this.barrios[i].id_comunaB) {
+                this.addBarrioAux({
+                  id_barrio:this.barrios[i].id_barrio,
+                  nom_barrio:this.barrios[i].nom_barrio,
+                  latitud:this.barrios[i].latitud,
+                  longitud:this.barrios[i].longitud,
+                  zona_roja:this.barrios[i].zona_roja,
+                  nom_comuna:this.comunas[j].nom_comuna,
+                });
+              }
+            }
+          }
+        }
+      }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
+        } else {
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+    
+    /* valida si el campo nombre del barrio del formulario buscar no esta vacio */
+    if (this.seletedBarrioBuscar.id_comunaB != this.validaciones.NULL) {
+      /* Limpia los otros campos de busqueda */
+      this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.zona_roja = this.validaciones.NULL;
+      /* llama el servicio para buscar todos los nombres y redtificar de que si exite */
+      this.barrioService.findAllBarrioComuna(this.seletedBarrioBuscar.id_comunaB).then(resultado => {
+        this.barrio = resultado;
+         /* se pregunta si existen datos */
+        if (this.barrio.length == this.validaciones.INT_NUMBER_0) {
+          /* Se llimpia el formulario Buscar */
+          this.seletedComunaBuscar.id_comuna = this.validaciones.NULL;
+          this.seletedZonaBuscar.id_zona = this.validaciones.NULL;
+          this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+          alert('no existe campo de la busqueda..');
+          this.ngOnInit();
+        } else {
+          /* inicializo arreglo que se muestra en el html para llenarlo de los datos de la busqueda */
+          this.barriosAux = [];
+          /* llena los datos del arreglo barrios con los de la busqueda */
+          this.barrios = this.barrio;
+          /* LLena el arreglo auxiliar para llenarlo con datos validos */
+          for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
+              if (this.comunas[j].id_comuna == this.barrios[i].id_comunaB) {
+                this.addBarrioAux({
+                  id_barrio:this.barrios[i].id_barrio,
+                  nom_barrio:this.barrios[i].nom_barrio,
+                  latitud:this.barrios[i].latitud,
+                  longitud:this.barrios[i].longitud,
+                  zona_roja:this.barrios[i].zona_roja,
+                  nom_comuna:this.comunas[j].nom_comuna,
+                });
+              }
+            }
+          }
+        }
+      }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
+        } else {
+          alert("a ocurrido un errror servidor");
+        }
+      });
+
+    }
+    
+    /* valida si el campo nombre del barrio del formulario buscar no esta vacio */
+    if (this.seletedBarrioBuscar.zona_roja != this.validaciones.NULL) {
+      /* Se llimpia el formulario Buscar */
+      this.seletedComunaBuscar.id_comuna = this.validaciones.NULL;
+      this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+      /* llama el servicio para buscar todos los nombres y redtificar de que si exite */
+      this.barrioService.findAllByIdBarrioZona(this.seletedBarrioBuscar.zona_roja).then(resultado => {
+        this.barrio = resultado;
+        /* se pregunta si existen datos */
+        if (this.barrio.length == this.validaciones.INT_NUMBER_0) {
+          /* Se llimpia el formulario Buscar */
+          this.seletedComunaBuscar.id_comuna = this.validaciones.NULL;
+          this.seletedZonaBuscar.id_zona = this.validaciones.NULL;
+          this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+          alert('no existe campo de la busqueda..');
+          this.ngOnInit();
+        } else {
+          /* inicializo arreglo que se muestra en el html para llenarlo de los datos de la busqueda */
+          this.barriosAux = [];
+          /* llena los datos del arreglo barrios con los de la busqueda */
+          this.barrios = this.barrio;
+          /* LLena el arreglo auxiliar para llenarlo con datos validos */
+          for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
+              if (this.comunas[j].id_comuna == this.barrios[i].id_comunaB) {
+                this.addBarrioAux({
+                  id_barrio:this.barrios[i].id_barrio,
+                  nom_barrio:this.barrios[i].nom_barrio,
+                  latitud:this.barrios[i].latitud,
+                  longitud:this.barrios[i].longitud,
+                  zona_roja:this.barrios[i].zona_roja,
+                  nom_comuna:this.comunas[j].nom_comuna,
+                });
+              }
+            }
+          }
+        }
+      }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
+        } else {
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+  listar() {
+     /* Se llimpia el formulario Agregar */
+     this.seletedBarrioAgregar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+     this.seletedBarrioAgregar.latitud = this.validaciones.STR_LETTER_WITHOUT;
+     this.seletedBarrioAgregar.longitud = this.validaciones.STR_LETTER_WITHOUT;
+     
+     /* Se llimpia el formulario Buscar */
+     this.seletedComunaBuscar.id_comuna = this.validaciones.NULL;
+     this.seletedZonaBuscar.id_zona = this.validaciones.NULL;
+     this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+     /* esta funcion llena los arreglos de la data de la base de datos */
+     this.ngOnInit();
+  }
+
+  /* funcion de evento al seleccionar el select de si o no en html */
+  selectZonaAgregar(item:Number){
+    /* si es uno asigna true */
+    if (item == this.validaciones.INT_NUMBER_1) {
+      this.seletedBarrioAgregar.zona_roja = this.validaciones.TRUE;
+    } else {
+      /* si no es uno asigna false */
+      this.seletedBarrioAgregar.zona_roja = this.validaciones.FALSE;
+    }
+  }
+
+  /* Cuando se selecciona zona en el formulario buscar agrega el dato seleccionado en el objeto barrio en el campo zona_roja */
+  selectZonaBuscar(item:Number) {
+    console.log(item);
+    /* Limpia los otros campos de busqueda */
+    this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedComunaBuscar.id_comuna = this.validaciones.NULL;
+    /* Asigna al formulario buscar la zona */
+    /* si es uno asigna true */
+    if (item == this.validaciones.INT_NUMBER_2) {
+      this.seletedBarrioBuscar.zona_roja = this.validaciones.TRUE;
+    } else {
+      /* si no es uno asigna false */
+      this.seletedBarrioBuscar.zona_roja = this.validaciones.FALSE;
+    }
+  }
+
+  /* Cuando se selecciona comuna en el formulario buscar agrega el dato seleccionado en el objeto barrio en el campo comuna */
+  selectComunaBuscar(item:Number) {
+    /* Limpia los otros campos de busqueda */
+    this.seletedBarrioBuscar.nom_barrio = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedZonaBuscar.id_zona = this.validaciones.NULL;
+    /* Asigna el campo de la comuna al formulario buscar */
+    this.seletedBarrioBuscar.id_comunaB = item;
+  }
 }

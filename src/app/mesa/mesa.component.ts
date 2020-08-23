@@ -10,6 +10,7 @@ import { Mesa } from '../modelos/mesa';
 import { UsuarioFindAll } from '../modelos/usuario-find-all';
 import { DigitadorFindAll } from '../modelos/digitador-find-all';
 import { Token } from '../modelos/token';
+import { Validaciones } from '../modelos/validaciones';
 
 @Component({
   selector: 'app-mesa',
@@ -17,6 +18,9 @@ import { Token } from '../modelos/token';
   styleUrls: ['./mesa.component.css']
 })
 export class MesaComponent implements OnInit {
+
+  /* Llamo ala clase validaciones */
+  validaciones = new Validaciones();
 
   /* Total de Mesas Ingresadas */
   totalMesa:any = 0;
@@ -129,10 +133,11 @@ export class MesaComponent implements OnInit {
   /* Funcion Guardar Mesa */
   guardar() {
     /* Para saber si lleno el campo de Agregar Mesa */
-    if (this.seletedMesaAgregar.nom_mesa != '') {
+    if (this.validaciones.validaCampoObligatorio(this.seletedMesaAgregar.nom_mesa) == false) {
+      /* Se llama al servicio para buscar una mesa en la tabla para asi insertar o no la mesa */
       this.mesaService.findByIdMesa(this.seletedMesaAgregar.nom_mesa).then(resultado => {
         this.mesas = resultado;
-        if (this.mesas.length == 0) {
+        if (this.mesas.length == this.validaciones.INT_NUMBER_0) {
           /* llama al Servicio de Mesa y la funcion de insertar mesa */
           this.mesaService.insertMesa({
             /* Agrega a los datos del objeto los que se ponen en la caja de testo de agregar */
@@ -215,10 +220,11 @@ export class MesaComponent implements OnInit {
   /* Funcion que busca lo escrito en el formulario buscar */
   buscar(){
     /* Se pregunta si el umput de buscar no esta vacio */
-    if (this.seletedMesaBuscar.nom_mesa != '') {
+    if (this.validaciones.validaCampoObligatorio(this.seletedMesaBuscar.nom_mesa) == false) {
+      /* LLama al servicio para buscar si la mesa en el input existe */
       this.mesaService.findByIdMesa(this.seletedMesaBuscar.nom_mesa).then(resultado => {
         this.mesasBuscar = resultado;
-        if (this.mesasBuscar.length != 0) {
+        if (this.mesasBuscar.length != this.validaciones.INT_NUMBER_0) {
           this.mesas = this.mesasBuscar;
         } else {
           alert('la mesa :' + this.seletedMesaBuscar.nom_mesa + ' No Existe');
