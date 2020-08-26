@@ -47,6 +47,17 @@ export class Validaciones {
         return false;
     }
 
+    /* funcion para validar numeros*/
+    validacionNumeros(variable:String) {
+        let letras:String = "0123456789";
+        for (let i = this.INT_NUMBER_0; i < variable.length; i++) {
+            if (letras.indexOf(variable.charAt(i),0) == -this.INT_NUMBER_1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* funcion para validar solo numeros con decimal  */
     validacionNumerico(variable:String) {
         let stringValor:string = variable.toString();

@@ -38,16 +38,16 @@ export class MesaComponent implements OnInit {
   digitador:DigitadorFindAll[] = [];
 
   /* Inicializo el objeto Mesa Para formulario Agregar*/
-  seletedMesaAgregar:Mesa = new Mesa(null, '');
+  seletedMesaAgregar:Mesa = new Mesa(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
   /* Inicializo el objeto Mesa Para formulario Actualizar*/
-  seletedMesaActualizar:Mesa = new Mesa(null, '');
+  seletedMesaActualizar:Mesa = new Mesa(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
   /* Inicializo el objeto Mesa Para formulario Buscar*/
-  seletedMesaBuscar:Mesa = new Mesa(null, '');
+  seletedMesaBuscar:Mesa = new Mesa(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
   /* Verificar la Ayutenticidad */
-  encontrado:Boolean = false;
+  encontrado:Boolean = this.validaciones.FALSE;
 
   /* Para bloquear desdel ts la viste del HTML dependiendo el tipo de usuario */
   vista:Number;
@@ -67,7 +67,6 @@ export class MesaComponent implements OnInit {
     this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
       this.usuario = resultado;
-      console.log(this.usuario);
       /* Consulto los Datos de la tabla digitador */
       this.loginServi.findAllDigitador().then(resultado => {
         /* Asigno los datos de la tabla digitador al arreglo digitador */
@@ -82,26 +81,28 @@ export class MesaComponent implements OnInit {
           });
           try {
             /* Consulto Tokent de Autenticidad */
-            this.token=this.loginServi.findAllToken();
+            this.token = this.loginServi.findAllToken();
             /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
             this.vista = this.token.tipo_usuario;
             /* Busco el usuario logueado */
-            for (let i = 0; i < this.usuario.length; i++) {
-              if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == 1) {
+            for (let i = this.validaciones.INT_NUMBER_0; i < this.usuario.length; i++) {
+              /* Se pregunta si el usuario logueado es de tipo 1 */
+              if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_1) {
               /* Si la encuentro cambio el estado a true */
-              this.encontrado = true;
+              this.encontrado = this.validaciones.TRUE;
               }
             }
             /* Busco el digitador logueado */
-            for (let i = 0; i< this.digitador.length; i++) {
-              if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == 4) {
+            for (let i = this.validaciones.INT_NUMBER_0; i< this.digitador.length; i++) {
+              /* Se pregunta si el usuario logueado es de tipo 4 */
+              if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_4) {
               /* Si la encuentro cambio el estado a true */
-              this.encontrado = true;
+              this.encontrado = this.validaciones.TRUE;
               }
             }
           } catch (e) {
             /* Si no encuentra el usuario */
-            if(this.encontrado == false){
+            if(this.encontrado == this.validaciones.FALSE){
             /* Navega al login */
             //this.route.navigate(['/']);
             }
@@ -133,10 +134,16 @@ export class MesaComponent implements OnInit {
   /* Funcion Guardar Mesa */
   guardar() {
     /* Para saber si lleno el campo de Agregar Mesa */
-    if (this.validaciones.validaCampoObligatorio(this.seletedMesaAgregar.nom_mesa) == false) {
+    if (this.validaciones.validaCampoObligatorio(this.seletedMesaAgregar.nom_mesa) == this.validaciones.TRUE) {
+      alert('CAMPO NOMBRE MESA OBLIGATORIO..');
+    } else if (this.validaciones.validacionNumeros(this.seletedMesaAgregar.nom_mesa)) {
+      alert('CAMPO NOMBRE MESA INVALIDO..');
+    } else {
       /* Se llama al servicio para buscar una mesa en la tabla para asi insertar o no la mesa */
       this.mesaService.findByIdMesa(this.seletedMesaAgregar.nom_mesa).then(resultado => {
+        /* Se Asigna al arreglo mesas el resultado de la busqueda */
         this.mesas = resultado;
+        /* Se pregunta si mesas contiene datos */
         if (this.mesas.length == this.validaciones.INT_NUMBER_0) {
           /* llama al Servicio de Mesa y la funcion de insertar mesa */
           this.mesaService.insertMesa({
@@ -149,7 +156,7 @@ export class MesaComponent implements OnInit {
           /* se llama la funcion inicial para que recargue la pagina */
           this.ngOnInit();
           /* se limpia el input de agregar */
-          this.seletedMesaAgregar.nom_mesa = '';
+          this.seletedMesaAgregar.nom_mesa = this.validaciones.STR_LETTER_WITHOUT;
           });
         } else {
           /* Respuesta de mesa a agregar ya encontrada */
@@ -162,43 +169,73 @@ export class MesaComponent implements OnInit {
           alert("a ocurrido un errror servidor");
         }
       });
-    } else {
-      /* Respuesta en caso de no llenar el Campo de agregar Mesa */
-      alert('LLene el campo: NUMERO DE MESA de Agregar');
     }
   }
 
   /* se llena el objeto actualizar de tipo mesa deacuerdo ala seleccionada en la lista */
-  actualizar(mesa:Mesa){
+  actualizar(mesa:Mesa) {
     /* llena el objeto de mesa para actualizar */
     this.seletedMesaActualizar = mesa;
   }
 
   /* Funcion que actualiza lo seleccionado en base de datos */
-  actualizacion(){
-    /* se llama el servicio mesa la funcion Update mesa */
-    this.mesaService.updateMesa({
-      /* Agrega a los datos del objeto los que se ponen en la caja de testo de Actualizar  */
-      id_mesa: this.seletedMesaActualizar.id_mesa,
-      nom_mesa: this.seletedMesaActualizar.nom_mesa
-    }).subscribe((modificado) => {
-      /* Se da respuesta Exitosa del servidor */
-      alert("Se actualizo la mesa con exito");
-      /* se llama la funcion inicial para que recargue la pagina */
+  actualizacion() {
+    if (this.validaciones.validaCampoObligatorio(this.seletedMesaActualizar.nom_mesa) == this.validaciones.TRUE) {
+      /* se limpia el input de actualizar */
+      this.seletedMesaActualizar.id_mesa = this.validaciones.NULL;
+      alert('CAMPO NOMBRE MESA OBLIGATORIO..' + this.seletedMesaActualizar.nom_mesa);
+      /* se limpia el input de actualizar */
       this.ngOnInit();
-    },(err:HttpErrorResponse) => {
-      if(err.error instanceof Error){
-        alert("a ocurrido un errror cliente");
-      }else{
-        alert("a ocurrido un errror servidor");
-      }
-   });
-   /* se limpia el input de actualizar */
-   this.seletedMesaActualizar.id_mesa = null;
+    } else if (this.validaciones.validacionNumeros(this.seletedMesaActualizar.nom_mesa)) {
+      /* se limpia el input de actualizar */
+      this.seletedMesaActualizar.id_mesa = this.validaciones.NULL;
+      alert('CAMPO NOMBRE MESA INVALIDO..' + this.seletedMesaActualizar.nom_mesa);
+      /* se limpia el input de actualizar */
+      this.ngOnInit();
+    } else {
+      /* Se llama al servicio para buscar una mesa en la tabla para asi insertar o no la mesa */
+      this.mesaService.findByIdMesa(this.seletedMesaActualizar.nom_mesa).then(resultado => {
+        /* Se Asigna al arreglo mesas el resultado de la busqueda */
+        this.mesas = resultado;
+        /* Se pregunta si el arreglo mesas esta vacio */
+        if (this.mesas.length == this.validaciones.INT_NUMBER_0) {
+          /* se llama el servicio mesa la funcion Update mesa */
+          this.mesaService.updateMesa({
+            /* Agrega a los datos del objeto los que se ponen en la caja de testo de Actualizar  */
+            id_mesa: this.seletedMesaActualizar.id_mesa,
+            nom_mesa: this.seletedMesaActualizar.nom_mesa
+          }).subscribe((modificado) => {
+            /* se limpia el input de actualizar */
+            this.seletedMesaActualizar.id_mesa = this.validaciones.NULL;
+            /* Se da respuesta Exitosa del servidor */
+            alert("Se actualizo la mesa con exito");
+            /* se llama la funcion inicial para que recargue la pagina */
+            this.ngOnInit();
+          },(err:HttpErrorResponse) => {
+            if(err.error instanceof Error){
+              alert("a ocurrido un errror cliente");
+            }else{
+              alert("a ocurrido un errror servidor");
+            }
+          });
+        } else {
+        /* se limpia el input de actualizar */
+        this.seletedMesaActualizar.id_mesa = this.validaciones.NULL;
+          /* ya existe el nuevo nombre */
+          alert('Mesa a Actualizar ya existe...');
+        }
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
   }
 
   /* Funcion que elimina lo seleccionado en base de datos */
-  eliminar(mesa:Mesa){
+  eliminar(mesa:Mesa) {
     /* dialogo de confirmacion de eliminar los datos */
     if(confirm('estas seguro de querer eliminarlo id_mesa: ' + mesa.id_mesa + ' nombre mesa: ' + mesa.nom_mesa)){
       /* se llama el servicio mesa la funcion eliminar */
@@ -220,15 +257,20 @@ export class MesaComponent implements OnInit {
   /* Funcion que busca lo escrito en el formulario buscar */
   buscar(){
     /* Se pregunta si el umput de buscar no esta vacio */
-    if (this.validaciones.validaCampoObligatorio(this.seletedMesaBuscar.nom_mesa) == false) {
+    if (this.validaciones.validaCampoObligatorio(this.seletedMesaBuscar.nom_mesa) == this.validaciones.FALSE) {
       /* LLama al servicio para buscar si la mesa en el input existe */
       this.mesaService.findByIdMesa(this.seletedMesaBuscar.nom_mesa).then(resultado => {
+        /* Se asigna la data en el arreglo mesasBuscar */
         this.mesasBuscar = resultado;
+        /* Se pregunta si mesasBuscar contiene datos */
         if (this.mesasBuscar.length != this.validaciones.INT_NUMBER_0) {
+          /* Se asigna al arreglo mesas los datos encontrados */
           this.mesas = this.mesasBuscar;
         } else {
+          /* Se da mensaje de alerta que no existe el campo escrito */
           alert('la mesa :' + this.seletedMesaBuscar.nom_mesa + ' No Existe');
-          this.seletedMesaBuscar.nom_mesa = '';
+          /* Se limpia el campo */
+          this.seletedMesaBuscar.nom_mesa = this.validaciones.STR_LETTER_WITHOUT;
         }
       },(err:HttpErrorResponse) => {
         if(err.error instanceof Error){
@@ -246,9 +288,11 @@ export class MesaComponent implements OnInit {
   /* Para volver a listar la data existente en la tabla mesa */
   listar() {
     /* Se llimpia el formulario buscar */
-    this.seletedMesaBuscar.nom_mesa = '';
+    this.seletedMesaBuscar.nom_mesa = this.validaciones.STR_LETTER_WITHOUT;
     /* Se llimpia el formulario Agregar */
-    this.seletedMesaAgregar.nom_mesa = '';
+    this.seletedMesaAgregar.nom_mesa = this.validaciones.STR_LETTER_WITHOUT;
+    /* Se llimpia el formulario Actualizar */
+    this.seletedMesaActualizar.nom_mesa = this.validaciones.STR_LETTER_WITHOUT;
     /* esta funcion llena los arreglos de la data de la base de datos */
     this.ngOnInit();
   }

@@ -10,6 +10,7 @@ import { UsuarioFindAll } from '../modelos/usuario-find-all';
 import { DigitadorFindAll } from '../modelos/digitador-find-all';
 import { Token } from '../modelos/token';
 import { Comuna } from '../modelos/comuna';
+import { Validaciones } from '../modelos/validaciones';
 
 
 @Component({
@@ -18,8 +19,12 @@ import { Comuna } from '../modelos/comuna';
   styleUrls: ['./comuna.component.css']
 })
 export class ComunaComponent implements OnInit {
+
+  /* Llamo ala clase validaciones */
+  validaciones = new Validaciones();
+
   /* Total de Comunas Ingresadas */
-  totalComuna:Number = 0;
+  totalComuna:Number = this.validaciones.INT_NUMBER_0;
 
   /* Inicializo un arreglo del objeto Comuna */
   comunas:Comuna[] = [];
@@ -35,16 +40,16 @@ export class ComunaComponent implements OnInit {
   digitador:DigitadorFindAll[] = [];
 
   /* Inicializo el objeto Comuna Para formulario Agregar*/
-  seletedComunaAgregar:Comuna = new Comuna(null, '');
+  seletedComunaAgregar:Comuna = new Comuna(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
   /* Inicializo el objeto Comuna Para formulario Actualizar*/
-  seletedComunaActualizar:Comuna = new Comuna(null, '');
+  seletedComunaActualizar:Comuna = new Comuna(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
   /* Inicializo el objeto Comuna Para formulario Buscar*/
-  seletedComunaBuscar:Comuna = new Comuna(null, '');
+  seletedComunaBuscar:Comuna = new Comuna(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
   /* Verificar la Ayutenticidad */
-  encontrado:Boolean = false;
+  encontrado:Boolean = this.validaciones.FALSE;
 
   /* Para bloquear desdel ts la viste del HTML dependiendo el tipo de usuario */
   vista:Number;
@@ -64,7 +69,6 @@ export class ComunaComponent implements OnInit {
     this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
       this.usuario = resultado;
-      console.log(this.usuario);
       /* Consulto los Datos de la tabla digitador */
       this.loginServi.findAllDigitador().then(resultado => {
         /* Asigno los datos de la tabla digitador al arreglo digitador */
@@ -75,30 +79,31 @@ export class ComunaComponent implements OnInit {
           this.comunas = resultado;
           /* consulta la cantidad de Comunas qque existen en el sistema */
           this.comunaService.findByIdTotalComuna().subscribe(resultado=>{
+            /* Asingno a la variable totalComuna la cantidad de comunas existentes */
             this.totalComuna = resultado;
           });
           try {
             /* Consulto Tokent de Autenticidad */
-            this.token=this.loginServi.findAllToken();
+            this.token = this.loginServi.findAllToken();
             /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
             this.vista = this.token.tipo_usuario;
             /* Busco el usuario logueado */
-            for (let i = 0; i < this.usuario.length; i++) {
-              if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == 1) {
+            for (let i = this.validaciones.INT_NUMBER_0; i < this.usuario.length; i++) {
+              if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_1) {
               /* Si la encuentro cambio el estado a true */
-              this.encontrado = true;
+              this.encontrado = this.validaciones.TRUE;
               }
             }
             /* Busco el digitador logueado */
-            for (let i = 0; i< this.digitador.length; i++) {
-              if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == 4) {
+            for (let i = this.validaciones.INT_NUMBER_0; i< this.digitador.length; i++) {
+              if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_4) {
               /* Si la encuentro cambio el estado a true */
-              this.encontrado = true;
+              this.encontrado = this.validaciones.TRUE;
               }
             }
           } catch (e) {
             /* Si no encuentra el usuario */
-            if(this.encontrado == false){
+            if(this.encontrado == this.validaciones.FALSE){
             /* Navega al login */
             //this.route.navigate(['/']);
             }
@@ -130,10 +135,17 @@ export class ComunaComponent implements OnInit {
   /* Funcion Guardar Comuna */
   guardar() {
     /* Para saber si lleno el campo de Agregar Comuna */
-    if (this.seletedComunaAgregar.nom_comuna != '') {
+    if (this.validaciones.validaCampoObligatorio(this.seletedComunaAgregar.nom_comuna) == this.validaciones.TRUE) {
+      alert('CAMPO NOMBRE COMUNA OBLIGATORIO..');
+    } else if (this.validaciones.validacionNombre(this.seletedComunaAgregar.nom_comuna) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO NOMBRE COMUNA INVALIDO..');
+    } else {
+      /* Se llama al servicio buscar si el nombre de la comuna lla existe */
       this.comunaService.findByIdComuna(this.seletedComunaAgregar.nom_comuna).then(resultado => {
+        /* Se asigna el resultado en el arreglo counas */
         this.comunas = resultado;
-        if (this.comunas.length == 0) {
+        /* Se pregunta si trajo datos dela consulta */
+        if (this.comunas.length == this.validaciones.INT_NUMBER_0) {
           /* llama al Servicio de Comuna y la funcion de insertar comuna */
           this.comunaService.insertComuna({
             /* Agrega a los datos del objeto los que se ponen en la caja de testo de agregar */
@@ -145,7 +157,7 @@ export class ComunaComponent implements OnInit {
           /* se llama la funcion inicial para que recargue la pagina */
           this.ngOnInit();
           /* se limpia el input de agregar */
-          this.seletedComunaAgregar.nom_comuna = '';
+          this.seletedComunaAgregar.nom_comuna = this.validaciones.STR_LETTER_WITHOUT;
           });
         } else {
           /* Respuesta de comuna a agregar ya encontrada */
@@ -158,9 +170,6 @@ export class ComunaComponent implements OnInit {
           alert("a ocurrido un errror servidor");
         }
       });
-    } else {
-      /* Respuesta en caso de no llenar el Campo de agregar Comuna */
-      alert('LLene el campo: NUMERO DE COMUNA de Agregar');
     }
   }
 
@@ -173,25 +182,60 @@ export class ComunaComponent implements OnInit {
 
    /* Funcion que actualiza lo seleccionado en base de datos */
    actualizacion(){
-    /* se llama el servicio comuna la funcion Update comuna */
-    this.comunaService.updateComuna({
-      /* Agrega a los datos del objeto los que se ponen en la caja de testo de Actualizar  */
-      id_comuna: this.seletedComunaActualizar.id_comuna,
-      nom_comuna: this.seletedComunaActualizar.nom_comuna
-    }).subscribe((modificado) => {
-      /* Se da respuesta Exitosa del servidor */
-      alert("Se actualizo la comuna con exito");
-      /* se llama la funcion inicial para que recargue la pagina */
+    if (this.validaciones.validaCampoObligatorio(this.seletedComunaActualizar.nom_comuna) == this.validaciones.TRUE) {
+      /* se limpia el input de actualizar */
+      this.seletedComunaActualizar.id_comuna = this.validaciones.NULL;
+      /* Alerta Para indicar obligatoriedad */
+      alert('CAMPO NOMBRE MESA OBLIGATORIO..' + this.seletedComunaActualizar.nom_comuna);
+      /* se limpia el input de actualizar */
       this.ngOnInit();
-    },(err:HttpErrorResponse) => {
-      if(err.error instanceof Error){
-        alert("a ocurrido un errror cliente");
-      }else{
-        alert("a ocurrido un errror servidor");
-      }
-   });
-   /* se limpia el input de actualizar */
-   this.seletedComunaActualizar.id_comuna = null;
+    } else if (this.validaciones.validacionNombre(this.seletedComunaActualizar.nom_comuna)) {
+      /* se limpia el input de actualizar */
+      this.seletedComunaActualizar.id_comuna = this.validaciones.NULL;
+      /* Alerta para indicar invalides */
+      alert('CAMPO NOMBRE MESA INVALIDO..' + this.seletedComunaActualizar.id_comuna);
+      /* se limpia el input de actualizar */
+      this.ngOnInit();
+    } else {
+      /* LLama al servicio para buscar si la mesa en el input existe */
+      this.comunaService.findByIdComuna(this.seletedComunaActualizar.nom_comuna).then(resultado => {
+        /* Se Asigna al arreglo mesas el resultado de la busqueda */
+        this.comunas = resultado;
+        /* Valida si las comunas ya existe */
+        if (this.comunas.length == this.validaciones.INT_NUMBER_0) {
+          /* se llama el servicio comuna la funcion Update comuna */
+          this.comunaService.updateComuna({
+          /* Agrega a los datos del objeto los que se ponen en la caja de testo de Actualizar  */
+          id_comuna: this.seletedComunaActualizar.id_comuna,
+          nom_comuna: this.seletedComunaActualizar.nom_comuna
+          }).subscribe((modificado) => {
+            /* se limpia el input de actualizar */
+            this.seletedComunaActualizar.id_comuna = this.validaciones.NULL;
+            /* Se da respuesta Exitosa del servidor */
+            alert("Se actualizo la comuna con exito");
+            /* se llama la funcion inicial para que recargue la pagina */
+            this.ngOnInit();
+          },(err:HttpErrorResponse) => {
+            if(err.error instanceof Error){
+              alert("a ocurrido un errror cliente");
+            }else{
+             alert("a ocurrido un errror servidor");
+            }
+          });
+        } else {
+          /* se limpia el input de actualizar */
+          this.seletedComunaActualizar.id_comuna = this.validaciones.NULL;
+          /* ya existe el nuevo nombre */
+          alert('Mesa a Actualizar ya existe...');
+        }
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
   }
 
   /* Funcion que elimina lo seleccionado en base de datos */
@@ -213,17 +257,24 @@ export class ComunaComponent implements OnInit {
       });
     }
   }
+
 /* Funcion que busca lo escrito en el formulario buscar */
   buscar(){
     /* Se pregunta si el umput de buscar no esta vacio */
-    if (this.seletedComunaBuscar.nom_comuna != '') {
+    if (this.validaciones.validaCampoObligatorio(this.seletedComunaBuscar.nom_comuna) == this.validaciones.FALSE) {
+      /* Se llama al servicio para bscar si el nombre escrito existe en la tabla */
       this.comunaService.findByIdComuna(this.seletedComunaBuscar.nom_comuna).then(resultado => {
+        /* Se asigna la data en el arreglo comuna Buscar */
         this.comunasBuscar = resultado;
-        if (this.comunasBuscar.length != 0) {
+        /* Se pregunta si esta vacio el arreglo */
+        if (this.comunasBuscar.length != this.validaciones.INT_NUMBER_0) {
+          /* Asigna al arreglo comunas  el arreglo comuna buscar */
           this.comunas = this.comunasBuscar;
         } else {
+          /* Mensaje de alerta indicando que no existe la comuna digitada */
           alert('la comuna :' + this.seletedComunaBuscar.nom_comuna + ' No Existe');
-          this.seletedComunaBuscar.nom_comuna = '';
+          /* Limpia el campo nombre comuna */
+          this.seletedComunaBuscar.nom_comuna = this.validaciones.STR_LETTER_WITHOUT;
         }
       },(err:HttpErrorResponse) => {
         if(err.error instanceof Error){
@@ -241,9 +292,11 @@ export class ComunaComponent implements OnInit {
   /* Para volver a listar la data existente en la tabla comuna */
   listar() {
     /* Se llimpia el formulario buscar */
-    this.seletedComunaBuscar.nom_comuna = '';
+    this.seletedComunaBuscar.nom_comuna = this.validaciones.STR_LETTER_WITHOUT;
     /* Se llimpia el formulario Agregar */
-    this.seletedComunaAgregar.nom_comuna = '';
+    this.seletedComunaAgregar.nom_comuna = this.validaciones.STR_LETTER_WITHOUT;
+    /* Se llimpia el formulario Actualizar */
+    this.seletedComunaActualizar.nom_comuna = this.validaciones.STR_LETTER_WITHOUT;
     /* esta funcion llena los arreglos de la data de la base de datos */
     this.ngOnInit();
   }

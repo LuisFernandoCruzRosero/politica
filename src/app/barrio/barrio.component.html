@@ -92,7 +92,7 @@
         <button (click)="listar()">listar</button>
 
         <h4>Lista de Barrios </h4>
-
+        <h6>Total de Barrios:<input type="text" disabled placeholder="{{totalBarrio}}"></h6>
     </div>
     <div id="main-container">
 
@@ -148,7 +148,9 @@
                             </ng-template>
                         </div>
                         <ng-template #falso3>
-                            <input type="text" [(ngModel)]="seletedBarrioActualizar.zona_roja" placeholder="ZONA ROJA" name="zona_roja">
+                            <select [(ngModel)]="seletedZonaActualizar.id_zona" (ngModelChange)="selectZonaActualizar($event)" name="id_zona">
+                                <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+                            </select>
                         </ng-template>
                     </td>
 
@@ -157,8 +159,8 @@
                             {{item.nom_comuna}}
                         </div>
                         <ng-template #falso4>
-                            <select [(ngModel)]="seletedListarBarrioComuna.nom_comuna" (ngModelChange)="SelectBarrio($event)" class="form-control" name="item.nom_comuna">
-                                    <option *ngFor="let item of comunas" [value]="item.nom_comuna">{{item.nom_comuna}}</option>
+                            <select [(ngModel)]="seletedComunaActualizar.id_comuna" (ngModelChange)="SelectComunaActualizar($event)" name="id_comuna">
+                                    <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
                                 </select>
                         </ng-template>
                     </td>
