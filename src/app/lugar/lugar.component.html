@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LUGAR</title>
+    <title>Lugar</title>
 </head>
 
 <body>
@@ -65,19 +65,34 @@
     </nav>
     <div>
         <h4>Agregar lugar </h4>
-        <input type="text">
-        <h4>Agregar Comuna </h4>
-        <input type="text">
-        <button>Agregar</button>
+        <input type="text" [(ngModel)]="seletedLugarAgregar.nom_lugar" placeholder="NOMBRE LUGAR" name="nom_lugar">
+        <input type="text" [(ngModel)]="seletedLugarAgregar.latitud" placeholder="LATITUD" name="latitud">
+        <input type="text" [(ngModel)]="seletedLugarAgregar.longitud" placeholder="LONGITUD" name="longitud">
+        <h4>SELECCIONE ZONA ROJA:</h4>
+        <select [(ngModel)]="seletedZonaAgregar.id_zona" (ngModelChange)="selectZonaAgregar($event)" name="item.id_zona">
+            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+        </select>
+        <h4>SELECCIONE COMUNA:</h4>
+        <select [(ngModel)]="seletedComunaAgregar.id_comuna" name="item.id_comuna">
+            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+        </select>
+        <button (click)="guardar()">Agregar</button>
 
-        <h4>Buscar </h4>
-        <input type="text" placeholder="ID">
-        <input type="text" placeholder="LUGAR">
-        <input type="text" placeholder="N° COMUNA">
-        <button>Aceptar</button>
+        <h4>BUSCAR LUGAR </h4>
+        <input [(ngModel)]="seletedLugarBuscar.nom_lugar" name="nom_lugar" type="text" placeholder="LUGAR">
+        <h4>SELECCIONE ZONA ROJA:</h4>
+        <select [(ngModel)]="seletedZonaBuscar.id_zona" (ngModelChange)="selectZonaBuscar($event)" name="id_zona">
+            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+        </select>
+        <h4>SELECCIONE COMUNA:</h4>
+        <select [(ngModel)]="seletedComunaBuscar.id_comuna" (ngModelChange)="selectComunaBuscar($event)" name="id_comuna">
+            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+        </select>
+        <button (click)="buscar()">Buscar</button>
+        <button (click)="listar()">listar</button>
 
-        <h4>Lista de Lugares de Votación </h4>
-
+        <h4>Lista de Lugares </h4>
+        <h6>Total de Lugares:<input type="text" disabled placeholder="{{totalLugar}}"></h6>
     </div>
     <div id="main-container">
 
@@ -86,44 +101,89 @@
                 <tr>
                     <th>ID</th>
                     <th>LUGAR</th>
+                    <th>LATITUD</th>
+                    <th>LONGITUD</th>
+                    <th>ZONA ROJA</th>
                     <th>COMUNA</th>
                     <th>OPERACIÓN</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- cuerpo de la tabla  -->
-                <tr>
-                    <td>1</td>
-                    <td>instituto tecnico popular de la costa
-
-                    </td>
-                    <td>01</td>
+                <tr *ngFor="let item of lugaresAux">
+                    <td>{{item.id_lugar}}</td>
                     <td>
-                        <button>Actualizar</button>
-
-                        <button>Eliminar</button>
+                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso">
+                            {{item.nom_lugar}}
+                        </div>
+                        <ng-template #falso>
+                            <input type="text" [(ngModel)]="seletedLugarActualizar.nom_lugar" placeholder="NOMBRE DEL LUGAR" name="nom_lugar">
+                        </ng-template>
                     </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>02</td>
+
+                    <td>
+                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso1">
+                            {{item.latitud}}
+                        </div>
+                        <ng-template #falso1>
+                            <input type="text" [(ngModel)]="seletedLugarActualizar.latitud" placeholder="LATITUD" name="latitud">
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso2">
+                            {{item.longitud}}
+                        </div>
+                        <ng-template #falso2>
+                            <input type="text" [(ngModel)]="seletedLugarActualizar.longitud" placeholder="LONGITUD" name="longitud">
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso3">
+                            <div *ngIf="item.zona_roja != false; else falso10">
+                                SI
+                            </div>
+                            <ng-template #falso10>
+                                NO
+                            </ng-template>
+                        </div>
+                        <ng-template #falso3>
+                            <select [(ngModel)]="seletedZonaActualizar.id_zona" (ngModelChange)="selectZonaActualizar($event)" name="id_zona">
+                                <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso4">
+                            {{item.nom_comuna}}
+                        </div>
+                        <ng-template #falso4>
+                            <select [(ngModel)]="seletedComunaActualizar.id_comuna" (ngModelChange)="SelectComunaActualizar($event)" name="id_comuna">
+                                    <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                                </select>
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedLugarActualizar.id_lugar == item.id_lugar; else falso9">
+                            <button type="button" (click)="actualizacion()">Guardar</button>
+
+                        </div>
+                        <ng-template #falso9>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" (click)="actualizar(item)">Actualizar</button>
+                                <button type="button" (click)="eliminar(item)">Eliminar</button>
+                            </div>
+                        </ng-template>
+                    </td>
                 </tr>
 
             </tbody>
         </table>
-
     </div>
+
     <br><br><br><br><br>
-
-
 </body>
 
 </html>
