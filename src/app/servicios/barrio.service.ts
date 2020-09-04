@@ -24,7 +24,7 @@ export class BarrioService {
     return this.http.get<Barrio[]>(ApiUrl + 'barrio/' + nom_barrio).toPromise();
   }
 
-  /*Consulta un barrio de tabla barrio*/
+  /*Consultar un zona de tabla barrio*/
   findAllByIdBarrioZona(zona_roja:Boolean):Promise<Barrio[]>{
     return this.http.get<Barrio[]>(ApiUrl + 'barrioZona/' + zona_roja).toPromise();
   }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BarrioService } from '../servicios/barrio.service';
 import { ComunaService } from '../servicios/comuna.service';
+import { MesaService } from '../servicios/mesa.service';
 
 /* Clases */
 import { UsuarioFindAll } from '../modelos/usuario-find-all';
@@ -87,7 +88,7 @@ export class BarrioComponent implements OnInit {
   /* Inicializo objeto zona para formulario Actualizar Comuna */
   seletedComunaActualizar:Comuna = new Comuna(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
-  /* Verificar la Ayutenticidad */
+  /* Verificar la Autenticidad */
   encontrado:Boolean = this.validaciones.FALSE;
 
   /* Para bloquear desdel ts la viste del HTML dependiendo el tipo de usuario */
@@ -99,7 +100,7 @@ export class BarrioComponent implements OnInit {
   /* Se llama a login service para verificar la autenticidad de usuario */
   /* Se llama a router para poder navegar del ts a un html deacuerdo ala autenticidad */
   /* Se llama a Barrio service para poder realizar la funciones del CRUD del modulo de las mesas */
-  constructor(private loginServi:LoginService, private route:Router, private barrioService:BarrioService, 
+  constructor(private loginServi:LoginService,private mesaServi:MesaService, private route:Router, private barrioService:BarrioService, 
               private comunaService:ComunaService) { this.barriosAux = [] }
 
   ngOnInit() {
@@ -242,13 +243,13 @@ export class BarrioComponent implements OnInit {
       this.seletedBarrioAgregar.latitud = (parseFloat(this.seletedBarrioAgregar.latitud.toString())).toString();
       /* PAra tomar valor Real numerico */
       this.seletedBarrioAgregar.longitud = (parseFloat(this.seletedBarrioAgregar.longitud.toString())).toString();
-      /* LLamo al servivoi barrio para buscar los barrios existentes */
+      /* LLamo al servicio barrio para buscar los barrios existentes */
       this.barrioService.findByIdBarrio(this.seletedBarrioAgregar.nom_barrio).then(resultado =>{
         /* Se llena el arreglo barrios con la data seleccionada en la busqueda */
         this.barrios = resultado;
         /* Se pregunta si barrios contiene datos */
         if (this.barrios.length == this.validaciones.INT_NUMBER_0) {
-          /* llama el servivio de agregar un barrio en la tabla barrio */
+          /* llama el servicio de agregar un barrio en la tabla barrio */
           this.barrioService.insertBarrio({
             /* Se envia la data diligenciada en el formulario */
             id_barrio:this.seletedBarrioAgregar.id_barrio,
@@ -271,7 +272,7 @@ export class BarrioComponent implements OnInit {
           });
         } else {
           /* Respuesta de mesa a agregar ya encontrada */
-          alert('nombre de barrio :' + this.seletedBarrioAgregar.nom_barrio + ' Ya Existe');
+          alert('nombre del barrio :' + this.seletedBarrioAgregar.nom_barrio + ' Ya Existe');
         }
       });
     }    
@@ -644,7 +645,7 @@ export class BarrioComponent implements OnInit {
             });
           } else {
             /* Mensaje de respuesta de barrio ya existe */
-            alert('lla Existe barrio: ' + this.seletedBarrioActualizar.nom_barrio);
+            alert('Ya Existe barrio: ' + this.seletedBarrioActualizar.nom_barrio);
             /* se limpia el input de actualizar */
             this.seletedBarrioActualizar.id_barrio = this.validaciones.NULL;
             /* Recargo la pagina */

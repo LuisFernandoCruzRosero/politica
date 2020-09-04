@@ -20,13 +20,13 @@ export class LugarService {
    }
 
    /*Consulta una de las lugar*/
-   findByIdLugar(id_lugar:Number):Promise<Lugar[]>{
-    return this.http.get<Lugar[]>(ApiUrl + 'lugar/' + id_lugar).toPromise();
+   findByIdLugar(nom_lugar:String):Promise<Lugar[]>{
+    return this.http.get<Lugar[]>(ApiUrl + 'lugar/' + nom_lugar).toPromise();
   }
 
   /*Consultatodos los lugares de una comuna*/
    findAllLugarComuna(id_comunaL:Number):Promise<Lugar[]>{
-    return this.http.get<Lugar[]>(ApiUrl + 'lugar/' + id_comunaL).toPromise();
+    return this.http.get<Lugar[]>(ApiUrl + 'lugarComuna/' + id_comunaL).toPromise();
   }
  
    /* Inserta un dato ala tabla Lugar */
@@ -43,5 +43,17 @@ export class LugarService {
    updateLugar(lugar:Lugar){
      return this.http.put<Lugar>(ApiUrl + 'lugar/' + lugar.id_lugar, lugar);
    }
+
+   
+  /* Cuenta el total de todas los Lugares */
+  findByIdTotalLugar(){
+    return this.http.get<any>(ApiUrl + 'lugarContar');
+  } 
+
+   /*Consulta un zona de tabla lugar*/
+   findAllByIdLugarZona(zona_roja:Boolean):Promise<Lugar[]>{
+    return this.http.get<Lugar[]>(ApiUrl + 'LugarZona/' + zona_roja).toPromise();
+  }
+
  
 }
