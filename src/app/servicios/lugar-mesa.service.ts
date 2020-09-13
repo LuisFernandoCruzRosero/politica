@@ -24,8 +24,8 @@ export class LugarMesaService {
     return this.http.get<LugarMesa[]>(ApiUrl + 'lugarmesa/' + id_lugar).toPromise();
    }
    /*Consulta una de las LugarMesa*/
-   findByIdLugarMesa(id_lugar_mesa:Number):Promise<LugarMesa[]>{
-    return this.http.get<LugarMesa[]>(ApiUrl + 'lugarmesa' + id_lugar_mesa ).toPromise();
+   findByIdLugarMesa(id_lugar:Number, id_mesa:Number):Promise<LugarMesa[]>{
+    return this.http.get<LugarMesa[]>(ApiUrl + 'lugarmesa/' + id_lugar + '/' + id_mesa).toPromise();
   }
 
    /* Inserta un dato ala tabla Lugar_Mesa */
@@ -42,5 +42,10 @@ export class LugarMesaService {
    updateLugarMesa(lugarmesa:LugarMesa){
      return this.http.put<LugarMesa>(ApiUrl + 'lugarmesa/' + lugarmesa.id_lugar_mesa, lugarmesa);
    }
+
+    /* Cuenta el total de todas los lugarmesa */
+  findByIdTotalLugarMesa(){
+    return this.http.get<any>(ApiUrl + 'lugarmesaContar');
+  } 
 
 }

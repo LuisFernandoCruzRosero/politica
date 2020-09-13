@@ -63,6 +63,86 @@
             </ul>
         </div>
     </nav>
+    <div>
+        <h4>Agregar a un lugar una Mesa</h4>
+        <h4>SELECCIONE Lugar:</h4>
+        <select [(ngModel)]="seletedLugarMesaAgregar.id_lugar" name="item.id_lugar">
+            <option *ngFor="let item of lugares" [value]="item.id_lugar">{{item.nom_lugar}}</option>
+        </select>
+        <h4>SELECCIONE Mesa:</h4>
+        <select [(ngModel)]="seletedLugarMesaAgregar.id_mesa" name="item.id_mesa">
+            <option *ngFor="let item of mesas" [value]="item.id_mesa">{{item.nom_mesa}}</option>
+        </select>
+        <button (click)="guardar()">Agregar</button>
+
+        <h4>BUSCAR LUGAR </h4>
+        <h4>SELECCIONE Lugar:</h4>
+        <select [(ngModel)]="seletedLugarMesaBuscar.id_lugar" (ngModelChange)="selectZonaBuscar($event)" name="id_lugar">
+            <option *ngFor="let item of lugares" [value]="item.id_lugar">{{item.nom_lugar}}</option>
+        </select>
+
+        <button (click)="buscar()">Buscar</button>
+        <button (click)="listar()">listar</button>
+
+        <h4>Lista de Lugares </h4>
+        <h6>Total de Lugares de mesa:<input type="text" disabled placeholder="{{totalLugarMesa}}"></h6>
+    </div>
+    <div id="main-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>LUGAR</th>
+                    <th>MESA</th>
+                    <th>OPERACIÓN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of lugarmesasAux">
+                    <td>{{item.id_lugar_mesa}}</td>
+                    <td>
+                        <div *ngIf="seletedLugarMesaActualizar.id_lugar_mesa != item.id_lugar_mesa; else falso3">
+                            {{item.nom_lugar}}
+                        </div>
+                        <ng-template #falso3>
+                            <select [(ngModel)]="seletedLugarMesaActualizar.id_lugar" (ngModelChange)="selectLugarActualizar($event)" name="id_lugar">
+                                <option *ngFor="let item of lugar" [value]="item.id_lugar">{{item.name_lugar}}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedLugarMesaActualizar.id_lugar_mesa != item.id_lugar_mesa; else falso4">
+                            {{item.nom_mesa}}
+                        </div>
+                        <ng-template #falso4>
+                            <select [(ngModel)]="seletedComunaActualizar.id_comuna" (ngModelChange)="SelectComunaActualizar($event)" name="id_comuna">
+                                    <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                                </select>
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <div *ngIf="seletedLugarMesaActualizar.id_lugar_mesa == item.id_lugar_mesa; else falso9">
+                            <button type="button" (click)="actualizacion()">Guardar</button>
+
+                        </div>
+                        <ng-template #falso9>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" (click)="actualizar(item)">Actualizar</button>
+                                <button type="button" (click)="eliminar(item)">Eliminar</button>
+                            </div>
+                        </ng-template>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <br><br><br><br><br>
+
 </body>
 
 </html>

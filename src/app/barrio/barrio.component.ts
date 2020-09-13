@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BarrioService } from '../servicios/barrio.service';
 import { ComunaService } from '../servicios/comuna.service';
-import { MesaService } from '../servicios/mesa.service';
 
 /* Clases */
 import { UsuarioFindAll } from '../modelos/usuario-find-all';
@@ -16,7 +15,6 @@ import { Comuna } from '../modelos/comuna';
 import { BarrioAux } from '../modelos/barrio-aux';
 import { Validaciones } from '../modelos/validaciones';
 import { Zona } from '../modelos/zona';
-import { Mesa } from '../modelos/mesa';
 
 @Component({
   selector: 'app-barrio',
@@ -100,7 +98,7 @@ export class BarrioComponent implements OnInit {
   /* Se llama a login service para verificar la autenticidad de usuario */
   /* Se llama a router para poder navegar del ts a un html deacuerdo ala autenticidad */
   /* Se llama a Barrio service para poder realizar la funciones del CRUD del modulo de las mesas */
-  constructor(private loginServi:LoginService,private mesaServi:MesaService, private route:Router, private barrioService:BarrioService, 
+  constructor(private loginServi:LoginService, private route:Router, private barrioService:BarrioService, 
               private comunaService:ComunaService) { this.barriosAux = [] }
 
   ngOnInit() {
@@ -536,8 +534,6 @@ export class BarrioComponent implements OnInit {
   SelectComunaActualizar(item:Number) {
     this.seletedBarrioActualizar.id_comunaB = item;
   }
-
-
 
   /* Funcion que actualiza lo seleccionado en base de datos */
   actualizacion(){
