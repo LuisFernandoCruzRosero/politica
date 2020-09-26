@@ -11,6 +11,7 @@ export class DigitadorFindAll {
         public id_lider:Number,
         public id_usuario:Number,
         public municipio:String,
+        public departamento:String,
         public id_comunaB:Number,
         public id_mesa:Number,
         public id_tipo_usuario:Number,
