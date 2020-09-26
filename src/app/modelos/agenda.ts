@@ -5,6 +5,6 @@ export class Agenda {
         public lugar:String,
         public hora:String,
         public descripcion:String,
-        public id_usuario:String,
+        public id_usuario:Number,
     ){}
 }

@@ -63,6 +63,113 @@
             </ul>
         </div>
     </nav>
+
+    <div>
+        <h4>Agregar Agenda </h4>
+        <input type="text" [(ngModel)]="seletedAgendaAgregar.id_usuario" placeholder="USUARIO" name="id_usuario">
+        <input type="text" [(ngModel)]="seletedAgendaAgregar.descripcion" placeholder="DESCRIPCION" name="descripcion">
+        <input type="text" [(ngModel)]="seletedAgendaAgregar.fecha" placeholder="FECHA" name="fecha">
+
+        <label for="start">Start date:</label>
+
+        <input type="date" id="start" name="trip-start" value="2018-07-22" min="2020-09-22" max="2050-12-31">
+
+
+        <form action="/action_page.php">
+            <label for="appt">Select a time:</label>
+            <input type="time" id="appt" name="appt">
+            <input type="submit" value="Submit">
+        </form>
+
+        <input type="text" [(ngModel)]="seletedAgendaAgregar.hora" placeholder="HORA" name="hora">
+        <input type="text" [(ngModel)]="seletedAgendaAgregar.lugar" placeholder="LUGAR" name="lugar">
+        <button (click)="guardar()">Agregar</button>
+
+        <div class="btn_Buscar">
+            <h4>Buscar</h4>
+            <input type="text" [(ngModel)]="seletedAgendaBuscar.descripcion" placeholder="NUMERO DE AGENDA">
+            <button (click)="buscar()">Buscar</button>
+            <button (click)="listar()">listar</button>
+        </div>
+        <h4>Lista de Agendas </h4>
+        <h6>Total de Agendas:<input type="text" disabled placeholder="{{totalAgenda}}"></h6>
+
+    </div>
+    <div id="main-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>USUARIO</th>
+                    <th>DESCRIPCION</th>
+                    <th>FECHA</th>
+                    <th>HORA</th>
+                    <th>LUGAR</th>
+                    <th>OPERACIÓN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of agendas">
+                    <td>{{item.id_agenda}}</td>
+                    <td>
+                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso">
+                            {{item.id_usuario}}
+                        </div>
+                        <ng-template #falso>
+                            <input type="text" [(ngModel)]="seletedAgendaActualizar.id_usuario" name="id_usuario">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso1">
+                            {{item.descripcion}}
+                        </div>
+                        <ng-template #falso1>
+                            <input type="text" [(ngModel)]="seletedAgendaActualizar.descripcion" name="descripcion">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso2">
+                            {{item.fecha}}
+                        </div>
+                        <ng-template #falso2>
+                            <input type="text" [(ngModel)]="seletedAgendaActualizar.fecha" name="fecha">
+                        </ng-template>
+
+                    </td>
+                    <td>
+                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso3">
+                            {{item.hora}}
+                        </div>
+                        <ng-template #falso3>
+                            <input type="text" [(ngModel)]="seletedAgendaActualizar.hora" name="hora">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso4">
+                            {{item.lugar}}
+                        </div>
+                        <ng-template #falso4>
+                            <input type="text" [(ngModel)]="seletedAgendaActualizar.lugar" name="lugar">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedAgendaActualizar.id_agenda == item.id_agenda; else falso5">
+                            <button (click)="actualizacion()">Guardar</button>
+                        </div>
+                        <ng-template #falso5>
+                            <button (click)="actualizar(item)">Actualizar</button>
+                            <button (click)="eliminar(item)">Eliminar</button>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <br><br><br><br><br>
+
+
 </body>
 
 </html>
