@@ -77,7 +77,7 @@
 
         <h4>BUSCAR LUGAR </h4>
         <h4>SELECCIONE Lugar:</h4>
-        <select [(ngModel)]="seletedLugarMesaBuscar.id_lugar" (ngModelChange)="selectZonaBuscar($event)" name="id_lugar">
+        <select [(ngModel)]="seletedLugarMesaBuscar.id_lugar" (ngModelChange)="selectLugarMesaBuscar($event)" name="id_lugar">
             <option *ngFor="let item of lugares" [value]="item.id_lugar">{{item.nom_lugar}}</option>
         </select>
 
@@ -88,6 +88,10 @@
         <h6>Total de Lugares de mesa:<input type="text" disabled placeholder="{{totalLugarMesa}}"></h6>
     </div>
     <div id="main-container">
+
+        <label for="start">Start date:</label>
+
+        <input type="date" id="start" name="trip-start" value="2018-07-22">
 
         <table>
             <thead>
@@ -106,8 +110,8 @@
                             {{item.nom_lugar}}
                         </div>
                         <ng-template #falso3>
-                            <select [(ngModel)]="seletedLugarMesaActualizar.id_lugar" (ngModelChange)="selectLugarActualizar($event)" name="id_lugar">
-                                <option *ngFor="let item of lugar" [value]="item.id_lugar">{{item.name_lugar}}</option>
+                            <select [(ngModel)]="seletedLugarActualizar.id_lugar" (ngModelChange)="SelectLugarActualizar($event)" name="id_lugar">
+                                <option *ngFor="let item of lugares" [value]="item.id_lugar">{{item.nom_lugar}}</option>
                             </select>
                         </ng-template>
                     </td>
@@ -117,8 +121,8 @@
                             {{item.nom_mesa}}
                         </div>
                         <ng-template #falso4>
-                            <select [(ngModel)]="seletedComunaActualizar.id_comuna" (ngModelChange)="SelectComunaActualizar($event)" name="id_comuna">
-                                    <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                            <select [(ngModel)]="seletedMesaActualizar.id_mesa" (ngModelChange)="SelectMesaActualizar($event)" name="id_mesa">
+                                    <option *ngFor="let item of mesas" [value]="item.id_mesa">{{item.nom_mesa}}</option>
                                 </select>
                         </ng-template>
                     </td>

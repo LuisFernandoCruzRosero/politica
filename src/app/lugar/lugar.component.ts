@@ -523,6 +523,7 @@ export class LugarComponent implements OnInit {
  actualizar(lugar:Lugar){
    /* llena el objeto de comuna para actualizar */
    this.seletedLugarActualizar = lugar;
+   console.log(lugar);
    /* Asigna por defecto el valor que tiene en la tabla y se asigna 1 0 2 dependiendo del estado */
    if (this.seletedLugarActualizar.zona_roja == this.validaciones.TRUE) {
      this.seletedZonaActualizar.id_zona = this.validaciones.INT_NUMBER_2;

@@ -56,6 +56,13 @@ export class LugarMesaComponent implements OnInit {
   /* inicializamos un arreglo del objeto mesa */
   mesas:Mesa [] = [];
 
+  /* Inicializo el objeto Lugar Para formulario Actualizar*/
+  seletedLugarActualizar:Lugar = new Lugar(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
+
+  /* Inicializo el objeto Mesa Para formulario Actualizar*/
+  seletedMesaActualizar:Mesa = new Mesa(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
+
   /* Inicializo el objeto lugarMesa Para formulario Agregar*/
   seletedLugarMesaAgregar:LugarMesa = new LugarMesa(this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL);
  
@@ -64,7 +71,6 @@ export class LugarMesaComponent implements OnInit {
 
   /* Inicializo el objeto lugarMesa Para formulario Actualizar*/
   seletedLugarMesaActualizar:LugarMesa = new LugarMesa(this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL);
-
   
   /* Verificar la Autenticidad */
   encontrado:Boolean = this.validaciones.FALSE;
@@ -106,8 +112,6 @@ export class LugarMesaComponent implements OnInit {
             this.lugarService.findAllLugar().then(resultado=>{
               /* Asingno al arreglo lugares la cantidad de lugares existentes */
               this.lugares = resultado;
-              console.log(this.lugares);
-              console.log(this.mesas);
              //if (this.encontrado == true) {
               /* Se llena un arreglo auxiliar para listar correctamente los datos de la tabla barrio */
               for(let i = this.validaciones.INT_NUMBER_0; i < this.lugarmesas.length; i++){
@@ -117,8 +121,8 @@ export class LugarMesaComponent implements OnInit {
                       if ( this.lugares[k].id_lugar == this.lugarmesas[i].id_lugar) {
                         this.addLugarMesaAux({
                           id_lugar_mesa:this.lugarmesas[i].id_lugar_mesa,
-                          nom_lugar:this.lugares[i].nom_lugar,
-                          nom_mesa:this.mesas[i].nom_mesa,
+                          nom_lugar:this.lugares[k].nom_lugar,
+                          nom_mesa:this.mesas[j].nom_mesa,
                         });
 
                       }
@@ -243,6 +247,7 @@ export class LugarMesaComponent implements OnInit {
     } 
    /* Busqueda de Campos */
    buscar() {
+     console.log(this.seletedLugarMesaBuscar.id_lugar);
       /* valida si el campo nombre del lugarmesa del formulario buscar no esta vacio */
         /* llama el servicio para buscar todos los nombres y redtificar de que si exite */
         this.lugarmesaService.findAllByIdLugarMesa(this.seletedLugarMesaBuscar.id_lugar).then(resultado => {
@@ -261,8 +266,7 @@ export class LugarMesaComponent implements OnInit {
             /* inicializo arreglo que se muestra en el html para llenarlo de los datos de la busqueda */
             this.lugarmesasAux = [];
             /* llena los datos del arreglo barrios con los de la busqueda */
-            this.lugarmesas = this.lugarmesa;
-            console.log('nombre: '+this.lugarmesas)
+            this.lugarmesa = this.lugarmesas;
             /* LLena el arreglo auxiliar para llenarlo con datos validos */
             for(let i = this.validaciones.INT_NUMBER_0; i < this.lugarmesas.length; i++){
               for (let j = this.validaciones.INT_NUMBER_0; j < this.mesas.length; j++) {
@@ -271,10 +275,11 @@ export class LugarMesaComponent implements OnInit {
                     if ( this.lugares[k].id_lugar == this.lugarmesas[i].id_lugar) {
                       this.addLugarMesaAux({
                         id_lugar_mesa:this.lugarmesas[i].id_lugar_mesa,
-                        nom_lugar:this.lugares[i].nom_lugar,
-                        nom_mesa:this.mesas[i].nom_mesa,
+                        nom_lugar:this.lugares[k].nom_lugar,
+                        nom_mesa:this.mesas[j].nom_mesa,
                       });
-                   }
+
+                    }
                   }
                 }
               }
@@ -331,17 +336,19 @@ export class LugarMesaComponent implements OnInit {
     /* llena el objeto de comuna para actualizar */
     this.seletedLugarMesaActualizar = lugarmesa;
     console.log(this.seletedLugarMesaActualizar);
+    console.log(this.lugarmesas);
+    console.log(this.mesas);
+    console.log(this.lugares);
     /* Se asigna valor por defecto de Comuna para mostrar nombre correcto */
     for (let i = this.validaciones.INT_NUMBER_0; i < this.mesas.length; i++) {
-      if (this.mesas[i].id_mesa == this.seletedLugarMesaActualizar.id_mesa && 
-        this.mesas[i].id_mesa == this.mesas[i].id_mesa) {
-          this.seletedLugarMesaActualizar.id_mesa = this.mesas[i].id_mesa;
-      }
-    }
-    for (let j = this.validaciones.INT_NUMBER_0; j < this.lugares.length; j++) {
-      if (this.lugares[j].id_lugar == this.seletedLugarMesaActualizar.id_lugar && 
-        this.lugares[j].id_lugar == this.lugares[j].id_lugar) {
-          this.seletedLugarMesaActualizar.id_lugar = this.lugares[j].id_lugar;
+      for (let k = this.validaciones.INT_NUMBER_0; k < this.lugares.length; k++) {
+        for (let j = this.validaciones.INT_NUMBER_0; j < this.lugarmesas.length; j++){
+          if (this.lugarmesas[j].id_lugar_mesa == this.seletedLugarMesaActualizar.id_lugar_mesa && 
+            this.lugarmesas[j].id_mesa == this.mesas[i].id_mesa &&  this.lugarmesas[j].id_lugar == this.lugares[k].id_lugar) {
+              this.seletedMesaActualizar.id_mesa = this.mesas[i].id_mesa;
+              this.seletedLugarActualizar.id_lugar = this.lugares[k].id_lugar;
+          }
+        }
       }
     }
   }
@@ -358,6 +365,8 @@ export class LugarMesaComponent implements OnInit {
 
   /* Funcion que actualiza lo seleccionado en base de datos */
   actualizacion() {
+    this.seletedLugarMesaActualizar.id_lugar  = this.seletedLugarActualizar.id_lugar;
+    this.seletedLugarMesaActualizar.id_mesa = this.seletedMesaActualizar.id_mesa;
     this.lugarmesaService.findByIdLugarMesa(this.seletedLugarMesaActualizar.id_lugar, this.seletedLugarMesaActualizar.id_mesa).then(resultado =>{
       this.lugarmesa = resultado
       if (this.lugarmesa.length == this.validaciones.INT_NUMBER_0) {
@@ -366,12 +375,9 @@ export class LugarMesaComponent implements OnInit {
           id_lugar : this.seletedLugarMesaActualizar.id_lugar,
           id_mesa : this.seletedLugarMesaActualizar.id_mesa
         }).subscribe((modificado) => {
-          /* se limpia el input de actualizar */
           this.seletedLugarMesaActualizar.id_lugar_mesa = this.validaciones.NULL;
-          this.seletedLugarMesaActualizar.id_lugar = this.validaciones.NULL;
-          this.seletedLugarMesaActualizar.id_mesa = this.validaciones.NULL;
           /* Se da respuesta Exitosa del servidor */
-          alert("Se actualizo la comuna con exito");
+          alert("Se actualizo la mesa y el lugar con exito");
           /* se llama la funcion inicial para que recargue la pagina */
           this.ngOnInit();
         },(err:HttpErrorResponse) => {
@@ -382,11 +388,9 @@ export class LugarMesaComponent implements OnInit {
           }
         });
       } else {
+        this.seletedLugarMesaActualizar.id_lugar_mesa = this.validaciones.NULL;
         /* Mensaje de respuesta de barrio ya existe */
         alert('Ya Existe Mesa: ' + this.seletedLugarMesaActualizar.id_mesa + ' en Lugar: '+ this.seletedLugarMesaActualizar.id_lugar);
-        /* se limpia el input de actualizar */
-        this.seletedLugarMesaActualizar.id_mesa = this.validaciones.NULL;
-        this.seletedLugarMesaActualizar.id_lugar = this.validaciones.NULL;
         /* Recargo la pagina */
         this.ngOnInit();
       }

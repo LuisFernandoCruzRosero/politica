@@ -21,7 +21,7 @@ export class LugarMesaService {
 
     /*Consulta los lugares de una Mesa*/
    findAllByIdLugarMesa(id_lugar:Number):Promise<LugarMesa[]>{
-    return this.http.get<LugarMesa[]>(ApiUrl + 'lugarmesa/' + id_lugar).toPromise();
+    return this.http.get<LugarMesa[]>(ApiUrl + 'lugarMesaLugar/' + id_lugar).toPromise();
    }
    /*Consulta una de las LugarMesa*/
    findByIdLugarMesa(id_lugar:Number, id_mesa:Number):Promise<LugarMesa[]>{
