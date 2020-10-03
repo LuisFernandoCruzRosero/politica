@@ -48,4 +48,9 @@ export class LoginService {
     this.autenticidad = JSON.parse(localStorage.getItem('autenticidad'));
     return this.autenticidad;
   }
+
+  /* obtiene la cedula de todos los usuarios */
+  findAllUsuarioCedula():Promise<UsuarioFindAll[]>{
+    return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCedula').toPromise();
+  }
 }

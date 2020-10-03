@@ -21,6 +21,7 @@ import { Barrio } from '../modelos/barrio';
 import { Mesa } from '../modelos/mesa';
 import { Lider } from '../modelos/lider';
 import { VotanteService } from '../servicios/votante.service';
+import { Votante } from '../modelos/votante';
 
 @Component({
   selector: 'app-digitador',
@@ -37,6 +38,9 @@ export class DigitadorComponent implements OnInit {
 
   /* Inicializo un arreglo del objeto digitador */
   digitador:DigitadorFindAll[] = [];
+
+  /* Inicializo un arreglo del objeto Votante */
+  votante:Votante[] = [];
 
   /* Inicializo un arreglo del objeto Comuna */
   comuna:Comuna[] = [];
@@ -256,7 +260,15 @@ export class DigitadorComponent implements OnInit {
       /* LLamo al servicio digitador para buscar los digitadores existentes */
       this.digitadorServi.findByIdDigitadorCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
         this.digitador = resultado;
-       
+        this.votanteServi.findByIdVotanteCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
+          this.votante = resultado
+        },(err:HttpErrorResponse) => {
+          if(err.error instanceof Error){
+            alert("a ocurrido un errror cliente");
+          }else{
+            alert("a ocurrido un errror servidor");
+          }
+        }); 
       },(err:HttpErrorResponse) => {
         if(err.error instanceof Error){
           alert("a ocurrido un errror cliente");
