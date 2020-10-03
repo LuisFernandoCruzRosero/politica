@@ -50,7 +50,7 @@ export class LoginService {
   }
 
   /* obtiene la cedula de todos los usuarios */
-  findAllUsuarioCedula():Promise<UsuarioFindAll[]>{
-    return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCedula').toPromise();
+  findAllUsuarioCedula(ced_usuario:String):Promise<UsuarioFindAll[]>{
+    return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCedula/' + ced_usuario).toPromise();
   }
 }

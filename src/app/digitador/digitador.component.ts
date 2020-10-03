@@ -262,6 +262,15 @@ export class DigitadorComponent implements OnInit {
         this.digitador = resultado;
         this.votanteServi.findByIdVotanteCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
           this.votante = resultado
+          this.loginServi.findAllUsuarioCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
+            this.usuario = resultado
+          },(err:HttpErrorResponse) => {
+            if(err.error instanceof Error){
+              alert("a ocurrido un errror cliente");
+            }else{
+              alert("a ocurrido un errror servidor");
+            }
+          }); 
         },(err:HttpErrorResponse) => {
           if(err.error instanceof Error){
             alert("a ocurrido un errror cliente");
