@@ -20,6 +20,7 @@ import { Lugar } from '../modelos/lugar';
 import { Barrio } from '../modelos/barrio';
 import { Mesa } from '../modelos/mesa';
 import { Lider } from '../modelos/lider';
+import { VotanteService } from '../servicios/votante.service';
 
 @Component({
   selector: 'app-digitador',
@@ -94,7 +95,7 @@ export class DigitadorComponent implements OnInit {
 
   constructor(private loginServi:LoginService, private route:Router, private digitadorServi:DigitadorService, 
     private comunaServi:ComunaService, private lugarServi:LugarService, private barrioServi:BarrioService, 
-    private mesaServi:MesaService, private liderServi:LiderService) {}
+    private mesaServi:MesaService, private liderServi:LiderService, private votanteServi:VotanteService) {}
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
@@ -131,6 +132,22 @@ export class DigitadorComponent implements OnInit {
                     /* Asigno al arreglo digitador todas las existenten en la tabla */
                     this.totalDigitador = resultado;
                     });
+/*
+                    for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
+                      for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
+                        if (this.comunas[j].id_comuna == this.barrios[i].id_comunaB) {
+                          this.addBarrioAux({
+                            id_barrio:this.barrios[i].id_barrio,
+                            nom_barrio:this.barrios[i].nom_barrio,
+                            latitud:this.barrios[i].latitud,
+                            longitud:this.barrios[i].longitud,
+                            zona_roja:this.barrios[i].zona_roja,
+                            nom_comuna:this.comunas[j].nom_comuna,
+                          });
+                        }
+                      }
+                    }
+*/
                     try {
                       /* Consulto Tokent de Autenticidad */
                       this.token = this.loginServi.findAllToken();
@@ -210,4 +227,43 @@ export class DigitadorComponent implements OnInit {
       });
   }
 
+  /*  Funcion Guardar Barrio */
+  guardar() {
+    /* Validacion de Campos Obligatorios y invalidos */
+    if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.ced_digitador) == this.validaciones.TRUE) {
+      alert('CAMPO CEDULA OBLIGATORIO..');
+    } else if (this.validaciones.validacionNumerico(this.seletedDigitadorAgregar.ced_digitador) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO CEDULA INVALIDO: ' + this.seletedDigitadorAgregar.ced_digitador);
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.nom_digitador) == this.validaciones.TRUE) {
+      alert('CAMPO NOMBRE OBLIGATORIO..');
+    } else if (this.validaciones.validacionNombre(this.seletedDigitadorAgregar.nom_digitador) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO NOMBRE INVALIDO: ' + this.seletedDigitadorAgregar.nom_digitador);
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.usu_digiador) == this.validaciones.TRUE) {
+      alert('CAMPO USUARIO OBLIGATORIO..');
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.con_digitador) == this.validaciones.TRUE) {
+      alert('CAMPO CONTRASEÑA OBLIGATORIO: ');
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.municipio) == this.validaciones.TRUE) {
+      alert('CAMPO MUNICIPIO OBLIGATORIO: ');
+    } else if (this.validaciones.validacionNombre(this.seletedDigitadorAgregar.municipio) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO MUNICIPIO INVALIDO: ' + this.seletedDigitadorAgregar.municipio);
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.departamento) == this.validaciones.TRUE) {
+      alert('CAMPO DEPARTAMENTO OBLIGATORIO: ');
+    } else if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.departamento) == this.validaciones.TRUE) {
+      alert('CAMPO DEPARTAMENTO INVALIDO: ' + this.seletedDigitadorAgregar.departamento);
+    } else if (this.validaciones.validacionNumerico(this.seletedDigitadorAgregar.tel_digitador) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('CAMPO DEPARTAMENTO INVALIDO: ' + this.seletedDigitadorAgregar.tel_digitador);
+    } else {
+      /* LLamo al servicio digitador para buscar los digitadores existentes */
+      this.digitadorServi.findByIdDigitadorCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
+        this.digitador = resultado;
+       
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }    
+  }
 }
