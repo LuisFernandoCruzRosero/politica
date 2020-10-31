@@ -22,6 +22,7 @@ import { Mesa } from '../modelos/mesa';
 import { Lider } from '../modelos/lider';
 import { VotanteService } from '../servicios/votante.service';
 import { Votante } from '../modelos/votante';
+import { DigitadorAux } from '../modelos/digitador-aux';
 
 @Component({
   selector: 'app-digitador',
@@ -38,6 +39,9 @@ export class DigitadorComponent implements OnInit {
 
   /* Inicializo un arreglo del objeto digitador */
   digitador:DigitadorFindAll[] = [];
+
+  /* Inicializo un arreglo del objeto Digitador Para la lista sin id */
+ digitadorAux:DigitadorAux[] = [];
 
   /* Inicializo un arreglo del objeto Votante */
   votante:Votante[] = [];
@@ -84,6 +88,13 @@ export class DigitadorComponent implements OnInit {
     this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, 
     this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
+     /* Inicializo el objeto digitador Para formulario Buscar*/
+    seletedListarDigitador:DigitadorFindAll = new DigitadorFindAll(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, 
+    this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, 
+    this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
+
   /* Verificar la Ayutenticidad */
   encontrado:Boolean = this.validaciones.FALSE;
 
@@ -99,59 +110,105 @@ export class DigitadorComponent implements OnInit {
 
   constructor(private loginServi:LoginService, private route:Router, private digitadorServi:DigitadorService, 
     private comunaServi:ComunaService, private lugarServi:LugarService, private barrioServi:BarrioService, 
-    private mesaServi:MesaService, private liderServi:LiderService, private votanteServi:VotanteService) {}
+    private mesaServi:MesaService, private liderServi:LiderService, private votanteServi:VotanteService) { this.digitadorAux = [] }
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
+    /* Se limpia arreglo auxiliar para volver a llenar */
+    this.digitadorAux = [];
     /* Consulto los Datos de la tabla usuario */
     this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
       this.usuario = resultado;
+      console.log(this.usuario);
       /* Consulto los Datos de la tabla digitador */
       this.loginServi.findAllDigitador().then(resultado => {
         /* Asigno los datos de la tabla digitador al arreglo digitador */
         this.digitador = resultado;
+        console.log(this.digitador);
         /* Consulto Los datos de la tabla Comuna */
         this.comunaServi.findAllComuna().then(resultado => {
           /* Asigno al arreglo Comuna todas las existenten en la tabla */
           this.comuna = resultado;
+          console.log(this.comuna);
           /* Asigno al arreglo lugar todas las existenten en la tabla */
           this.lugarServi.findAllLugar().then(resultado => {
             /* Asigno al arreglo lugar todas las existenten en la tabla */
             this.lugar = resultado;
+            console.log(this.lugar);
             /* Asigno al arreglo barrio todas las existenten en la tabla */
             this.barrioServi.findAllBarrio().then(resultado => {
               /* Asigno al arreglo barrio todas las existenten en la tabla */
               this.barrio = resultado;
+              console.log(this.barrio);
                /* Asigno al arreglo lider todas las existenten en la tabla */
               this.liderServi.findAllLider().then(resultado => {
                 /* Asigno al arreglo lider todas las existenten en la tabla */
                 this.lider = resultado;
+                console.log(this.lider);
                 /* Asigno al arreglo mesa todas las existenten en la tabla */
                  this.mesaServi.findAllMesa().then(resultado => {
                   /* Asigno al arreglo mesa todas las existenten en la tabla */
                   this.mesa = resultado;
+                  console.log(this.mesa);
                   /* consulta la cantidad de digitador que existen en el sistema */
                   this.digitadorServi.findByIdTotalDigitador().subscribe(resultado=>{
                     /* Asigno al arreglo digitador todas las existenten en la tabla */
                     this.totalDigitador = resultado;
                     });
-/*
-                    for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
-                      for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
-                        if (this.comunas[j].id_comuna == this.barrios[i].id_comunaB) {
-                          this.addBarrioAux({
-                            id_barrio:this.barrios[i].id_barrio,
-                            nom_barrio:this.barrios[i].nom_barrio,
-                            latitud:this.barrios[i].latitud,
-                            longitud:this.barrios[i].longitud,
-                            zona_roja:this.barrios[i].zona_roja,
-                            nom_comuna:this.comunas[j].nom_comuna,
-                          });
+
+                    for (let i = this.validaciones.INT_NUMBER_0; i < this.digitador.length; i++) {
+                      for (let j = this.validaciones.INT_NUMBER_0; j < this.lider.length; j++) {
+                        for (let k = this.validaciones.INT_NUMBER_0; k < this.usuario.length; k++) {
+                          for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                            for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++) {
+                              for (let n = this.validaciones.INT_NUMBER_0; n < this.barrio.length; n++) {
+                                for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                                  for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                                    if (this.digitador[i].id_lider == this.lider[j].id_lider) {
+                                      if (this.digitador[i].id_usuario == this.usuario[k].id_usuario) {
+                                        if (this.digitador[i].id_comunaB == this.comuna[l].id_comuna) {
+                                          if (this.digitador[i].id_comunaL == this.comuna[m].id_comuna) {
+                                            if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
+                                              if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
+                                                if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
+                                                  console.log('encontro1');
+                                                  this.addDigitadorAux({
+                                                    id_digitador : this.digitador[i].id_digitador,
+                                                    ced_digitador: this.digitador[i].ced_digitador,
+                                                    nom_digitador : this.digitador[i].nom_digitador,
+                                                    tel_digitador : this.digitador[i].tel_digitador,
+                                                    municipio : this.digitador[i].municipio,
+                                                    departamento : this.digitador[i].departamento,
+                                                    usu_digiador : this.digitador[i].usu_digiador,
+                                                    con_digitador : this.digitador[i].con_digitador,
+                                                    comuna_barrio : this.comuna[l].nom_comuna,
+                                                    nom_barrio : this.barrio[n].nom_barrio,
+                                                    comuna_lugar : this.comuna[m].nom_comuna,
+                                                    nom_lugar : this.lugar[o].nom_lugar,
+                                                    id_tipo_usuario : this.digitador[i].id_tipo_usuario,
+                                                    nom_lider : this.lider[j].nom_lider,
+                                                    nom_usuario : this.usuario[k].nom_usuario,
+                                                    nom_mesa : this.mesa[p].nom_mesa,
+                                                    activo : this.digitador[i].activo,
+                                                  })
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
                         }
                       }
                     }
-*/
+                    console.log(this.digitadorAux)
+
                     try {
                       /* Consulto Tokent de Autenticidad */
                       this.token = this.loginServi.findAllToken();
@@ -260,10 +317,64 @@ export class DigitadorComponent implements OnInit {
       /* LLamo al servicio digitador para buscar los digitadores existentes */
       this.digitadorServi.findByIdDigitadorCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
         this.digitador = resultado;
+        /* LLamo al servicio votante para buscar los digitadores existentes */
         this.votanteServi.findByIdVotanteCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
           this.votante = resultado
+          /* LLamo al servicio usuario para buscar los digitadores existentes */
           this.loginServi.findAllUsuarioCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
-            this.usuario = resultado
+            this.usuario = resultado;
+            /* LLamo al servicio lider para buscar los digitadores existentes */
+            this.liderServi.findByIdLiderCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
+              this.lider = resultado
+                /* Se valida que el nuevo registro no exista en ninguna tabla existente */
+                if (this.digitador.length == this.validaciones.INT_NUMBER_0 && this.votante.length == this.validaciones.INT_NUMBER_0
+                    && this.usuario.length == this.validaciones.INT_NUMBER_0 && this.lider.length == this.validaciones.INT_NUMBER_0) {
+                      this.digitadorServi.insertDigitador({
+                        id_digitador : this.seletedDigitadorAgregar.id_digitador,
+                        ced_digitador: this.seletedDigitadorAgregar.ced_digitador,
+                        nom_digitador : this.seletedDigitadorAgregar.nom_digitador,
+                        tel_digitador : this.seletedDigitadorAgregar.tel_digitador,
+                        municipio : this.seletedDigitadorAgregar.municipio,
+                        departamento : this.seletedDigitadorAgregar.departamento,
+                        usu_digiador : this.seletedDigitadorAgregar.usu_digiador,
+                        con_digitador : this.seletedDigitadorAgregar.con_digitador,
+                        id_comunaB : this.seletedDigitadorAgregar.id_comunaB,
+                        id_barrio : this.seletedDigitadorAgregar.id_barrio,
+                        id_comunaL : this.seletedDigitadorAgregar.id_comunaL,
+                        id_lugar : this.seletedDigitadorAgregar.id_lugar,
+                        id_tipo_usuario : 4,
+                        id_lider : this.seletedDigitadorAgregar.id_lider,
+                        id_usuario : this.seletedDigitadorAgregar.id_usuario,
+                        id_mesa : this.seletedDigitadorAgregar.id_mesa,
+                        activo : this.validaciones.TRUE,
+                      }).subscribe((resultado) => {
+                        alert('Se agrego el digitador..');
+                        this.ngOnInit();
+                        /* Se limpian los IMPUT */
+                        this.seletedDigitadorAgregar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+                        this.seletedDigitadorAgregar.nom_digitador = this.validaciones.STR_LETTER_WITHOUT;
+                        this.seletedDigitadorAgregar.usu_digiador = this.validaciones.STR_LETTER_WITHOUT;
+                        this.seletedDigitadorAgregar.con_digitador = this.validaciones.STR_LETTER_WITHOUT;
+                        this.seletedDigitadorAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
+                        this.seletedDigitadorAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
+                        this.seletedDigitadorAgregar.tel_digitador = this.validaciones.STR_LETTER_WITHOUT;
+                      });
+                } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
+                  alert("la cedula ya Existe en digitador: " + this.seletedDigitadorAgregar.ced_digitador);
+                } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {
+                  alert("la cedula ya Existe en votante: " + this.seletedDigitadorAgregar.ced_digitador);
+                } else if (this.usuario.length != this.validaciones.INT_NUMBER_0) {
+                  alert("la cedula ya Existe en usuario: " + this.seletedDigitadorAgregar.ced_digitador);
+                } else if (this.lider.length != this.validaciones.INT_NUMBER_0) {
+                  alert("la cedula ya Existe en lider: " + this.seletedDigitadorAgregar.ced_digitador);
+                }
+              },(err:HttpErrorResponse) => {
+                if(err.error instanceof Error){
+                  alert("a ocurrido un errror cliente");
+                }else{
+                  alert("a ocurrido un errror servidor");
+                }
+              });
           },(err:HttpErrorResponse) => {
             if(err.error instanceof Error){
               alert("a ocurrido un errror cliente");
@@ -287,4 +398,9 @@ export class DigitadorComponent implements OnInit {
       });
     }    
   }
+   /* Agregar Barrio a Arreglo local par aquitar id */
+   addDigitadorAux(item:DigitadorAux){
+    this.digitadorAux.push(item);
+  }
+
 }
