@@ -133,4 +133,10 @@ export class Validaciones {
             }
         }
     }
+
+    validaNull(numberNull:Number) {
+        if (numberNull == this.NULL || numberNull == this.INT_NUMBER_0) {
+            return '';
+        }
+    }
 }
