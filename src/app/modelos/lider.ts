@@ -7,10 +7,10 @@ export class Lider {
         public id_barrio:Number,
         public nom_lider:String,
         public id_usuario:Number,
-        public tel_lider:Number,
+        public tel_lider:String,
         public id_comunaL:Number,
         public id_comunaB:Number,
-        public activo:Number,
+        public activo:Boolean,
         public municipio:String,
         public departamento:String,
      ){}

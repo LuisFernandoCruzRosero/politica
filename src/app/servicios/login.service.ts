@@ -48,9 +48,23 @@ export class LoginService {
     this.autenticidad = JSON.parse(localStorage.getItem('autenticidad'));
     return this.autenticidad;
   }
+  /* Inserta un dato ala tabla coordinador */
+  insertCoordinador(usuario:UsuarioFindAll){
+    return this.http.post<UsuarioFindAll>(ApiUrl + 'usuario', usuario)
+  }
 
   /* obtiene la cedula de todos los usuarios */
   findAllUsuarioCedula(ced_usuario:String):Promise<UsuarioFindAll[]>{
     return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCedula/' + ced_usuario).toPromise();
+  }
+
+  /* obtiene todos los usuarios de coordinador */
+  findAllUsuarioCoordinador():Promise<UsuarioFindAll[]>{
+    return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCoordinador').toPromise();
+  }
+  
+   /* Cuenta el total de todas las lider */
+   findByIdTotalUsuarioCoordinador(){
+    return this.http.get<any>(ApiUrl + 'usuarioCoordinadorContar');
   }
 }

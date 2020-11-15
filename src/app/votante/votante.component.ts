@@ -21,6 +21,8 @@ import { Lugar } from '../modelos/lugar';
 import { Barrio } from '../modelos/barrio';
 import { Mesa } from '../modelos/mesa';
 import { Lider } from '../modelos/lider';
+import { DigitadorService } from '../servicios/digitador.service';
+import { VotanteAux } from '../modelos/votante-aux';
 
 
 
@@ -49,6 +51,8 @@ export class VotanteComponent implements OnInit {
   mesa:Mesa[] = [];
   /* Inicializo un arreglo del objeto Lider */
   lider:Lider[] = [];
+   /* Inicializo un arreglo del objeto Lider */
+   votanteAux:VotanteAux[] = [];
   
 
   /* Inicializo un arreglo del objeto Agenda Para la busqueda*/
@@ -67,6 +71,13 @@ export class VotanteComponent implements OnInit {
    this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
    this.validaciones.STR_LETTER_WITHOUT);
 
+    /* Inicializo el objeto Agenda Para formulario listar*/
+    seletedVotanteListar:Votante = new Votante(this.validaciones.NULL, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL,
+    this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
+    this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
+    this.validaciones.STR_LETTER_WITHOUT);
+ 
   /* Inicializo el objeto Agenda Para formulario Actualizar*/
   seletedVotanteActualizar:Votante = new Votante(this.validaciones.NULL, 
     this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL,
@@ -97,11 +108,12 @@ export class VotanteComponent implements OnInit {
 
   constructor(private loginServi:LoginService, private route:Router, private votanteService:VotanteService,
     private comunaService:ComunaService, private lugarService:LugarService, private barrioService:BarrioService,
-    private mesaService:MesaService, private liderService:LiderService) { }
+    private mesaService:MesaService, private liderService:LiderService, private digitadorService:DigitadorService) { this.votanteAux = [] }
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
-
+    /*se limpia arreglo aux para volver a llenar*/
+    this.votanteAux = [];
     /* Consulto los Datos de la tabla usuario */
     this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
@@ -138,6 +150,53 @@ export class VotanteComponent implements OnInit {
           this.votanteService.findByIdTotalVotante().subscribe(resultado=>{
             this.totalVotante = resultado;
           });
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.usuario.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          
+                        if (this.votantes[i].id_barrio == this.barrio[j].id_barrio) {
+                          if (this.votantes[i].id_lider == this.lider[k].id_lider) {
+                            if (this.votantes[i].id_usuario == this.usuario[n].id_usuario) {
+                              if (this.votantes[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addVotanteAux({
+                                        id_votante:this.votantes[i].id_votante,
+                                        ced_votante: this.votantes[i].ced_votante,
+                                        nom_lider: this.lider[k].nom_lider,
+                                        nom_votante: this.votantes[i].nom_votante,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.usuario[n].nom_usuario,
+                                        tel_votante : this.votantes[i].tel_votante,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.votantes[i].municipio,
+                                        departamento: this.votantes[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
           try {
             /* Consulto Tokent de Autenticidad */
             this.token = this.loginServi.findAllToken();
@@ -248,10 +307,23 @@ export class VotanteComponent implements OnInit {
     } else {
       /* LLamo al servicio votante para buscar los votantes existentes */
       this.votanteService.findByIdVotanteCedula(this.seletedVotanteAgregar.ced_votante).then(resultado =>{
-        /* Se llena el arreglo votantes con la data seleccionada en la busqueda */
-        this.votantes = resultado;
-        /* Se pregunta si barrios contiene datos */
-        if (this.votantes.length == this.validaciones.INT_NUMBER_0) {
+      /* Se llena el arreglo votantes con la data seleccionada en la busqueda */
+      this.votantes = resultado;
+      /* LLamo al servicio digitador para buscar los votantes existentes */
+      this.digitadorService.findByIdDigitadorCedula(this.seletedVotanteAgregar.ced_votante).then(resultado =>{
+        /* Se llena el arreglo digitador con la data seleccionada en la busqueda */
+        this.digitador = resultado;
+        /* LLamo al servicio lider para buscar los votantes existentes */
+      this.liderService.findByIdLiderCedula(this.seletedVotanteAgregar.ced_votante).then(resultado =>{
+        /* Se llena el arreglo lider con la data seleccionada en la busqueda */
+        this.lider = resultado;
+        /* LLamo al servicio Usuario para buscar los votantes existentes */
+      this.loginServi.findAllUsuarioCedula(this.seletedVotanteAgregar.ced_votante).then(resultado =>{
+        /* Se llena el arreglo Usuario con la data seleccionada en la busqueda */
+        this.usuario = resultado;
+         /* Se pregunta si barrios contiene datos */
+        if (this.votantes.length == this.validaciones.INT_NUMBER_0 && this.digitador.length == this.validaciones.INT_NUMBER_0 &&
+          this.usuario.length == this.validaciones.INT_NUMBER_0 && this.lider.length == this.validaciones.INT_NUMBER_0 ) {
           /* llama el servicio de agregar un barrio en la tabla barrio */
           this.votanteService.insertVotante({
             /* Se envia la data diligenciada en el formulario */
@@ -264,25 +336,63 @@ export class VotanteComponent implements OnInit {
             id_barrio: this.seletedVotanteAgregar.id_barrio,
             id_usuario: this.seletedVotanteAgregar.id_usuario,
             tel_votante : this.seletedVotanteAgregar.tel_votante,
-            activo : this.seletedVotanteAgregar.activo,
+            activo : this.validaciones.TRUE,
             id_comunaL: this.seletedVotanteAgregar.id_comunaL,
             id_comunaB: this.seletedVotanteAgregar.id_comunaB,
             municipio: this.seletedVotanteAgregar.municipio,
             departamento: this.seletedVotanteAgregar.departamento
           }).subscribe((resultado) => {
             /* Se da respuesta Exitosa del servidor */
-            alert("Se Agrego la Mesa");
+            alert("Se Agrego EL VOTANTE");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
-            /* se limpia el input de agregar nombre de barrio */
+            /* se limpia el input de agregar */
             this.seletedVotanteAgregar.nom_votante = this.validaciones.STR_LETTER_WITHOUT;
             this.seletedVotanteAgregar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
-
+            this.seletedVotanteAgregar.tel_votante = this.validaciones.STR_LETTER_WITHOUT;
+            this.seletedVotanteAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
+            this.seletedVotanteAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
           });
+        } else if (this.votantes.length != this.validaciones.INT_NUMBER_0) { 
+          alert("la cedula ya exite en votante: " + this.seletedVotanteAgregar.ced_votante);
+        } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
+          alert("la cedula ya exite en digitador: " + this.seletedVotanteAgregar.ced_votante);
+        } else if (this.usuario.length != this.validaciones.INT_NUMBER_0) {
+          alert("la cedula ya exite en usuario: " + this.seletedVotanteAgregar.ced_votante);
+        } else if (this.lider.length != this.validaciones.INT_NUMBER_0) {
+          alert("la cedula ya exite en lider: " + this.seletedVotanteAgregar.ced_votante);
+        }
+      }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
         } else {
-          /* Respuesta de votante a agregar ya encontrada */
+          alert("a ocurrido un errror servidor");
         }
       });
+    }, (err:HttpErrorResponse) => {
+      if (err.error instanceof Error) {
+        alert("a ocurrido un errror cliente");
+      } else {
+        alert("a ocurrido un errror servidor");
+      }
+    });
+  }, (err:HttpErrorResponse) => {
+    if (err.error instanceof Error) {
+      alert("a ocurrido un errror cliente");
+    } else {
+      alert("a ocurrido un errror servidor");
+    }
+  });
+}, (err:HttpErrorResponse) => {
+  if (err.error instanceof Error) {
+    alert("a ocurrido un errror cliente");
+  } else {
+    alert("a ocurrido un errror servidor");
+  }
+});
     }    
+  }
+  addVotanteAux(item:VotanteAux) {
+    this.votanteAux.push(item);
   }
 }
