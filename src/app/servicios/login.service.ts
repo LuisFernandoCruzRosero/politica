@@ -63,8 +63,13 @@ export class LoginService {
     return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCoordinador').toPromise();
   }
   
-   /* Cuenta el total de todas las lider */
+   /* Cuenta el total de todas las coordinador */
    findByIdTotalUsuarioCoordinador(){
     return this.http.get<any>(ApiUrl + 'usuarioCoordinadorContar');
+  }
+
+  /* Borra un dato de la tabla coordinador por id */
+  deleteByIdCoordinador(id_usuario:Number){
+    return this.http.delete(ApiUrl + 'coordinador/' + id_usuario);
   }
 }

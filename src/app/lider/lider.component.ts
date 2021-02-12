@@ -10,6 +10,7 @@ import { BarrioService } from '../servicios/barrio.service';
 import { MesaService } from '../servicios/mesa.service';
 import { UsuarioService } from '../servicios/usuario.service';
 import { VotanteService } from '../servicios/votante.service';
+import { LugarMesaService } from '../servicios/lugar-mesa.service';
 
 /* Clases */
 import { UsuarioFindAll } from '../modelos/usuario-find-all';
@@ -24,6 +25,9 @@ import { Lider } from '../modelos/lider';
 import { DigitadorService } from '../servicios/digitador.service';
 import { LiderAux } from '../modelos/lider-aux';
 import { Votante } from '../modelos/votante';
+import { LugarMesa } from '../modelos/lugar-mesa';
+import { LugarMesaComponent } from '../lugar-mesa/lugar-mesa.component';
+
 
 @Component({
   selector: 'app-lider',
@@ -40,22 +44,37 @@ export class LiderComponent implements OnInit {
 
   /* Inicializo un arreglo del objeto Agenda */
   lideres:Lider[] = [];
+
   /* Inicializo un arreglo del objeto Agenda */
   votantes:Votante[] = [];
+
   /* Inicializo un arreglo del objeto Barrio */
   barrio:Barrio[] = [];
+  barrioAux:Barrio[] = [];
+
   /* Inicializo un arreglo del objeto Comuna */
-  comuna:Comuna[] = [];
+  comuna:Comuna[] = [];  
+  comunaLAux:Comuna[] = [];
+  comunaBAux:Comuna[] = [];
+
   /* Inicializo un arreglo del objeto Lugar */
   lugar:Lugar[] = [];
+  lugarAux:Lugar[] = [];
+
+  /* Mesa Lugar */
+  lugarMesa:LugarMesa[] = [];
+  lugarMesaAux:LugarMesa[] = [];
+
   /* Inicializo un arreglo del objeto Mesa */
   mesa:Mesa[] = [];
+  mesaAux:Mesa[] = [];
+
   /* Inicializo un arreglo del objeto votante */
   votante:Votante[] = [];
+
   /* Inicializo un arreglo del objeto Lider */
   lider:Lider[] = [];
-   /* Inicializo un arreglo del objeto Lider */
-   liderAux:LiderAux[] = [];
+  liderAux:LiderAux[] = [];
   
 
   /* Inicializo un arreglo del objeto Agenda Para la busqueda*/
@@ -66,6 +85,10 @@ export class LiderComponent implements OnInit {
 
   /* Inicializamos un arreglo del objeto Digitador */
   digitador:DigitadorFindAll[] = [];
+
+  /* Inicializo un arreglo del objeto usuario para los coordinadores */
+  coordinador:UsuarioFindAll[] = [];
+
 
   /* Inicializo el objeto Agenda Para formulario Agregar*/
   seletedLiderAgregar:Lider = new Lider(this.validaciones.NULL, 
@@ -113,13 +136,10 @@ export class LiderComponent implements OnInit {
   /* Se llama a Mesa service para poder realizar la funciones del CRUD del modulo de las mesas */
 
   constructor(private loginServi:LoginService, private route:Router, private comunaService:ComunaService, private lugarService:LugarService, private barrioService:BarrioService,
-    private mesaService:MesaService, private liderService:LiderService,private votanteService:VotanteService, private digitadorService:DigitadorService) { this.liderAux = [] }
+    private mesaService:MesaService, private liderService:LiderService,private votanteService:VotanteService, private digitadorService:DigitadorService,private lugarmesaService:LugarMesaService ) { this.liderAux = [] }
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
- 
-
   ngOnInit() {
-
     /*se limpia arreglo aux para volver a llenar*/
     this.liderAux = [];
     /* Consulto los Datos de la tabla usuario */
@@ -138,14 +158,18 @@ export class LiderComponent implements OnInit {
         this.comunaService.findAllComuna().then(resultado => {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
           this.comuna = resultado;
+          this.comunaBAux = this.comuna;
+          this.comunaLAux = this.comuna;        
           /* Consulto Los datos de la tabla barrio */
         this.barrioService.findAllBarrio().then(resultado => {
           /* Asigno al arreglo barrio todas las existenten en la tabla */
           this.barrio = resultado;
+          this.barrioAux = this.barrio;
           /* Consulto Los datos de la tabla lugar */
         this.lugarService.findAllLugar().then(resultado => {
           /* Asigno al arreglo lugar todas las existenten en la tabla */
           this.lugar = resultado;
+          this.lugarAux = this.lugar;
           /* Consulto Los datos de la tabla mesa */
         this.mesaService.findAllMesa().then(resultado => {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
@@ -153,6 +177,10 @@ export class LiderComponent implements OnInit {
           /* consulta la cantidad de Agendas que existen en el sistema */
           this.liderService.findByIdTotalLider().subscribe(resultado=>{
             this.totalLider = resultado;
+          /* asigno el arreglo coordinador todos los datos de la tabla usuario que son coordinadores */
+         this.loginServi.findAllUsuarioCoordinador().then(resultado=>{
+              this.coordinador = resultado;
+           
           });
 
           for (let i = this.validaciones.INT_NUMBER_0; i < this.lideres.length; i++){
@@ -240,13 +268,19 @@ export class LiderComponent implements OnInit {
             alert("a ocurrido un errror servidor");
           }
         });
-            }, (err:HttpErrorResponse) => {
-              if (err.error instanceof Error) {
-                alert("a ocurrido un errror cliente");
-              } else {
-                alert("a ocurrido un errror servidor");
-              }
-            });
+      }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
+        } else {
+          alert("a ocurrido un errror servidor");
+        }
+      });  }, (err:HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          alert("a ocurrido un errror cliente");
+        } else {
+          alert("a ocurrido un errror servidor");
+        }
+      });
           }, (err:HttpErrorResponse) => {
             if (err.error instanceof Error) {
               alert("a ocurrido un errror cliente");
@@ -279,6 +313,21 @@ export class LiderComponent implements OnInit {
 
   /*  Funcion Guardar Votante */
   guardar() {
+    console.log(
+      "cedula: " + this.seletedLiderAgregar.ced_lider + "\n" +
+      "nombre: " + this.seletedLiderAgregar.nom_lider + "\n" +
+      "id_comunaL: " + this.seletedLiderAgregar.id_comunaL + "\n" +
+      "id_lugar: " + this.seletedLiderAgregar.id_lugar + "\n" +
+      "id_barrio: " + this.seletedLiderAgregar.id_barrio + "\n" +
+      "id_lider: " + this.seletedLiderAgregar.id_lider + "\n" +
+      "id_usuario: " + this.seletedLiderAgregar.id_usuario + "\n" +
+      "municipio: " + this.seletedLiderAgregar.municipio + "\n" +
+      "departamento: " + this.seletedLiderAgregar.departamento + "\n" +
+      "id_comunaB: " + this.seletedLiderAgregar.id_comunaB + "\n" + 
+      "id_mesa: " + this.seletedLiderAgregar.id_mesa + "\n" + 
+      "activo: " + this.seletedLiderAgregar.activo + "\n" + 
+      "telefeno: " + this.seletedLiderAgregar.tel_lider + "\n" 
+    );
     /* Validacion de Campos Obligatorios y invalidos */
     if (this.validaciones.validaCampoObligatorio(this.seletedLiderAgregar.nom_lider) == this.validaciones.TRUE) {
       alert('CAMPO NOMBRE VOTANTE OBLIGATORIO..');
@@ -316,8 +365,8 @@ export class LiderComponent implements OnInit {
         /* Se llena el arreglo Usuario con la data seleccionada en la busqueda */
         this.usuario = resultado;
          /* Se pregunta si barrios contiene datos */
-        if (this.lideres.length == this.validaciones.INT_NUMBER_0 && this.digitador.length == this.validaciones.INT_NUMBER_0 &&
-          this.usuario.length == this.validaciones.INT_NUMBER_0 && this.lider.length == this.validaciones.INT_NUMBER_0 ) {
+        if (this.lider == this.validaciones.NULL && this.digitador == this.validaciones.NULL &&
+          this.usuario == this.validaciones.NULL && this.votantes == this.validaciones.NULL) {
           /* llama el servicio de agregar un barrio en la tabla barrio */
           this.liderService.insertLider({
             /* Se envia la data diligenciada en el formulario */
@@ -346,13 +395,13 @@ export class LiderComponent implements OnInit {
             this.seletedLiderAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
             this.seletedLiderAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
           });
-        } else if (this.lideres.length != this.validaciones.INT_NUMBER_0) { 
+        } else if (this.votantes != this.validaciones.NULL) { 
           alert("la cedula ya exite en votante: " + this.seletedLiderAgregar.ced_lider);
-        } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
+        } else if (this.digitador != this.validaciones.NULL) {
           alert("la cedula ya exite en digitador: " + this.seletedLiderAgregar.ced_lider);
-        } else if (this.usuario.length != this.validaciones.INT_NUMBER_0) {
+        } else if (this.usuario != this.validaciones.NULL) {
           alert("la cedula ya exite en usuario: " + this.seletedLiderAgregar.ced_lider);
-        } else if (this.lider.length != this.validaciones.INT_NUMBER_0) {
+        } else if (this.lider != this.validaciones.NULL) {
           alert("la cedula ya exite en lider: " + this.seletedLiderAgregar.ced_lider);
         }
       }, (err:HttpErrorResponse) => {
@@ -389,4 +438,95 @@ export class LiderComponent implements OnInit {
   addLiderAux(item:LiderAux) {
     this.liderAux.push(item);
   }
+
+
+  SelectComunaBAgregar(id_comunaB:Number){
+    this.barrioAux = [];
+    let j = 0;
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_comunaB == this.barrio[i].id_comunaB){
+        this.barrioAux[j] = this.barrio[i];
+        j++;
+      }
+    }
+  }
+
+  SelectBarrioAgregar(id_barrio:Number){
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_barrio == this.barrio[i].id_barrio){
+        this.seletedLiderAgregar.id_comunaB = this.barrio[i].id_comunaB;
+      }
+    }
+  }
+
+  SelectComunaLAgregar(id_comunaL:Number){
+    this.lugarAux = [];
+    let j = 0;
+    for(let i = 0; i < this.lugar.length; i++){
+      if(id_comunaL == this.lugar[i].id_comunaL){
+        this.lugarAux[j] = this.lugar[i];
+        j++;
+      }
+    }
+  }
+
+  SelectLugarAgregar(id_lugar:Number){
+    let l = 0;
+    this.lugarMesa = [];
+    this.mesaAux = [];
+    this.lugarMesaAux = [];
+    this.lugarmesaService.findAllLugarMesa().then(resultado =>{
+      this.lugarMesa = resultado;
+      for(let i = 0; i < this.lugar.length; i++){
+        if(id_lugar == this.lugar[i].id_lugar){
+          this.seletedLiderAgregar.id_comunaL = this.lugar[i].id_comunaL;
+        }
+      }
+      for (let j = 0; j < this.lugarMesa.length;j++) {
+        if (this.lugarMesa[j].id_lugar == this.seletedLiderAgregar.id_lugar) {
+           this.lugarMesaAux[l] = this.lugarMesa[j];
+           l++;
+        }
+      }
+      let h = 0;
+      for (let k = 0; k < this.lugarMesaAux.length ;k++) {
+       for (let m = 0; m < this.mesa.length; m++) {
+          if (this.mesa[m].id_mesa == this.lugarMesaAux[k].id_mesa) {
+            this.mesaAux[h] = this.mesa[m];
+            h++;
+          }
+       }
+      }
+    });
+  }
+
+  SelectLiderAgregar(id_lider:Number) {
+    for(let i = 0; i < this.lider.length; i++){
+      if(id_lider == this.lider[i].id_lider){
+        this.seletedLiderAgregar.id_usuario = this.lider[i].id_usuario;
+      }
+    }
+  }
+
+  /* Funcion que elimina lo seleccionado en base de datos */
+  eliminar(lider:Lider) {
+    /* dialogo de confirmacion de eliminar los datos */
+    if(confirm('estas seguro de querer eliminarlo ced_lider: ' + lider.ced_lider + ' nombre lider: ' + lider.nom_lider)){
+      /* se llama el servicio mesa la funcion eliminar */
+      this.liderService.deleteByIdLider(lider.id_lider).subscribe((modificado) =>{
+        /* Se da respuesta Exitosa del servidor */
+        alert('Registro Eliminado Exito');
+        /* se llama la funcion inicial para que recargue la pagina */
+        this.ngOnInit();
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+
 }

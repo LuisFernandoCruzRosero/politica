@@ -400,6 +400,26 @@ export class CoordinadorComponent implements OnInit {
  
   addCoordinadorAux(item:CoordinadorAux) {
     this.coordinadorAux.push(item);
+   }
 
+   /* Funcion que elimina lo seleccionado en base de datos */
+  eliminar(coordinador:UsuarioFindAll) {
+    /* dialogo de confirmacion de eliminar los datos */
+    if(confirm('estas seguro de querer eliminarlo ced_usuario: ' + coordinador.ced_usuario + ' nombre coordinador: ' + coordinador.nom_usuario)){
+      /* se llama el servicio mesa la funcion eliminar */
+      this.loginServi.deleteByIdCoordinador(coordinador.id_usuario).subscribe((modificado) =>{
+        /* Se da respuesta Exitosa del servidor */
+        alert('Registro Eliminado Exito');
+        /* se llama la funcion inicial para que recargue la pagina */
+        this.ngOnInit();
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
   }
+
 }

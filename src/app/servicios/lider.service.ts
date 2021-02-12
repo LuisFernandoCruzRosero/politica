@@ -22,7 +22,7 @@ export class LiderService {
 
   /* Consulta una de los lider registradas de la tabla lider */
   findByIdLiderCedula(ced_lider:String):Promise<Lider[]>{
-    return this.http.get<Lider[]>(ApiUrl + 'lider/' + ced_lider).toPromise();
+    return this.http.get<Lider[]>(ApiUrl + 'liderCedula/' + ced_lider).toPromise();
   }
 
   /* Inserta un dato ala tabla lider */
