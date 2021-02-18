@@ -89,11 +89,3 @@ input {
     margin-left: 100px;
     margin-top: 10px;
 }
-
-td input {
-    background-color: rgb(211, 207, 207);
-    margin-right: 10px;
-    margin-left: 20px;
-    margin-top: 10px;
-    width: 40px;
-}

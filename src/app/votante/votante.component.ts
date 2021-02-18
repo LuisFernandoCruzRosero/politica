@@ -11,7 +11,7 @@ import { MesaService } from '../servicios/mesa.service';
 import { LiderService } from '../servicios/lider.service';
 import { LugarMesaService } from '../servicios/lugar-mesa.service';
 
-/* Clases */
+/* Modelos */
 import { UsuarioFindAll } from '../modelos/usuario-find-all';
 import { DigitadorFindAll } from '../modelos/digitador-find-all';
 import { Token } from '../modelos/token';
@@ -47,6 +47,8 @@ export class VotanteComponent implements OnInit {
 
   /* Inicializo un arreglo del objeto Agenda */
   votantes:Votante[] = [];
+  
+  votante:Votante[] = [];
   votanteAux:VotanteAux[] = [];
 
   /* Inicializo un arreglo del objeto Barrio */
@@ -113,7 +115,36 @@ export class VotanteComponent implements OnInit {
     this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
     this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
     this.validaciones.STR_LETTER_WITHOUT);
- 
+
+     /* Inicializo el objeto digitador Para formulario Buscar*/
+  seletedDigitadorBuscar:DigitadorFindAll = new DigitadorFindAll(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, 
+    this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, 
+    this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
+
+
+ /* Inicializo el objeto Lugar Para formulario Buscar*/
+ seletedLugarBuscar:Lugar = new Lugar(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+  this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
+
+/* Inicializo el objeto barrio Para formulario Buscar*/
+seletedBarrioBuscar:Barrio = new Barrio(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+  this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
+
+/* Inicializo el objeto Lider Para formulario Buscar*/
+seletedLiderBuscar:Lider = new Lider(this.validaciones.NULL, 
+  this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, 
+  this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL,this.validaciones.NULL,this.validaciones.NULL,
+  this.validaciones.NULL,this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.STR_LETTER_WITHOUT);
+
+  /* Inicializo el objeto Coordinador Para formulario Buscar*/
+seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
+  this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL, this.validaciones.NULL, 
+  this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.STR_LETTER_WITHOUT,
+  this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL,
+  this.validaciones.NULL,this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,
+  this.validaciones.STR_LETTER_WITHOUT);
 
   /* Verificar la Ayutenticidad */
   encontrado:Boolean = this.validaciones.FALSE;
@@ -148,6 +179,7 @@ export class VotanteComponent implements OnInit {
         this.votanteService.findAllVotante().then(resultado => {
           /* Asigno al arreglo votantes todas las existenten en la tabla */
           this.votantes = resultado;
+          this.votante = this.votantes;
           console.log(this.votantes);
         /* Consulto Los datos de la tabla Comuna */
         this.comunaService.findAllComuna().then(resultado => {
@@ -497,6 +529,7 @@ export class VotanteComponent implements OnInit {
   }
 
   SelectLugarAgregar(id_lugar:Number){
+    console.log("id_lugar: " + id_lugar);
     let l = 0;
     this.lugarMesa = [];
     this.mesaAux = [];
@@ -532,6 +565,490 @@ export class VotanteComponent implements OnInit {
         this.seletedVotanteAgregar.id_usuario = this.lider[i].id_usuario;
       }
     }
+  }
+
+
+  selectLugarBuscar(id_lugar:Number) {
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedVotanteBuscar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = id_lugar;
+    this.seletedVotanteBuscar.id_votante = this.validaciones.NULL;
+  }
+
+  selectBarriorBuscar(id_barrio:Number) {
+    this.seletedVotanteBuscar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = id_barrio;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedVotanteBuscar.id_votante = this.validaciones.NULL;
+  }
+
+  selectLiderBuscar(id_lider:Number) { 
+    
+    this.seletedVotanteBuscar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = id_lider;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedVotanteBuscar.id_votante = this.validaciones.NULL;
+  }
+
+  selectCoordinadorBuscar(id_coordinador:Number) {
+    this.seletedVotanteBuscar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = id_coordinador;
+    this.seletedVotanteBuscar.id_votante = this.validaciones.NULL;
+  }
+
+  selectVotanteBuscar (id_votante:Number) {
+    this.seletedVotanteBuscar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedVotanteBuscar.id_votante = id_votante;
+  }
+
+
+  buscar() {
+    this.votanteAux = [];
+
+
+    if(this.seletedVotanteBuscar.id_votante != this.validaciones.NULL){
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.votanteService.findByIdVotante(this.seletedVotanteBuscar.id_votante).then(resultado=>{
+        this.votantes = resultado;
+        if ( this.votantes.length != this.validaciones.INT_NUMBER_0) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.coordinador.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          
+                        if (this.votantes[i].id_barrio == this.barrio[j].id_barrio) {
+                          if (this.votantes[i].id_lider == this.lider[k].id_lider) {
+                            if (this.votantes[i].id_usuario == this.coordinador[n].id_usuario) {
+                              if (this.votantes[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addVotanteAux({
+                                        id_votante:this.votantes[i].id_votante,
+                                        ced_votante: this.votantes[i].ced_votante,
+                                        nom_lider: this.lider[k].nom_lider,
+                                        nom_votante: this.votantes[i].nom_votante,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.coordinador[n].nom_usuario,
+                                        tel_votante : this.votantes[i].tel_votante,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.votantes[i].municipio,
+                                        departamento: this.votantes[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } else if(this.addVotanteAux.length == this.validaciones.INT_NUMBER_0){
+          alert('Cedula: ' + this.seletedVotanteBuscar.ced_votante + ' No Existe..');
+        }
+
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+
+
+
+    if(this.seletedVotanteBuscar.ced_votante != this.validaciones.STR_LETTER_WITHOUT){
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedDigitadorBuscar.id_usuario = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.votanteService.findByIdVotanteCedula(this.seletedVotanteBuscar.ced_votante).then(resultado=>{
+        this.votantes = resultado;
+        console.log(this.votantes);
+        if ( this.votantes.length != this.validaciones.INT_NUMBER_0) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.coordinador.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          
+                        if (this.votantes[i].id_barrio == this.barrio[j].id_barrio) {
+                          if (this.votantes[i].id_lider == this.lider[k].id_lider) {
+                            if (this.votantes[i].id_usuario == this.coordinador[n].id_usuario) {
+                              if (this.votantes[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addVotanteAux({
+                                        id_votante:this.votantes[i].id_votante,
+                                        ced_votante: this.votantes[i].ced_votante,
+                                        nom_lider: this.lider[k].nom_lider,
+                                        nom_votante: this.votantes[i].nom_votante,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.coordinador[n].nom_usuario,
+                                        tel_votante : this.votantes[i].tel_votante,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.votantes[i].municipio,
+                                        departamento: this.votantes[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }      
+        } else if(this.votanteAux.length == this.validaciones.INT_NUMBER_0){
+          alert('Cedula: ' + this.seletedVotanteBuscar.ced_votante + ' No Existe..');
+        }
+
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedLugarBuscar.id_lugar != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.votanteService.findByIdVotanteLugar(this.seletedLugarBuscar.id_lugar).then(resultado=>{
+        this.votantes = resultado;
+        if ( this.votantes.length != this.validaciones.INT_NUMBER_0) {
+        for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
+          for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+            for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
+              for (let n = this.validaciones.INT_NUMBER_0; n < this.coordinador.length; n++) {
+                for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                  for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                    for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                      for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                        
+                      if (this.votantes[i].id_barrio == this.barrio[j].id_barrio) {
+                        if (this.votantes[i].id_lider == this.lider[k].id_lider) {
+                          if (this.votantes[i].id_usuario == this.coordinador[n].id_usuario) {
+                            if (this.votantes[i].id_comunaB == this.comuna[l].id_comuna) {
+                              if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
+                                if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
+                                  if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
+                                    console.log('entro');
+                                    this.addVotanteAux({
+                                      id_votante:this.votantes[i].id_votante,
+                                      ced_votante: this.votantes[i].ced_votante,
+                                      nom_lider: this.lider[k].nom_lider,
+                                      nom_votante: this.votantes[i].nom_votante,
+                                      nom_lugar: this.lugar[o].nom_lugar,
+                                      nom_mesa: this.mesa[p].nom_mesa,
+                                      nom_barrio: this.barrio[j].nom_barrio,
+                                      nom_usuario: this.coordinador[n].nom_usuario,
+                                      tel_votante : this.votantes[i].tel_votante,
+                                      activo : this.validaciones.TRUE,
+                                      comuna_lugar: this.comuna[m].nom_comuna,
+                                      comuna_barrio: this.comuna[l].nom_comuna,
+                                      municipio: this.votantes[i].municipio,
+                                      departamento: this.votantes[i].departamento
+                                    })
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        } else if(this.addVotanteAux.length == this.validaciones.INT_NUMBER_0){
+          alert('En este Lugar: ' + this.seletedLugarBuscar.id_lugar + ' No Se a Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedBarrioBuscar.id_barrio != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.votanteService.findAllVotanteBarrio(this.seletedBarrioBuscar.id_barrio).then(resultado=>{
+        this.votantes = resultado;
+        if ( this.votantes.length != this.validaciones.INT_NUMBER_0) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.coordinador.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          
+                        if (this.votantes[i].id_barrio == this.barrio[j].id_barrio) {
+                          if (this.votantes[i].id_lider == this.lider[k].id_lider) {
+                            if (this.votantes[i].id_usuario == this.coordinador[n].id_usuario) {
+                              if (this.votantes[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addVotanteAux({
+                                        id_votante:this.votantes[i].id_votante,
+                                        ced_votante: this.votantes[i].ced_votante,
+                                        nom_lider: this.lider[k].nom_lider,
+                                        nom_votante: this.votantes[i].nom_votante,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.coordinador[n].nom_usuario,
+                                        tel_votante : this.votantes[i].tel_votante,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.votantes[i].municipio,
+                                        departamento: this.votantes[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }else if (this.votanteAux.length == this.validaciones.INT_NUMBER_0){
+          alert('En este Barrio: ' + this.seletedBarrioBuscar.id_barrio + ' No Se a Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedCoordinadorBuscar.id_usuario != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.votanteService.findAllVotanteUsuario(this.seletedCoordinadorBuscar.id_usuario).then(resultado=>{
+        this.votantes = resultado;
+        if ( this.votantes.length != this.validaciones.INT_NUMBER_0) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.coordinador.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          
+                        if (this.votantes[i].id_barrio == this.barrio[j].id_barrio) {
+                          if (this.votantes[i].id_lider == this.lider[k].id_lider) {
+                            if (this.votantes[i].id_usuario == this.coordinador[n].id_usuario) {
+                              if (this.votantes[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addVotanteAux({
+                                        id_votante:this.votantes[i].id_votante,
+                                        ced_votante: this.votantes[i].ced_votante,
+                                        nom_lider: this.lider[k].nom_lider,
+                                        nom_votante: this.votantes[i].nom_votante,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.coordinador[n].nom_usuario,
+                                        tel_votante : this.votantes[i].tel_votante,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.votantes[i].municipio,
+                                        departamento: this.votantes[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }else if(this.votanteAux.length == this.validaciones.INT_NUMBER_0){
+          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedLiderBuscar.id_lider != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.votanteService.findAllVotanteLider(this.seletedLiderBuscar.id_lider).then(resultado=>{
+        this.votantes = resultado;
+        if ( this.votantes.length != this.validaciones.INT_NUMBER_0) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.coordinador.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          
+                        if (this.votantes[i].id_barrio == this.barrio[j].id_barrio) {
+                          if (this.votantes[i].id_lider == this.lider[k].id_lider) {
+                            if (this.votantes[i].id_usuario == this.coordinador[n].id_usuario) {
+                              if (this.votantes[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addVotanteAux({
+                                        id_votante:this.votantes[i].id_votante,
+                                        ced_votante: this.votantes[i].ced_votante,
+                                        nom_lider: this.lider[k].nom_lider,
+                                        nom_votante: this.votantes[i].nom_votante,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.coordinador[n].nom_usuario,
+                                        tel_votante : this.votantes[i].tel_votante,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.votantes[i].municipio,
+                                        departamento: this.votantes[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }else if(this.votanteAux.length == this.validaciones.INT_NUMBER_0){
+          alert('El Lider: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+  listar() {
+    this.limpiar();
+    this.ngOnInit();
+  }
+
+  limpiar() {
+    /* Se limpian los imput de Buscar */
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.ced_digitador =this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+    /* selimpian los imput de Agregar  */
+    this.seletedVotanteAgregar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedVotanteAgregar.nom_votante = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedVotanteAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedVotanteAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedVotanteAgregar.tel_votante = this.validaciones.STR_LETTER_WITHOUT;
   }
 
   /* Funcion que elimina lo seleccionado en base de datos */

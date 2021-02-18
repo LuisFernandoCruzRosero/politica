@@ -20,6 +20,10 @@ export class LiderService {
     return this.http.get<Lider[]>(ApiUrl + 'lider').toPromise();
   }
 
+  findByIdLider(id_lider:Number):Promise<Lider[]>{
+    return this.http.get<Lider[]>(ApiUrl + 'lider/' + id_lider).toPromise();
+  }
+
   /* Consulta una de los lider registradas de la tabla lider */
   findByIdLiderCedula(ced_lider:String):Promise<Lider[]>{
     return this.http.get<Lider[]>(ApiUrl + 'liderCedula/' + ced_lider).toPromise();
@@ -44,4 +48,23 @@ export class LiderService {
   findByIdTotalLider(){
     return this.http.get<any>(ApiUrl + 'liderContar');
   }
+
+  /* Busca los digitadores por Lugar */
+  findAllLiderLugar(id_lugar:Number):Promise<Lider[]>{
+    return this.http.get<Lider[]>(ApiUrl + 'liderLugar/' + id_lugar).toPromise();
+  }
+
+  /* Busca los digitadores por Lugar */
+  findAllLiderBarrio(id_barrio:Number):Promise<Lider[]>{
+    return this.http.get<Lider[]>(ApiUrl + 'liderBarrio/' + id_barrio).toPromise();
+   }
+
+  
+
+  /* Busca los digitadores por Lugar */
+  findAllLiderUsuario(id_usuario:Number):Promise<Lider[]>{
+    return this.http.get<Lider[]>(ApiUrl + 'liderUsuario/' + id_usuario).toPromise();
+  
+  }
 }
+

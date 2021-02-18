@@ -21,9 +21,11 @@ export class VotanteService {
  }
 
  /* Consulta una de las Agendas registradas de la tabla Votante */
- findByIdVotante(descripcion:String):Promise<Votante[]>{
-   return this.http.get<Votante[]>(ApiUrl + 'votante/' + descripcion).toPromise();
+ findByIdVotante(id_votante:Number):Promise<Votante[]>{
+   return this.http.get<Votante[]>(ApiUrl + 'votante/' + id_votante).toPromise();
  }
+
+
 
  /* Inserta un dato ala tabla Votante */
  insertVotante(votante:Votante){
@@ -49,5 +51,24 @@ export class VotanteService {
  findByIdVotanteCedula(cedula:String):Promise<Votante[]>{
   return this.http.get<Votante[]>(ApiUrl + 'votanteCedula/' + cedula).toPromise();
 }
+
+  /* Busca los votantes por Lugar */
+  findByIdVotanteLugar(id_lugar:Number):Promise<Votante[]>{
+    return this.http.get<Votante[]>(ApiUrl + 'votanteLugar/' + id_lugar).toPromise();
+  }
+
+  findAllVotanteBarrio(id_barrio:Number):Promise<Votante[]>{
+    return this.http.get<Votante[]>(ApiUrl + 'votanteBarrio/' + id_barrio).toPromise();
+
+  }
+
+  findAllVotanteUsuario(id_usuario:Number):Promise<Votante[]>{
+    return this.http.get<Votante[]>(ApiUrl + 'votanteUsuario/' + id_usuario).toPromise();
+
+  }
+  findAllVotanteLider(id_lider:Number):Promise<Votante[]>{
+    return this.http.get<Votante[]>(ApiUrl + 'votanteLider/' + id_lider).toPromise();
+
+  }
 
 }

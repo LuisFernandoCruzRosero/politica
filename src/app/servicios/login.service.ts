@@ -58,6 +58,23 @@ export class LoginService {
     return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCedula/' + ced_usuario).toPromise();
   }
 
+  /* obtiene la cedula de todos los usuarios */
+  findByIdUsuarioCoordinador(id_usuario:Number):Promise<UsuarioFindAll[]>{
+  return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCoordinador/' + id_usuario).toPromise();
+  }
+
+ /* obtiene la cedula de todos los usuarios */
+ findAllUsuarioCoordinadorCedula(ced_usuario:String):Promise<UsuarioFindAll[]>{
+  return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCoordinadorCedula/' + ced_usuario).toPromise();
+}
+
+findAllUsuarioCoordinadorLugar(id_lugar:Number):Promise<UsuarioFindAll[]>{
+  return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCoordinadorLugar/' + id_lugar).toPromise();
+}
+
+findAllUsuarioCoordinadorBarrio(id_barrio:Number):Promise<UsuarioFindAll[]>{
+  return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCoordinadorBarrio/' + id_barrio).toPromise();
+}
   /* obtiene todos los usuarios de coordinador */
   findAllUsuarioCoordinador():Promise<UsuarioFindAll[]>{
     return this.http.get<UsuarioFindAll[]>(ApiUrl + 'usuarioCoordinador').toPromise();
@@ -70,6 +87,6 @@ export class LoginService {
 
   /* Borra un dato de la tabla coordinador por id */
   deleteByIdCoordinador(id_usuario:Number){
-    return this.http.delete(ApiUrl + 'coordinador/' + id_usuario);
+    return this.http.delete(ApiUrl + 'usuario/' + id_usuario);
   }
 }

@@ -12,7 +12,7 @@ import { UsuarioService } from '../servicios/usuario.service';
 import { VotanteService } from '../servicios/votante.service';
 import { LugarMesaService } from '../servicios/lugar-mesa.service';
 
-/* Clases */
+/* Modelos */
 import { UsuarioFindAll } from '../modelos/usuario-find-all';
 import { DigitadorFindAll } from '../modelos/digitador-find-all';
 import { Token } from '../modelos/token';
@@ -120,6 +120,28 @@ export class LiderComponent implements OnInit {
     this.validaciones.NULL,this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.STR_LETTER_WITHOUT,
     );
  
+/* Inicializo el objeto Lugar Para formulario Buscar*/
+seletedLugarBuscar:Lugar = new Lugar(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+  this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
+
+/* Inicializo el objeto barrio Para formulario Buscar*/
+seletedBarrioBuscar:Barrio = new Barrio(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+  this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
+
+/* Inicializo el objeto Lider Para formulario Buscar*/
+seletedDigitadorBuscar:DigitadorFindAll = new DigitadorFindAll(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+  this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, 
+  this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+  this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, 
+  this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
+
+  /* Inicializo el objeto Coordinador Para formulario Buscar*/
+seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
+  this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL, this.validaciones.NULL, 
+  this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.STR_LETTER_WITHOUT,
+  this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL,
+  this.validaciones.NULL,this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,
+  this.validaciones.STR_LETTER_WITHOUT);
  
 
   /* Verificar la Ayutenticidad */
@@ -140,6 +162,9 @@ export class LiderComponent implements OnInit {
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
+     /* se quema el departamento y el municipio */
+     this.seletedLiderAgregar.departamento = 'NARIÑO';
+     this.seletedLiderAgregar.municipio = 'TUMACO';
     /*se limpia arreglo aux para volver a llenar*/
     this.liderAux = [];
     /* Consulto los Datos de la tabla usuario */
@@ -154,6 +179,7 @@ export class LiderComponent implements OnInit {
         this.liderService.findAllLider().then(resultado => {
           /* Asigno al arreglo votantes todas las existenten en la tabla */
           this.lideres = resultado;
+          this.lider = this.lideres;
         /* Consulto Los datos de la tabla Comuna */
         this.comunaService.findAllComuna().then(resultado => {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
@@ -365,8 +391,8 @@ export class LiderComponent implements OnInit {
         /* Se llena el arreglo Usuario con la data seleccionada en la busqueda */
         this.usuario = resultado;
          /* Se pregunta si barrios contiene datos */
-        if (this.lider == this.validaciones.NULL && this.digitador == this.validaciones.NULL &&
-          this.usuario == this.validaciones.NULL && this.votantes == this.validaciones.NULL) {
+        if (this.lider.length == this.validaciones.INT_NUMBER_0 && this.digitador.length == this.validaciones.INT_NUMBER_0 &&
+          this.usuario.length == this.validaciones.INT_NUMBER_0 && this.votantes.length == this.validaciones.INT_NUMBER_0) {
           /* llama el servicio de agregar un barrio en la tabla barrio */
           this.liderService.insertLider({
             /* Se envia la data diligenciada en el formulario */
@@ -395,13 +421,13 @@ export class LiderComponent implements OnInit {
             this.seletedLiderAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
             this.seletedLiderAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
           });
-        } else if (this.votantes != this.validaciones.NULL) { 
+        } else if (this.votantes.length != this.validaciones.INT_NUMBER_0) { 
           alert("la cedula ya exite en votante: " + this.seletedLiderAgregar.ced_lider);
-        } else if (this.digitador != this.validaciones.NULL) {
+        } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
           alert("la cedula ya exite en digitador: " + this.seletedLiderAgregar.ced_lider);
-        } else if (this.usuario != this.validaciones.NULL) {
+        } else if (this.usuario.length != this.validaciones.INT_NUMBER_0) {
           alert("la cedula ya exite en usuario: " + this.seletedLiderAgregar.ced_lider);
-        } else if (this.lider != this.validaciones.NULL) {
+        } else if (this.lider.length != this.validaciones.INT_NUMBER_0) {
           alert("la cedula ya exite en lider: " + this.seletedLiderAgregar.ced_lider);
         }
       }, (err:HttpErrorResponse) => {
@@ -506,6 +532,384 @@ export class LiderComponent implements OnInit {
         this.seletedLiderAgregar.id_usuario = this.lider[i].id_usuario;
       }
     }
+  }
+
+
+  selectLugarBuscar(id_lugar:Number) {
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = id_lugar;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectBarriorBuscar(id_barrio:Number) {
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = id_barrio;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectLiderBuscar(id_lider:Number) { 
+    
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = id_lider;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectCoordinadorBuscar(id_coordinador:Number) {
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = id_coordinador;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectDigitadorBuscar (id_digitador:Number) {
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.id_digitador = id_digitador;
+  }
+
+  buscar() {
+    this.liderAux  = [];
+
+
+    if(this.seletedLiderBuscar.id_lider != this.validaciones.NULL){
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedDigitadorBuscar.id_usuario = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.liderService.findByIdLider(this.seletedLiderBuscar.id_lider).then(resultado=>{
+        this.lideres = resultado;
+        if ( this.lideres != this.validaciones.NULL) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.lideres.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.usuario.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          if (this.lideres[i].id_barrio == this.barrio[j].id_barrio) {
+                            if (this.lideres[i].id_usuario == this.usuario[n].id_usuario) {
+                              if (this.lideres[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addLiderAux({
+                                        id_lider:this.lideres[i].id_lider,
+                                        ced_lider: this.lideres[i].ced_lider,
+                                        nom_lider: this.lideres[i].nom_lider,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.usuario[n].nom_usuario,
+                                        tel_lider : this.lideres[i].tel_lider,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.lideres[i].municipio,
+                                        departamento: this.lideres[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } else if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
+          alert('Cedula: ' + this.seletedLiderBuscar.ced_lider + ' No Existe..');
+        }
+
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+    if(this.seletedLiderBuscar.ced_lider != this.validaciones.STR_LETTER_WITHOUT){
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedDigitadorBuscar.id_usuario = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.liderService.findByIdLiderCedula(this.seletedLiderBuscar.ced_lider).then(resultado=>{
+        this.lideres = resultado;
+        if ( this.lideres != this.validaciones.NULL) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.lideres.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.usuario.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          if (this.lideres[i].id_barrio == this.barrio[j].id_barrio) {
+                            if (this.lideres[i].id_usuario == this.usuario[n].id_usuario) {
+                              if (this.lideres[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addLiderAux({
+                                        id_lider:this.lideres[i].id_lider,
+                                        ced_lider: this.lideres[i].ced_lider,
+                                        nom_lider: this.lideres[i].nom_lider,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.usuario[n].nom_usuario,
+                                        tel_lider : this.lideres[i].tel_lider,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.lideres[i].municipio,
+                                        departamento: this.lideres[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+        } else if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
+          alert('Cedula: ' + this.seletedLiderBuscar.ced_lider + ' No Existe..');
+        }
+
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedLugarBuscar.id_lugar != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.liderService.findAllLiderLugar(this.seletedLugarBuscar.id_lugar).then(resultado=>{
+        this.lideres = resultado;
+        if ( this.lideres != this.validaciones.NULL) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.lideres.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.usuario.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          if (this.lideres[i].id_barrio == this.barrio[j].id_barrio) {
+                            if (this.lideres[i].id_usuario == this.usuario[n].id_usuario) {
+                              if (this.lideres[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addLiderAux({
+                                        id_lider:this.lideres[i].id_lider,
+                                        ced_lider: this.lideres[i].ced_lider,
+                                        nom_lider: this.lideres[i].nom_lider,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.usuario[n].nom_usuario,
+                                        tel_lider : this.lideres[i].tel_lider,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.lideres[i].municipio,
+                                        departamento: this.lideres[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }else if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
+          alert('En este Lugar: ' + this.seletedLugarBuscar.id_lugar + ' No Se a Registrado ningun lider..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedBarrioBuscar.id_barrio != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.liderService.findAllLiderBarrio(this.seletedBarrioBuscar.id_barrio).then(resultado=>{
+        this.lideres = resultado;
+        if ( this.lideres != this.validaciones.NULL) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.lideres.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.usuario.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          if (this.lideres[i].id_barrio == this.barrio[j].id_barrio) {
+                            if (this.lideres[i].id_usuario == this.usuario[n].id_usuario) {
+                              if (this.lideres[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addLiderAux({
+                                        id_lider:this.lideres[i].id_lider,
+                                        ced_lider: this.lideres[i].ced_lider,
+                                        nom_lider: this.lideres[i].nom_lider,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.usuario[n].nom_usuario,
+                                        tel_lider : this.lideres[i].tel_lider,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.lideres[i].municipio,
+                                        departamento: this.lideres[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }else if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
+          alert('En este Barrio: ' + this.seletedBarrioBuscar.id_barrio + ' No Se a Registrado ningun lider..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedCoordinadorBuscar.id_usuario != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.liderService.findAllLiderUsuario(this.seletedCoordinadorBuscar.id_usuario).then(resultado=>{
+        this.lideres = resultado;
+        if ( this.lideres != this.validaciones.NULL) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.lideres.length; i++){
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
+                for (let n = this.validaciones.INT_NUMBER_0; n < this.usuario.length; n++) {
+                  for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                    for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++)
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          if (this.lideres[i].id_barrio == this.barrio[j].id_barrio) {
+                            if (this.lideres[i].id_usuario == this.usuario[n].id_usuario) {
+                              if (this.lideres[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('entro');
+                                      this.addLiderAux({
+                                        id_lider:this.lideres[i].id_lider,
+                                        ced_lider: this.lideres[i].ced_lider,
+                                        nom_lider: this.lideres[i].nom_lider,
+                                        nom_lugar: this.lugar[o].nom_lugar,
+                                        nom_mesa: this.mesa[p].nom_mesa,
+                                        nom_barrio: this.barrio[j].nom_barrio,
+                                        nom_usuario: this.usuario[n].nom_usuario,
+                                        tel_lider : this.lideres[i].tel_lider,
+                                        activo : this.validaciones.TRUE,
+                                        comuna_lugar: this.comuna[m].nom_comuna,
+                                        comuna_barrio: this.comuna[l].nom_comuna,
+                                        municipio: this.lideres[i].municipio,
+                                        departamento: this.lideres[i].departamento
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }else  if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
+          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun lider..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+  listar() {
+    this.limpiar();
+    this.ngOnInit();
+  }
+
+  limpiar() {
+    /* Se limpian los imput de Buscar */
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedLiderBuscar.ced_lider =this.validaciones.STR_LETTER_WITHOUT;
+    /* selimpian los imput de Agregar  */
+    this.seletedLiderAgregar.ced_lider = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLiderAgregar.nom_lider = this.validaciones.STR_LETTER_WITHOUT;
+   this.seletedLiderAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLiderAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLiderAgregar.tel_lider = this.validaciones.STR_LETTER_WITHOUT;
   }
 
   /* Funcion que elimina lo seleccionado en base de datos */

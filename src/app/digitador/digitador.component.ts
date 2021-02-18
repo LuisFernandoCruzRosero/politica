@@ -109,6 +109,28 @@ export class DigitadorComponent implements OnInit {
     this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, 
     this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT);
 
+  /* Inicializo el objeto Lugar Para formulario Buscar*/
+  seletedLugarBuscar:Lugar = new Lugar(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
+
+  /* Inicializo el objeto barrio Para formulario Buscar*/
+  seletedBarrioBuscar:Barrio = new Barrio(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT, 
+    this.validaciones.STR_LETTER_WITHOUT, this.validaciones.STR_LETTER_WITHOUT, this.validaciones.NULL, this.validaciones.NULL);
+
+  /* Inicializo el objeto Lider Para formulario Buscar*/
+  seletedLiderBuscar:Lider = new Lider(this.validaciones.NULL, 
+    this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL, this.validaciones.NULL, this.validaciones.NULL, 
+    this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL,this.validaciones.NULL,this.validaciones.NULL,
+    this.validaciones.NULL,this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.STR_LETTER_WITHOUT);
+  
+    /* Inicializo el objeto Coordinador Para formulario Buscar*/
+  seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
+    this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL, this.validaciones.NULL, 
+    this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.STR_LETTER_WITHOUT,
+    this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,this.validaciones.NULL,
+    this.validaciones.NULL,this.validaciones.NULL,this.validaciones.STR_LETTER_WITHOUT,
+    this.validaciones.STR_LETTER_WITHOUT);
+  
   /* Verificar la Ayutenticidad */
   encontrado:Boolean = this.validaciones.FALSE;
 
@@ -129,6 +151,9 @@ export class DigitadorComponent implements OnInit {
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
+    /* se quema el departamento y el municipio */
+    this.seletedDigitadorAgregar.departamento = 'NARIÑO';
+    this.seletedDigitadorAgregar.municipio = 'TUMACO';
     /* Se limpia arreglo auxiliar para volver a llenar */
     this.digitadorAux = [];
     /* Consulto los Datos de la tabla usuario */
@@ -139,7 +164,6 @@ export class DigitadorComponent implements OnInit {
       this.loginServi.findAllDigitador().then(resultado => {
         /* Asigno los datos de la tabla digitador al arreglo digitador */
         this.digitador = resultado;
-        console.log(this.digitador);
         /* Consulto Los datos de la tabla Comuna */
         this.comunaServi.findAllComuna().then(resultado => {
           /* Asigno al arreglo Comuna todas las existenten en la tabla */
@@ -165,6 +189,7 @@ export class DigitadorComponent implements OnInit {
                  this.mesaServi.findAllMesa().then(resultado => {
                   /* Asigno al arreglo mesa todas las existenten en la tabla */
                   this.mesa = resultado;
+                  console.log("mesa:1" + this.mesa)
                   /* asigno el arreglo coordinador todos los datos de la tabla usuario que son coordinadores */
                   this.loginServi.findAllUsuarioCoordinador().then(resultado=>{
                     this.coordinador = resultado;
@@ -189,7 +214,6 @@ export class DigitadorComponent implements OnInit {
                                             if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
                                               if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
                                                 if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
-                                                  console.log('encontro1');
                                                   this.addDigitadorAux({
                                                     id_digitador : this.digitador[i].id_digitador,
                                                     ced_digitador: this.digitador[i].ced_digitador,
@@ -224,7 +248,6 @@ export class DigitadorComponent implements OnInit {
                         }
                       }
                     }
-                    console.log(this.digitadorAux)
 
                     try {
                       /* Consulto Tokent de Autenticidad */
@@ -383,8 +406,8 @@ export class DigitadorComponent implements OnInit {
             this.liderServi.findByIdLiderCedula(this.seletedDigitadorAgregar.ced_digitador).then(resultado =>{
               this.lider = resultado;
                 /* Se valida que el nuevo registro no exista en ninguna tabla existente */
-                if (this.digitador == this.validaciones.NULL && this.votante == this.validaciones.NULL
-                    && this.usuario == this.validaciones.NULL && this.lider == this.validaciones.NULL) {
+                if (this.digitador.length == this.validaciones.INT_NUMBER_0 && this.votante.length== this.validaciones.INT_NUMBER_0
+                    && this.usuario.length == this.validaciones.INT_NUMBER_0 && this.lider.length == this.validaciones.INT_NUMBER_0) {
                       this.digitadorServi.insertDigitador({
                         id_digitador : this.seletedDigitadorAgregar.id_digitador,
                         ced_digitador: this.seletedDigitadorAgregar.ced_digitador,
@@ -407,13 +430,7 @@ export class DigitadorComponent implements OnInit {
                         alert('Se agrego el digitador..');
                         this.ngOnInit();
                         /* Se limpian los IMPUT */
-                        this.seletedDigitadorAgregar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
-                        this.seletedDigitadorAgregar.nom_digitador = this.validaciones.STR_LETTER_WITHOUT;
-                        this.seletedDigitadorAgregar.usu_digiador = this.validaciones.STR_LETTER_WITHOUT;
-                        this.seletedDigitadorAgregar.con_digitador = this.validaciones.STR_LETTER_WITHOUT;
-                        this.seletedDigitadorAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
-                        this.seletedDigitadorAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
-                        this.seletedDigitadorAgregar.tel_digitador = this.validaciones.STR_LETTER_WITHOUT;
+                        this.limpiar();
                       },(err:HttpErrorResponse)=>{
                         if(err.error instanceof Error){
                           alert("a ocurrido un errror cliente");
@@ -502,6 +519,7 @@ export class DigitadorComponent implements OnInit {
     this.lugarMesaAux = [];
     this.lugarmesaService.findAllLugarMesa().then(resultado =>{
       this.lugarMesa = resultado;
+      console.log("mesaa:" + this.lugarMesa) 
       for(let i = 0; i < this.lugar.length; i++){
         if(id_lugar == this.lugar[i].id_lugar){
           this.seletedDigitadorAgregar.id_comunaL = this.lugar[i].id_comunaL;
@@ -509,7 +527,8 @@ export class DigitadorComponent implements OnInit {
       }
       for (let j = 0; j < this.lugarMesa.length;j++) {
         if (this.lugarMesa[j].id_lugar == this.seletedDigitadorAgregar.id_lugar) {
-           this.lugarMesaAux[l] = this.lugarMesa[j];
+          console.log("entro:123456"  ) 
+          this.lugarMesaAux[l] = this.lugarMesa[j];
            l++;
         }
       }
@@ -543,4 +562,523 @@ export class DigitadorComponent implements OnInit {
       }
     }
   }
+
+  selectLugarBuscar(id_lugar:Number) {
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = id_lugar;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectBarriorBuscar(id_barrio:Number) {
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = id_barrio;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectLiderBuscar(id_lider:Number) { 
+    
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = id_lider;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectCoordinadorBuscar(id_coordinador:Number) {
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = id_coordinador;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+  }
+
+  selectDigitadorBuscar (id_digitador:Number) {
+    this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.id_digitador = id_digitador;
+  }
+
+  buscar() {
+    this.digitadorAux = [];
+
+
+    if(this.seletedDigitadorBuscar.id_digitador != this.validaciones.NULL){
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedDigitadorBuscar.id_usuario = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.digitadorServi.findByIdDigitador(this.seletedDigitadorBuscar.id_digitador).then(resultado=>{
+        this.digitador = resultado;
+        if ( this.digitador != this.validaciones.NULL) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.digitador.length; i++) {
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.lider.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.coordinador.length; k++) {
+                for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                  for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++) {
+                    for (let n = this.validaciones.INT_NUMBER_0; n < this.barrio.length; n++) {
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          if (this.digitador[i].id_lider == this.lider[j].id_lider) {
+                            if (this.digitador[i].id_usuario == this.coordinador[k].id_usuario) {
+                              if (this.digitador[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.digitador[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
+                                    if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
+                                      if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
+                                        this.addDigitadorAux({
+                                          id_digitador : this.digitador[i].id_digitador,
+                                          ced_digitador: this.digitador[i].ced_digitador,
+                                          nom_digitador : this.digitador[i].nom_digitador,
+                                          tel_digitador : this.digitador[i].tel_digitador,
+                                          municipio : this.digitador[i].municipio,
+                                          departamento : this.digitador[i].departamento,
+                                          usu_digiador : this.digitador[i].usu_digiador,
+                                          con_digitador : this.digitador[i].con_digitador,
+                                          comuna_barrio : this.comuna[l].nom_comuna,
+                                          nom_barrio : this.barrio[n].nom_barrio,
+                                          comuna_lugar : this.comuna[m].nom_comuna,
+                                          nom_lugar : this.lugar[o].nom_lugar,
+                                          id_tipo_usuario : this.digitador[i].id_tipo_usuario,
+                                          nom_lider : this.lider[j].nom_lider,
+                                          nom_usuario : this.coordinador[k].nom_usuario,
+                                          nom_mesa : this.mesa[p].nom_mesa,
+                                          activo : this.digitador[i].activo,
+                                        })
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } else if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
+          alert('Cedula: ' + this.seletedDigitadorBuscar.ced_digitador + ' No Existe..');
+        }
+
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+
+
+
+    if(this.seletedDigitadorBuscar.ced_digitador != this.validaciones.STR_LETTER_WITHOUT){
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedDigitadorBuscar.id_usuario = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.digitadorServi.findByIdDigitadorCedula(this.seletedDigitadorBuscar.ced_digitador).then(resultado=>{
+        this.digitador = resultado;
+        if ( this.digitador != this.validaciones.NULL) {
+          for (let i = this.validaciones.INT_NUMBER_0; i < this.digitador.length; i++) {
+            for (let j = this.validaciones.INT_NUMBER_0; j < this.lider.length; j++) {
+              for (let k = this.validaciones.INT_NUMBER_0; k < this.coordinador.length; k++) {
+                for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                  for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++) {
+                    for (let n = this.validaciones.INT_NUMBER_0; n < this.barrio.length; n++) {
+                      for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                        for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                          if (this.digitador[i].id_lider == this.lider[j].id_lider) {
+                            if (this.digitador[i].id_usuario == this.coordinador[k].id_usuario) {
+                              if (this.digitador[i].id_comunaB == this.comuna[l].id_comuna) {
+                                if (this.digitador[i].id_comunaL == this.comuna[m].id_comuna) {
+                                  if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
+                                    if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
+                                      if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
+                                        this.addDigitadorAux({
+                                          id_digitador : this.digitador[i].id_digitador,
+                                          ced_digitador: this.digitador[i].ced_digitador,
+                                          nom_digitador : this.digitador[i].nom_digitador,
+                                          tel_digitador : this.digitador[i].tel_digitador,
+                                          municipio : this.digitador[i].municipio,
+                                          departamento : this.digitador[i].departamento,
+                                          usu_digiador : this.digitador[i].usu_digiador,
+                                          con_digitador : this.digitador[i].con_digitador,
+                                          comuna_barrio : this.comuna[l].nom_comuna,
+                                          nom_barrio : this.barrio[n].nom_barrio,
+                                          comuna_lugar : this.comuna[m].nom_comuna,
+                                          nom_lugar : this.lugar[o].nom_lugar,
+                                          id_tipo_usuario : this.digitador[i].id_tipo_usuario,
+                                          nom_lider : this.lider[j].nom_lider,
+                                          nom_usuario : this.coordinador[k].nom_usuario,
+                                          nom_mesa : this.mesa[p].nom_mesa,
+                                          activo : this.digitador[i].activo,
+                                        })
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } else if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
+          alert('Cedula: ' + this.seletedDigitadorBuscar.ced_digitador + ' No Existe..');
+        }
+
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedLugarBuscar.id_lugar != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.digitadorServi.findByIdDigitadorLugar(this.seletedLugarBuscar.id_lugar).then(resultado=>{
+        this.digitador = resultado;
+        for (let i = this.validaciones.INT_NUMBER_0; i < this.digitador.length; i++) {
+          for (let j = this.validaciones.INT_NUMBER_0; j < this.lider.length; j++) {
+            for (let k = this.validaciones.INT_NUMBER_0; k < this.coordinador.length; k++) {
+              for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++) {
+                  for (let n = this.validaciones.INT_NUMBER_0; n < this.barrio.length; n++) {
+                    for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                      for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                        if (this.digitador[i].id_lider == this.lider[j].id_lider) {
+                          if (this.digitador[i].id_usuario == this.coordinador[k].id_usuario) {
+                            if (this.digitador[i].id_comunaB == this.comuna[l].id_comuna) {
+                              if (this.digitador[i].id_comunaL == this.comuna[m].id_comuna) {
+                                if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
+                                  if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('encontro1');
+                                      this.addDigitadorAux({
+                                        id_digitador : this.digitador[i].id_digitador,
+                                        ced_digitador: this.digitador[i].ced_digitador,
+                                        nom_digitador : this.digitador[i].nom_digitador,
+                                        tel_digitador : this.digitador[i].tel_digitador,
+                                        municipio : this.digitador[i].municipio,
+                                        departamento : this.digitador[i].departamento,
+                                        usu_digiador : this.digitador[i].usu_digiador,
+                                        con_digitador : this.digitador[i].con_digitador,
+                                        comuna_barrio : this.comuna[l].nom_comuna,
+                                        nom_barrio : this.barrio[n].nom_barrio,
+                                        comuna_lugar : this.comuna[m].nom_comuna,
+                                        nom_lugar : this.lugar[o].nom_lugar,
+                                        id_tipo_usuario : this.digitador[i].id_tipo_usuario,
+                                        nom_lider : this.lider[j].nom_lider,
+                                        nom_usuario : this.coordinador[k].nom_usuario,
+                                        nom_mesa : this.mesa[p].nom_mesa,
+                                        activo : this.digitador[i].activo,
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
+          alert('En este Lugar: ' + this.seletedLugarBuscar.id_lugar + ' No Se a Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedBarrioBuscar.id_barrio != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.digitadorServi.findByIdDigitadorBarrio(this.seletedBarrioBuscar.id_barrio).then(resultado=>{
+        this.digitador = resultado;
+        for (let i = this.validaciones.INT_NUMBER_0; i < this.digitador.length; i++) {
+          for (let j = this.validaciones.INT_NUMBER_0; j < this.lider.length; j++) {
+            for (let k = this.validaciones.INT_NUMBER_0; k < this.coordinador.length; k++) {
+              for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++) {
+                  for (let n = this.validaciones.INT_NUMBER_0; n < this.barrio.length; n++) {
+                    for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                      for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                        if (this.digitador[i].id_lider == this.lider[j].id_lider) {
+                          if (this.digitador[i].id_usuario == this.coordinador[k].id_usuario) {
+                            if (this.digitador[i].id_comunaB == this.comuna[l].id_comuna) {
+                              if (this.digitador[i].id_comunaL == this.comuna[m].id_comuna) {
+                                if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
+                                  if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('encontro1');
+                                      this.addDigitadorAux({
+                                        id_digitador : this.digitador[i].id_digitador,
+                                        ced_digitador: this.digitador[i].ced_digitador,
+                                        nom_digitador : this.digitador[i].nom_digitador,
+                                        tel_digitador : this.digitador[i].tel_digitador,
+                                        municipio : this.digitador[i].municipio,
+                                        departamento : this.digitador[i].departamento,
+                                        usu_digiador : this.digitador[i].usu_digiador,
+                                        con_digitador : this.digitador[i].con_digitador,
+                                        comuna_barrio : this.comuna[l].nom_comuna,
+                                        nom_barrio : this.barrio[n].nom_barrio,
+                                        comuna_lugar : this.comuna[m].nom_comuna,
+                                        nom_lugar : this.lugar[o].nom_lugar,
+                                        id_tipo_usuario : this.digitador[i].id_tipo_usuario,
+                                        nom_lider : this.lider[j].nom_lider,
+                                        nom_usuario : this.coordinador[k].nom_usuario,
+                                        nom_mesa : this.mesa[p].nom_mesa,
+                                        activo : this.digitador[i].activo,
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
+          alert('En este Barrio: ' + this.seletedBarrioBuscar.id_barrio + ' No Se a Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedCoordinadorBuscar.id_usuario != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.digitadorServi.findByIdDigitadorCoordinador(this.seletedCoordinadorBuscar.id_usuario).then(resultado=>{
+        this.digitador = resultado;
+        for (let i = this.validaciones.INT_NUMBER_0; i < this.digitador.length; i++) {
+          for (let j = this.validaciones.INT_NUMBER_0; j < this.lider.length; j++) {
+            for (let k = this.validaciones.INT_NUMBER_0; k < this.coordinador.length; k++) {
+              for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++) {
+                  for (let n = this.validaciones.INT_NUMBER_0; n < this.barrio.length; n++) {
+                    for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                      for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                        if (this.digitador[i].id_lider == this.lider[j].id_lider) {
+                          if (this.digitador[i].id_usuario == this.coordinador[k].id_usuario) {
+                            if (this.digitador[i].id_comunaB == this.comuna[l].id_comuna) {
+                              if (this.digitador[i].id_comunaL == this.comuna[m].id_comuna) {
+                                if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
+                                  if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
+                                      this.addDigitadorAux({
+                                        id_digitador : this.digitador[i].id_digitador,
+                                        ced_digitador: this.digitador[i].ced_digitador,
+                                        nom_digitador : this.digitador[i].nom_digitador,
+                                        tel_digitador : this.digitador[i].tel_digitador,
+                                        municipio : this.digitador[i].municipio,
+                                        departamento : this.digitador[i].departamento,
+                                        usu_digiador : this.digitador[i].usu_digiador,
+                                        con_digitador : this.digitador[i].con_digitador,
+                                        comuna_barrio : this.comuna[l].nom_comuna,
+                                        nom_barrio : this.barrio[n].nom_barrio,
+                                        comuna_lugar : this.comuna[m].nom_comuna,
+                                        nom_lugar : this.lugar[o].nom_lugar,
+                                        id_tipo_usuario : this.digitador[i].id_tipo_usuario,
+                                        nom_lider : this.lider[j].nom_lider,
+                                        nom_usuario : this.coordinador[k].nom_usuario,
+                                        nom_mesa : this.mesa[p].nom_mesa,
+                                        activo : this.digitador[i].activo,
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
+          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+
+    if(this.seletedLiderBuscar.id_lider != this.validaciones.NULL) {
+      this.seletedDigitadorBuscar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+      this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+      this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+      this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+      this.digitadorServi.findByIdDigitadorLider(this.seletedLiderBuscar.id_lider).then(resultado=>{
+        this.digitador = resultado;
+        for (let i = this.validaciones.INT_NUMBER_0; i < this.digitador.length; i++) {
+          for (let j = this.validaciones.INT_NUMBER_0; j < this.lider.length; j++) {
+            for (let k = this.validaciones.INT_NUMBER_0; k < this.coordinador.length; k++) {
+              for (let l = this.validaciones.INT_NUMBER_0; l < this.comuna.length; l++) {
+                for (let m = this.validaciones.INT_NUMBER_0; m < this.comuna.length; m++) {
+                  for (let n = this.validaciones.INT_NUMBER_0; n < this.barrio.length; n++) {
+                    for (let o = this.validaciones.INT_NUMBER_0; o < this.lugar.length; o++) {
+                      for (let p = this.validaciones.INT_NUMBER_0; p < this.mesa.length; p++) {
+                        if (this.digitador[i].id_lider == this.lider[j].id_lider) {
+                          if (this.digitador[i].id_usuario == this.coordinador[k].id_usuario) {
+                            if (this.digitador[i].id_comunaB == this.comuna[l].id_comuna) {
+                              if (this.digitador[i].id_comunaL == this.comuna[m].id_comuna) {
+                                if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
+                                  if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
+                                    if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
+                                      console.log('encontro1');
+                                      this.addDigitadorAux({
+                                        id_digitador : this.digitador[i].id_digitador,
+                                        ced_digitador: this.digitador[i].ced_digitador,
+                                        nom_digitador : this.digitador[i].nom_digitador,
+                                        tel_digitador : this.digitador[i].tel_digitador,
+                                        municipio : this.digitador[i].municipio,
+                                        departamento : this.digitador[i].departamento,
+                                        usu_digiador : this.digitador[i].usu_digiador,
+                                        con_digitador : this.digitador[i].con_digitador,
+                                        comuna_barrio : this.comuna[l].nom_comuna,
+                                        nom_barrio : this.barrio[n].nom_barrio,
+                                        comuna_lugar : this.comuna[m].nom_comuna,
+                                        nom_lugar : this.lugar[o].nom_lugar,
+                                        id_tipo_usuario : this.digitador[i].id_tipo_usuario,
+                                        nom_lider : this.lider[j].nom_lider,
+                                        nom_usuario : this.coordinador[k].nom_usuario,
+                                        nom_mesa : this.mesa[p].nom_mesa,
+                                        activo : this.digitador[i].activo,
+                                      })
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
+          alert('El Lider: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+        }
+      },(err:HttpErrorResponse)=>{
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+  listar() {
+    this.limpiar();
+    this.ngOnInit();
+  }
+
+  limpiar() {
+    /* Se limpian los imput de Buscar */
+    this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
+    this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
+    this.seletedLiderBuscar.id_lider = this.validaciones.NULL;
+    this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
+    this.seletedDigitadorBuscar.ced_digitador =this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorBuscar.id_digitador = this.validaciones.NULL;
+    /* selimpian los imput de Agregar  */
+    this.seletedDigitadorAgregar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorAgregar.nom_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorAgregar.usu_digiador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorAgregar.con_digitador = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorAgregar.municipio = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorAgregar.departamento = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedDigitadorAgregar.tel_digitador = this.validaciones.STR_LETTER_WITHOUT;
+  }
+
+/* Funcion que elimina lo seleccionado en base de datos */
+eliminar(digitador:DigitadorFindAll) {
+  /* dialogo de confirmacion de eliminar los datos */
+  if(confirm('estas seguro de querer eliminarlo id_digitador: ' + digitador.ced_digitador + ' nombre digitador: ' + digitador.nom_digitador)){
+    /* se llama el servicio mesa la funcion eliminar */
+    this.digitadorServi.deleteByIdDigitador(digitador.id_digitador).subscribe((modificado) =>{
+      /* Se da respuesta Exitosa del servidor */
+      alert('Registro Eliminado Exito');
+      /* se llama la funcion inicial para que recargue la pagina */
+      this.ngOnInit();
+    },(err:HttpErrorResponse) => {
+      if(err.error instanceof Error){
+        alert("a ocurrido un errror cliente");
+      }else{
+        alert("a ocurrido un errror servidor");
+      }
+    });
+  }
+}
+
 }

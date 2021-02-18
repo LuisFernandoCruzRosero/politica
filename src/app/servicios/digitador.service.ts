@@ -22,7 +22,11 @@ export class DigitadorService {
 
   /* Consulta una de los digitadores registradas de la tabla digitador */
   findByIdDigitadorCedula(ced_digitador:String):Promise<DigitadorFindAll[]>{
-    return this.http.get<DigitadorFindAll[]>(ApiUrl + 'digitador/' + ced_digitador).toPromise();
+    return this.http.get<DigitadorFindAll[]>(ApiUrl + 'digitadorCedula/' + ced_digitador).toPromise();
+  }
+
+  findByIdDigitador(id_digitador:Number):Promise<DigitadorFindAll[]>{
+    return this.http.get<DigitadorFindAll[]>(ApiUrl + 'digitador/' + id_digitador).toPromise();
   }
 
   /* Inserta un dato ala tabla digitador */
@@ -43,5 +47,25 @@ export class DigitadorService {
   /* Cuenta el total de todas las digitador */
   findByIdTotalDigitador(){
     return this.http.get<any>(ApiUrl + 'digitadorContar');
+  }
+
+  /* Busca los digitadores por Lugar */
+  findByIdDigitadorLugar(id_lugar:Number):Promise<DigitadorFindAll[]>{
+    return this.http.get<DigitadorFindAll[]>(ApiUrl + 'digitadorLugar/' + id_lugar).toPromise();
+  }
+
+  /* Busca los digitadores por Lugar */
+  findByIdDigitadorBarrio(id_barrio:Number):Promise<DigitadorFindAll[]>{
+    return this.http.get<DigitadorFindAll[]>(ApiUrl + 'digitadorBarrio/' + id_barrio).toPromise();
+  }
+
+  /* Busca los digitadores por Lugar */
+  findByIdDigitadorLider(id_lider:Number):Promise<DigitadorFindAll[]>{
+    return this.http.get<DigitadorFindAll[]>(ApiUrl + 'digitadorLider/' + id_lider).toPromise();
+  }
+
+  /* Busca los digitadores por Lugar */
+  findByIdDigitadorCoordinador(id_usuario:Number):Promise<DigitadorFindAll[]>{
+    return this.http.get<DigitadorFindAll[]>(ApiUrl + 'digitadorCoordinador/' + id_usuario).toPromise();
   }
 }

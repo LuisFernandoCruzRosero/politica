@@ -148,6 +148,50 @@
         </div>
 
 
+        <div class="card">
+            <b><div class="card-header">LISTAR LIDERES</div></b><br>
+            <h6> <b>Buscar Por:</b> </h6>
+            <form>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>Seleccione Barrio:</h6>
+                        <select [(ngModel)]="seletedBarrioBuscar.id_barrio" (ngModelChange)="selectBarriorBuscar($event)" class="form-control" name="item.id_barrio">
+                            <option *ngFor="let item of barrio" [value]="item.id_barrio">{{item.nom_barrio}}</option>        
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>Seleccione Lugar De votacion:</h6>
+                        <select [(ngModel)]="seletedLugarBuscar.id_lugar" (ngModelChange)="selectLugarBuscar($event)" class="form-control" name="item.id_lugar">
+                            <option *ngFor="let item of lugar" [value]="item.id_lugar">{{item.nom_lugar}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>Seleccione El Coordinador</h6>
+                        <select [(ngModel)]="seletedCoordinadorBuscar.id_usuario" (ngModelChange)="selectCoordinadorBuscar($event)" class="form-control" name="item.id_usuario">
+                            <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>Seleccione El Lider</h6>
+                        <select [(ngModel)]="seletedLiderBuscar.id_lider" (ngModelChange)="selectLiderBuscar($event)" class="form-control" name="item.id_lider">
+                            <option *ngFor="let item of lider" [value]="item.id_lider">{{item.nom_lider}}</option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>Digite Cedula</h6>
+                        <input type="text" [(ngModel)]="seletedLiderBuscar.ced_lider" placeholder="Cedula" class="form-control" name="ced_lider">
+                    </div>
+                </div>
+                <button type="button" class="btn" (click)="buscar()">Buscar</button>
+                <button type="button" class="btn" (click)="listar()">Listar</button>
+                <button type="button" class="btn" (click)="exportAsXLSX()">Exportar Exel</button>
+            </form>
+        </div>
+
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-xl-6 p-2" *ngFor="let item of liderAux">
@@ -164,7 +208,7 @@
                                             </div>
                                             <ng-template #falso>
                                                 <div class="form-group">
-                                                    <input type="text" [(ngModel)]="seletedListarDigitador.ced_digitador" class="form-control" id="ced_digitador" name="ced_digitador">
+                                                    <input type="text" [(ngModel)]="seletedListarLider.ced_lider" class="form-control" id="ced_lider" name="ced_lider">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -178,7 +222,7 @@
                                             </div>
                                             <ng-template #falso20>
                                                 <div class="form-group">
-                                                    <input type="text" [(ngModel)]="seletedListarDigitador.nom_digitador" class="form-control" id="nom_digitador" name="nom_digitador">
+                                                    <input type="text" [(ngModel)]="seletedListarLider.nom_lider" class="form-control" id="nom_lider" name="nom_lider">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -192,7 +236,7 @@
                                             </div>
                                             <ng-template #falso2>
                                                 <div class="form-group">
-                                                    <input type="text" [(ngModel)]="seletedListarDigitador.tel_digitador" class="form-control" id="tel_digitador" name="tel_digitador">
+                                                    <input type="text" [(ngModel)]="seletedListarLider.tel_lider" class="form-control" id="tel_lider" name="tel_lider">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -205,7 +249,7 @@
                                             </div>
                                             <ng-template #falso3>
                                                 <div class="form-group">
-                                                    <select [(ngModel)]="seletedListarDigitador.bar_usu" (ngModelChange)="SelectBarrio($event)" class="form-control" name="item.nom_bar">
+                                                    <select [(ngModel)]="seletedListarLider.bar_usu" (ngModelChange)="SelectBarrio($event)" class="form-control" name="item.nom_bar">
                                                         <option *ngFor="let item of barrioAux" [value]="item.nom_bar">{{item.nom_bar}}</option>
                                                     </select>
                                                     <!-- <input type="text" [(ngModel)]="seletedListarDigitador.bar_usu" class="form-control" id="bar_usu" name="bar_usu"> -->
@@ -221,7 +265,7 @@
                                             </div>
                                             <ng-template #falso4>
                                                 <div class="form-group">
-                                                    <select [(ngModel)]="seletedListarDigitador.ocupacion" class="form-control" name="item.nom_per_pro">
+                                                    <select [(ngModel)]="seletedListarLider.ocupacion" class="form-control" name="item.nom_per_pro">
                                                             <option *ngFor="let item of perfilProfesional" [value]="item.nom_per_pro">{{item.nom_per_pro}}</option>
                                                         </select>
                                                     <!-- <input type="text" [(ngModel)]="seletedListarDigitador.ocupacion" class="form-control" id="ocupacion" name="ocupacion"> -->
@@ -238,7 +282,7 @@
                                             </div>
                                             <ng-template #falso21>
                                                 <div class="form-group">
-                                                    <input type="text" [(ngModel)]="seletedListarDigitador.departamento" class="form-control" id="departamento" name="departamento">
+                                                    <input type="text" [(ngModel)]="seletedListarLider.departamento" class="form-control" id="departamento" name="departamento">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -251,7 +295,7 @@
                                             </div>
                                             <ng-template #falso14>
                                                 <div class="form-group">
-                                                    <input type="text" [(ngModel)]="seletedListarDigitador.mesa" class="form-control" id="mesa" name="mesa">
+                                                    <input type="text" [(ngModel)]="seletedListarLider.mesa" class="form-control" id="mesa" name="mesa">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -265,7 +309,7 @@
                                             </div>
                                             <ng-template #falso5>
                                                 <div class="form-group">
-                                                    <input type="text" [(ngModel)]="seletedListarDigitador.user_usu" class="form-control" id="user_usu" name="user_usu">
+                                                    <input type="text" [(ngModel)]="seletedListarLider.user_usu" class="form-control" id="user_usu" name="user_usu">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -278,7 +322,7 @@
                                             </div>
                                             <ng-template #falso6>
                                                 <div class="form-group">
-                                                    <input type="text" [(ngModel)]="seletedListarDigitador.contrasena" class="form-control" id="contrasena" name="contrasena">
+                                                    <input type="text" [(ngModel)]="seletedListarLider.contrasena" class="form-control" id="contrasena" name="contrasena">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -293,7 +337,7 @@
                                             <ng-template #falso7>
                                                 <div class="form-group">
 
-                                                    <select [(ngModel)]="seletedListarDigitador.id_comuna" (ngModelChange)="selectComuna($event)" class="form-control" name="item.id_comuna">
+                                                    <select [(ngModel)]="seletedListarLider.id_comuna" (ngModelChange)="selectComuna($event)" class="form-control" name="item.id_comuna">
                                                    <option *ngFor="let item of comuna" [value]="item.id_comuna">{{item.nom_com}}</option>        
                                                </select>
 
@@ -309,7 +353,7 @@
                                             </div>
                                             <ng-template #falso8>
                                                 <div class="form-group">
-                                                    <select [(ngModel)]="seletedListarDigitador.id_sector" (ngModelChange)="selectSector($event)" class="form-control" name="tipo.id_sector">
+                                                    <select [(ngModel)]="seletedListarLider.id_sector" (ngModelChange)="selectSector($event)" class="form-control" name="tipo.id_sector">
                                                     <option *ngFor="let tipo of sectorAux" [value]="tipo.id_sector">{{tipo.nom_sec}}</option>
                                                 </select>
                                                 </div>
