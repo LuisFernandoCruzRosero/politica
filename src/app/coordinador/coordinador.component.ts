@@ -79,11 +79,14 @@ export class CoordinadorComponent implements OnInit {
 
   /* Inicializamos un arreglo del objeto Usuaio */
   usuario:UsuarioFindAll[] = [];
+  usuarios:UsuarioFindAll[] = [];
   /* Inicializamos un arreglo del objeto Usuaio para Coordinador */
   coordinadores:UsuarioFindAll[] = [];
 
   /* Inicializamos un arreglo del objeto Digitador */
   digitador:DigitadorFindAll[] = [];
+
+  votante:Votante[] = [];
 
   /* Inicializo el objeto Agenda Para formulario Agregar*/
   seletedCoordinadorAgregar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.NULL, this.validaciones.STR_LETTER_WITHOUT,
@@ -169,6 +172,7 @@ export class CoordinadorComponent implements OnInit {
     this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
       this.usuario = resultado;
+      this.usuarios = this.usuario;
       /* Consulto los Datos de la tabla digitador */
       this.loginServi.findAllDigitador().then(resultado => {
         /* Asigno los datos de la tabla digitador al arreglo digitador */
@@ -197,6 +201,7 @@ export class CoordinadorComponent implements OnInit {
         this.mesaService.findAllMesa().then(resultado => {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
         this.mesa = resultado;
+        this.mesaAux = this.mesa;
           
       console.log("mesa:1" + this.mesa)
           /* consulta la cantidad de Agendas que existen en el sistema */
@@ -856,7 +861,301 @@ export class CoordinadorComponent implements OnInit {
     }
   }
 
+  actualizar(item:UsuarioFindAll){
+    console.log("item:UsuarioFindAll" + item.id_usuario);
+    /* llena el objeto de comuna para actualizar */
+    for(let i = 0; i < this.coordinadores.length; i++) {
+        if (this.coordinadores[i].id_usuario == item.id_usuario) {
+          console.log("123entrohhhh");
+        this.seletedCoordinadorActualizar = this.coordinadores[i];
+      }
+    }
+  }
+  
+  SelectComunaLActualizar(id_comunaL:number) {
+        this.lugarAux = [];
+        let j = 0;
+        for(let i = 0; i < this.lugar.length; i++){
+          if(id_comunaL == this.lugar[i].id_comunaL){
+            this.lugarAux[j] = this.lugar[i];
+            j++;
+          }
+        }
+    console.log("comunaLugar: " + id_comunaL);
+  }
+  
+  SelectComunaBActualizar(id_comunaB:Number) {
+    this.barrioAux = [];
+    let j = 0;
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_comunaB == this.barrio[i].id_comunaB){
+        this.barrioAux[j] = this.barrio[i];
+        j++;
+      }
+    }
+    console.log("comunaBarrio: " + id_comunaB);
+  }
+  
+  SelectLugarActualizar(id_lugar:Number){
+    let l = 0;
+    this.lugarMesa = [];
+    this.mesaAux = [];
+    this.lugarMesaAux = [];
+    this.lugarmesaService.findAllLugarMesa().then(resultado =>{
+      this.lugarMesa = resultado;
+      console.log("mesaa:" + this.lugarMesa) 
+      for(let i = 0; i < this.lugar.length; i++){
+        if(id_lugar == this.lugar[i].id_lugar){
+          this.seletedCoordinadorActualizar.id_comunaL = this.lugar[i].id_comunaL;
+        }
+      }
+      for (let j = 0; j < this.lugarMesa.length;j++) {
+        if (this.lugarMesa[j].id_lugar == this.seletedCoordinadorActualizar.id_lugar) {
+          console.log("entro:123456"  ) 
+          this.lugarMesaAux[l] = this.lugarMesa[j];
+           l++;
+        }
+      }
+      let h = 0;
+      for (let k = 0; k < this.lugarMesaAux.length ;k++) {
+       for (let m = 0; m < this.mesa.length; m++) {
+          if (this.mesa[m].id_mesa == this.lugarMesaAux[k].id_mesa) {
+            this.mesaAux[h] = this.mesa[m];
+            h++;
+          }
+       }
+      }
+    });
+    console.log("Lugar: " + id_lugar);
+  }
+  
+  SelectCoordinadorActualizar(id_coordinador:Number){
+    this.liderAux = [];
+    let j = 0;
+    for(let i = 0; i < this.lider.length; i++){
+      if(id_coordinador == this.lider[i].id_usuario){
+        this.liderAux[j] = this.lider[i];
+        j++;
+      }
+    }
+    console.log("Coordinador: " + id_coordinador);
+  }
+  
+  SelectLiderActualizar(id_lider:Number){
+    for(let i = 0; i < this.lider.length; i++){
+      if(id_lider == this.lider[i].id_lider){
+        this.seletedCoordinadorActualizar.id_usuario = this.lider[i].id_usuario;
+      }
+    }
+    console.log("Lider: " + id_lider);
+  }
+  
+  SelectBarrioActualizar(id_barrio:Number){
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_barrio == this.barrio[i].id_barrio){
+        this.seletedCoordinadorActualizar.id_comunaB = this.barrio[i].id_comunaB;
+      }
+    }
+    console.log("Barrio: " + id_barrio);
+  }
 
+  actualizacion() {
+    /* Validacion de campos Obligatorios */
+    if (this.validaciones.validaCampoObligatorio(
+      this.seletedCoordinadorActualizar.ced_usuario) == this.validaciones.TRUE) {
+      alert('CEDULA Obligatoria..');
+    } else if (this.validaciones.validaCampoObligatorio(
+      this.seletedCoordinadorActualizar.nom_usuario) == this.validaciones.TRUE) {
+      alert('NOMBRE obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedCoordinadorActualizar.id_comunaL) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COMUNA DE VOTACION obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedCoordinadorActualizar.id_lugar) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('LUGAR DE VOTACION obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedCoordinadorActualizar.id_comunaB) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COMUNA BARRIO obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedCoordinadorActualizar.id_barrio) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('BARRIO obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedCoordinadorActualizar.id_usuario) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COORDINADOR obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedCoordinadorActualizar.id_mesa) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('MESA obligatotio..');
+    } else if (this.validaciones.validaCampoObligatorio(
+      this.seletedCoordinadorActualizar.tel_usuario) == this.validaciones.TRUE) {
+      alert('TELEFONO obligatotio..');
+    }
+
+    /* Validaciones de Rangos */
+    else if (this.validaciones.validacionNumeros(
+      this.seletedCoordinadorActualizar.ced_usuario) == this.validaciones.TRUE) {
+      alert('Cedula: ' + this.seletedCoordinadorActualizar.ced_usuario + ' Invalida..');
+      this.seletedCoordinadorActualizar.ced_usuario = this.validaciones.STR_LETTER_WITHOUT;
+    } else if (this.validaciones.validacionNombre(
+      this.seletedCoordinadorActualizar.nom_usuario) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('NOMBRE: ' + this.seletedCoordinadorActualizar.nom_usuario + ' Invalido..');
+      this.seletedCoordinadorActualizar.nom_usuario = this.validaciones.STR_LETTER_WITHOUT;
+    } else if (this.validaciones.validacionNumeros(
+      this.seletedCoordinadorActualizar.tel_usuario) == this.validaciones.TRUE) {
+      alert('TELEFONO: ' + this.seletedCoordinadorActualizar.tel_usuario + ' Invalido..')
+    } else {
+      this.digitadorService.findByIdDigitadorCedula(this.seletedCoordinadorActualizar.ced_usuario).then(resultado =>{
+        this.digitador = resultado;
+        /* LLamo al servicio votante para buscar los digitadores existentes */
+        this.votanteService.findByIdVotanteCedula(this.seletedCoordinadorActualizar.ced_usuario).then(resultado =>{
+          this.votante = resultado
+          /* LLamo al servicio usuario para buscar los digitadores existentes */
+          this.loginServi.findAllUsuarioCedula(this.seletedCoordinadorActualizar.ced_usuario).then(resultado =>{
+            this.usuario = resultado;
+            /* LLamo al servicio lider para buscar los digitadores existentes */
+            this.liderService.findByIdLiderCedula(this.seletedCoordinadorActualizar.ced_usuario).then(resultado =>{
+              this.lider = resultado;
+              if (this.votante.length == this.validaciones.INT_NUMBER_0 && 
+                this.digitador.length == this.validaciones.INT_NUMBER_0 && 
+                this.lider.length == this.validaciones.INT_NUMBER_0) {
+                  console.log("this.digitador.length: "+this.digitador.length)
+                  if (this.usuario.length == this.validaciones.INT_NUMBER_0) {
+                    this.loginServi.updateUsuario({
+                      id_usuario: this.seletedCoordinadorActualizar.id_usuario,
+                      ced_usuario: this.seletedCoordinadorActualizar.ced_usuario,
+                      nom_usuario: this.seletedCoordinadorActualizar.nom_usuario,
+                      id_comunaL: this.seletedCoordinadorActualizar.id_comunaL,
+                      id_lugar: this.seletedCoordinadorActualizar.id_lugar,
+                      id_barrio: this.seletedCoordinadorActualizar.id_barrio,
+                      municipio: this.seletedCoordinadorActualizar.municipio,
+                      departamento: this.seletedCoordinadorActualizar.departamento,
+                      id_comunaB: this.seletedCoordinadorActualizar.id_comunaB,
+                      id_mesa: this.seletedCoordinadorActualizar.id_mesa,
+                      id_tipo_usuario:3,
+                      activo: this.seletedCoordinadorActualizar.activo,
+                      tel_usuario: this.seletedCoordinadorActualizar.tel_usuario,
+                      login: this.seletedCoordinadorActualizar.login,
+                      contrasena: this.seletedCoordinadorActualizar.contrasena,
+                    }).subscribe((modificado) => {
+                      /* se limpia el input de actualizar */
+                      this.seletedCoordinadorActualizar.id_usuario = this.validaciones.NULL;
+                      /* Se da respuesta Exitosa del servidor */
+                      alert("Se actualizo el coordinador con exito");
+                      /* se llama la funcion inicial para que recargue la pagina */
+                      this.ngOnInit();
+                    },(err:HttpErrorResponse) => {
+                      if(err.error instanceof Error){
+                        alert("a ocurrido un errror cliente");
+                      }else{
+                        alert("a ocurrido un errror servidor");
+                      }
+                    });
+                  } else {
+                    console.log("entro");
+                    let id_number = this.validaciones.INT_NUMBER_0; 
+                    let encuentra:Boolean = this.validaciones.FALSE;
+                    for (let i = 0; i < this.usuario.length; i++ ) {
+                      if (this.seletedCoordinadorActualizar.id_usuario == this.usuario[i].id_usuario &&
+                          this.seletedCoordinadorActualizar.ced_usuario == this.usuario[i].ced_usuario) {
+                            encuentra = this.validaciones.TRUE;
+                            id_number = i;
+                      }
+                    }
+                    if (encuentra == this.validaciones.TRUE) {
+                      this.loginServi.updateUsuario({
+                        id_usuario: this.seletedCoordinadorActualizar.id_usuario,
+                        ced_usuario: this.seletedCoordinadorActualizar.ced_usuario,
+                        nom_usuario: this.seletedCoordinadorActualizar.nom_usuario,
+                        id_comunaL: this.seletedCoordinadorActualizar.id_comunaL,
+                        id_lugar: this.seletedCoordinadorActualizar.id_lugar,
+                        id_barrio: this.seletedCoordinadorActualizar.id_barrio,
+                        municipio: this.seletedCoordinadorActualizar.municipio,
+                        departamento: this.seletedCoordinadorActualizar.departamento,
+                        id_comunaB: this.seletedCoordinadorActualizar.id_comunaB,
+                        id_mesa: this.seletedCoordinadorActualizar.id_mesa,
+                        id_tipo_usuario: 3,
+                        activo: this.seletedCoordinadorActualizar.activo,
+                        tel_usuario: this.seletedCoordinadorActualizar.tel_usuario,
+                        login: this.seletedCoordinadorActualizar.login,
+                        contrasena: this.seletedCoordinadorActualizar.contrasena,
+                      }).subscribe((modificado) => {
+                        /* se limpia el input de actualizar */
+                        this.seletedCoordinadorActualizar.id_usuario = this.validaciones.NULL;
+                        /* Se da respuesta Exitosa del servidor */
+                        alert("Se actualizo el coordinador con exito");
+                        /* se llama la funcion inicial para que recargue la pagina */
+                        this.ngOnInit();
+                      },(err:HttpErrorResponse) => {
+                        if(err.error instanceof Error){
+                          alert("a ocurrido un errror cliente");
+                        }else{
+                          alert("a ocurrido un errror servidor");
+                        }
+                      });
+                    } else {
+                      /* Mensaje de respuesta de lugar ya existe */
+                      alert('la Cedula: ' + this.seletedCoordinadorActualizar.ced_usuario +'\n' +
+                            'esta registrada con el nombre: ' + this.usuario[id_number].nom_usuario 
+                            + '\n\n'
+                      );
+                      /* se limpia el input de actualizar */
+                      this.seletedCoordinadorActualizar.id_usuario = this.validaciones.NULL;
+                      /* Recargo la pagina */
+                      this.ngOnInit();
+                    }
+                  }
+              } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
+                console.log("this.digitador.length: "+this.digitador.length);
+                console.log("this.votante.length: "+this.votante.length);
+                console.log("this.usuario.length: "+this.usuario.length);
+                console.log("this.lider.length: "+this.lider.length);
+                alert("la cedula ya Existe en digitador: " + this.seletedCoordinadorActualizar.ced_usuario);
+                this.seletedCoordinadorActualizar.ced_usuario = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en votante: " + this.seletedCoordinadorActualizar.ced_usuario);
+                this.seletedCoordinadorActualizar.ced_usuario = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.usuario.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en usuario: " + this.seletedCoordinadorActualizar.ced_usuario);
+                this.seletedCoordinadorActualizar.ced_usuario = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.lider.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en lider: " + this.seletedCoordinadorActualizar.ced_usuario);
+                this.seletedCoordinadorActualizar.ced_usuario = this.validaciones.STR_LETTER_WITHOUT;
+              }
+
+            },(err:HttpErrorResponse) => {
+              if(err.error instanceof Error){
+                alert("a ocurrido un errror cliente");
+              }else{
+                alert("a ocurrido un errror servidor");
+              }
+            });
+          },(err:HttpErrorResponse) => {
+            if(err.error instanceof Error){
+              alert("a ocurrido un errror cliente");
+            }else{
+            alert("a ocurrido un errror servidor");
+            }
+          }); 
+        },(err:HttpErrorResponse) => {
+          if(err.error instanceof Error){
+            alert("a ocurrido un errror cliente");
+          }else{
+           alert("a ocurrido un errror servidor");
+          }
+        }); 
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+  
+  cancelar() {
+    this.seletedCoordinadorActualizar.id_usuario = this.validaciones.NULL;
+    this.ngOnInit();
+  }
 
   
 

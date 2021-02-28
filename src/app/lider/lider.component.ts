@@ -75,7 +75,7 @@ export class LiderComponent implements OnInit {
   /* Inicializo un arreglo del objeto Lider */
   lider:Lider[] = [];
   liderAux:LiderAux[] = [];
-  
+  liderAuxAct:Lider[] = [];
 
   /* Inicializo un arreglo del objeto Agenda Para la busqueda*/
   lideresBuscar:Lider[] = [];
@@ -88,6 +88,7 @@ export class LiderComponent implements OnInit {
 
   /* Inicializo un arreglo del objeto usuario para los coordinadores */
   coordinador:UsuarioFindAll[] = [];
+  coordinadorAux:UsuarioFindAll[] = [];
 
 
   /* Inicializo el objeto Agenda Para formulario Agregar*/
@@ -200,12 +201,14 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         this.mesaService.findAllMesa().then(resultado => {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
           this.mesa = resultado;
+          this.mesaAux = this.mesa;
           /* consulta la cantidad de Agendas que existen en el sistema */
           this.liderService.findByIdTotalLider().subscribe(resultado=>{
             this.totalLider = resultado;
           /* asigno el arreglo coordinador todos los datos de la tabla usuario que son coordinadores */
          this.loginServi.findAllUsuarioCoordinador().then(resultado=>{
               this.coordinador = resultado;
+              this.coordinadorAux = this.coordinador;
            
           });
 
@@ -932,5 +935,298 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
     }
   }
 
+  actualizar(item:Lider){
+    /* llena el objeto de comuna para actualizar */
+    for(let i = 0; i < this.lider.length; i++) {
+      if (this.lider[i].id_lider == item.id_lider) {
+        this.seletedLiderActualizar = this.lider[i];
+      }
+    }
+  }
+  
+  SelectComunaLActualizar(id_comunaL:number) {
+        this.lugarAux = [];
+        let j = 0;
+        for(let i = 0; i < this.lugar.length; i++){
+          if(id_comunaL == this.lugar[i].id_comunaL){
+            this.lugarAux[j] = this.lugar[i];
+            j++;
+          }
+        }
+    console.log("comunaLugar: " + id_comunaL);
+  }
+  
+  SelectComunaBActualizar(id_comunaB:Number) {
+    this.barrioAux = [];
+    let j = 0;
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_comunaB == this.barrio[i].id_comunaB){
+        this.barrioAux[j] = this.barrio[i];
+        j++;
+      }
+    }
+    console.log("comunaBarrio: " + id_comunaB);
+  }
+  
+  SelectLugarActualizar(id_lugar:Number){
+    let l = 0;
+    this.lugarMesa = [];
+    this.mesaAux = [];
+    this.lugarMesaAux = [];
+    this.lugarmesaService.findAllLugarMesa().then(resultado =>{
+      this.lugarMesa = resultado;
+      console.log("mesaa:" + this.lugarMesa) 
+      for(let i = 0; i < this.lugar.length; i++){
+        if(id_lugar == this.lugar[i].id_lugar){
+          this.seletedLiderActualizar.id_comunaL = this.lugar[i].id_comunaL;
+        }
+      }
+      for (let j = 0; j < this.lugarMesa.length;j++) {
+        if (this.lugarMesa[j].id_lugar == this.seletedLiderActualizar.id_lugar) {
+          console.log("entro:123456"  ) 
+          this.lugarMesaAux[l] = this.lugarMesa[j];
+           l++;
+        }
+      }
+      let h = 0;
+      for (let k = 0; k < this.lugarMesaAux.length ;k++) {
+       for (let m = 0; m < this.mesa.length; m++) {
+          if (this.mesa[m].id_mesa == this.lugarMesaAux[k].id_mesa) {
+            this.mesaAux[h] = this.mesa[m];
+            h++;
+          }
+       }
+      }
+    });
+    console.log("Lugar: " + id_lugar);
+  }
+  
+  SelectCoordinadorActualizar(id_coordinador:Number){
+    this.liderAux = [];
+    let j = 0;
+    for(let i = 0; i < this.lider.length; i++){
+      if(id_coordinador == this.lider[i].id_usuario){
+        this.liderAuxAct[j] = this.lider[i];
+        j++;
+      }
+    }
+    console.log("Coordinador: " + id_coordinador);
+  }
+  
+  SelectLiderActualizar(id_lider:Number){
+    for(let i = 0; i < this.lider.length; i++){
+      if(id_lider == this.lider[i].id_lider){
+        this.seletedLiderActualizar.id_usuario = this.lider[i].id_usuario;
+      }
+    }
+    console.log("Lider: " + id_lider);
+  }
+  
+  SelectBarrioActualizar(id_barrio:Number){
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_barrio == this.barrio[i].id_barrio){
+        this.seletedLiderActualizar.id_comunaB = this.barrio[i].id_comunaB;
+      }
+    }
+    console.log("Barrio: " + id_barrio);
+  }
+
+
+  actualizacion() {
+    /* Validacion de campos Obligatorios */
+    if (this.validaciones.validaCampoObligatorio(
+      this.seletedLiderActualizar.ced_lider) == this.validaciones.TRUE) {
+      alert('CEDULA Obligatoria..');
+    } else if (this.validaciones.validaCampoObligatorio(
+      this.seletedLiderActualizar.nom_lider) == this.validaciones.TRUE) {
+      alert('NOMBRE obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedLiderActualizar.id_comunaL) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COMUNA DE VOTACION obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedLiderActualizar.id_lugar) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('LUGAR DE VOTACION obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedLiderActualizar.id_comunaB) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COMUNA BARRIO obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedLiderActualizar.id_barrio) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('BARRIO obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedLiderActualizar.id_lider) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('LIDER obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedLiderActualizar.id_usuario) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COORDINADOR obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedLiderActualizar.id_mesa) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('MESA obligatotio..');
+    } else if (this.validaciones.validaCampoObligatorio(
+      this.seletedLiderActualizar.tel_lider) == this.validaciones.TRUE) {
+      alert('TELEFONO obligatotio..');
+    }
+
+    /* Validaciones de Rangos */
+    else if (this.validaciones.validacionNumeros(
+      this.seletedLiderActualizar.ced_lider) == this.validaciones.TRUE) {
+      alert('Cedula: ' + this.seletedLiderActualizar.ced_lider + ' Invalida..');
+      this.seletedLiderActualizar.ced_lider = this.validaciones.STR_LETTER_WITHOUT;
+    } else if (this.validaciones.validacionNombre(
+      this.seletedLiderActualizar.nom_lider) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('NOMBRE: ' + this.seletedLiderActualizar.nom_lider + ' Invalido..');
+      this.seletedLiderActualizar.nom_lider = this.validaciones.STR_LETTER_WITHOUT;
+    } else if (this.validaciones.validacionNumeros(
+      this.seletedLiderActualizar.tel_lider) == this.validaciones.TRUE) {
+      alert('TELEFONO: ' + this.seletedLiderActualizar.tel_lider + ' Invalido..')
+    } else {
+      this.liderService.findByIdLiderCedula(this.seletedLiderActualizar.ced_lider).then(resultado =>{
+        this.lideres = resultado;
+        /* LLamo al servicio votante para buscar los lideres existentes */
+        this.votanteService.findByIdVotanteCedula(this.seletedLiderActualizar.ced_lider).then(resultado =>{
+          this.votante = resultado
+          /* LLamo al servicio usuario para buscar los lideres existentes */
+          this.loginServi.findAllUsuarioCedula(this.seletedLiderActualizar.ced_lider).then(resultado =>{
+            this.usuario = resultado;
+            /* LLamo al servicio digitador para buscar los lideres existentes */
+            this.digitadorService.findByIdDigitadorCedula(this.seletedLiderActualizar.ced_lider).then(resultado =>{
+              this.digitador = resultado;
+              if (this.votante.length == this.validaciones.INT_NUMBER_0 && 
+                this.usuario.length == this.validaciones.INT_NUMBER_0 && 
+                this.digitador.length == this.validaciones.INT_NUMBER_0) {
+                  console.log("this.lideres.length: "+this.digitador.length)
+                  if (this.lideres.length == this.validaciones.INT_NUMBER_0) {
+                      this.liderService.updateLider({
+                      id_lider: this.seletedLiderActualizar.id_lider,
+                      ced_lider: this.seletedLiderActualizar.ced_lider,
+                      nom_lider: this.seletedLiderActualizar.nom_lider,
+                      id_comunaL: this.seletedLiderActualizar.id_comunaL,
+                      id_lugar: this.seletedLiderActualizar.id_lugar,
+                      id_barrio: this.seletedLiderActualizar.id_barrio,
+                      id_usuario: this.seletedLiderActualizar.id_usuario,
+                      municipio: this.seletedLiderActualizar.municipio,
+                      departamento: this.seletedLiderActualizar.departamento,
+                      id_comunaB: this.seletedLiderActualizar.id_comunaB,
+                      id_mesa: this.seletedLiderActualizar.id_mesa,
+                      activo: this.seletedLiderActualizar.activo,
+                      tel_lider: this.seletedLiderActualizar.tel_lider,
+                    }).subscribe((modificado) => {
+                      /* se limpia el input de actualizar */
+                      this.seletedLiderActualizar.id_lider = this.validaciones.NULL;
+                      /* Se da respuesta Exitosa del servidor */
+                      alert("Se actualizo el digitador con exito");
+                      /* se llama la funcion inicial para que recargue la pagina */
+                      this.ngOnInit();
+                    },(err:HttpErrorResponse) => {
+                      if(err.error instanceof Error){
+                        alert("a ocurrido un errror cliente");
+                      }else{
+                        alert("a ocurrido un errror servidor");
+                      }
+                    });
+                  } else {
+                    console.log("entro");
+                    let id_number = this.validaciones.INT_NUMBER_0; 
+                    let encuentra:Boolean = this.validaciones.FALSE;
+                    for (let i = 0; i < this.lideres.length; i++ ) {
+                      if (this.seletedLiderActualizar.id_lider == this.lideres[i].id_lider &&
+                          this.seletedLiderActualizar.ced_lider == this.lideres[i].ced_lider) {
+                            encuentra = this.validaciones.TRUE;
+                            id_number = i;
+                      }
+                    }
+                    if (encuentra == this.validaciones.TRUE) {
+                      this.liderService.updateLider({
+                        id_lider: this.seletedLiderActualizar.id_lider,
+                        ced_lider: this.seletedLiderActualizar.ced_lider,
+                        nom_lider: this.seletedLiderActualizar.nom_lider,
+                        id_comunaL: this.seletedLiderActualizar.id_comunaL,
+                        id_lugar: this.seletedLiderActualizar.id_lugar,
+                        id_barrio: this.seletedLiderActualizar.id_barrio,
+                        id_usuario: this.seletedLiderActualizar.id_usuario,
+                        municipio: this.seletedLiderActualizar.municipio,
+                        departamento: this.seletedLiderActualizar.departamento,
+                        id_comunaB: this.seletedLiderActualizar.id_comunaB,
+                        id_mesa: this.seletedLiderActualizar.id_mesa,
+                        activo: this.seletedLiderActualizar.activo,
+                        tel_lider: this.seletedLiderActualizar.tel_lider,
+                      }).subscribe((modificado) => {
+                        /* se limpia el input de actualizar */
+                        this.seletedLiderActualizar.id_lider = this.validaciones.NULL;
+                        /* Se da respuesta Exitosa del servidor */
+                        alert("Se actualizo el digitador con exito");
+                        /* se llama la funcion inicial para que recargue la pagina */
+                        this.ngOnInit();
+                      },(err:HttpErrorResponse) => {
+                        if(err.error instanceof Error){
+                          alert("a ocurrido un errror cliente");
+                        }else{
+                          alert("a ocurrido un errror servidor");
+                        }
+                      });
+                    } else {
+                      /* Mensaje de respuesta de lugar ya existe */
+                      alert('la Cedula: ' + this.seletedLiderActualizar.ced_lider +'\n' +
+                            'esta registrada con el nombre: ' + this.lideres[id_number].nom_lider 
+                            + '\n\n'
+                      );
+                      /* se limpia el input de actualizar */
+                      this.seletedLiderActualizar.id_lider = this.validaciones.NULL;
+                      /* Recargo la pagina */
+                      this.ngOnInit();
+                    }
+                  }
+              } else if (this.lideres.length != this.validaciones.INT_NUMBER_0) {
+                console.log("this.digitador.length: "+this.digitador.length);
+                console.log("this.votante.length: "+this.votante.length);
+                console.log("this.usuario.length: "+this.usuario.length);
+                console.log("this.lider.length: "+this.lider.length);
+                alert("la cedula ya Existe en digitador: " + this.seletedLiderActualizar.ced_lider);
+                this.seletedLiderActualizar.ced_lider = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en votante: " + this.seletedLiderActualizar.ced_lider);
+                this.seletedLiderActualizar.ced_lider = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.usuario.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en usuario: " + this.seletedLiderActualizar.ced_lider);
+                this.seletedLiderActualizar.ced_lider = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.lider.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en lider: " + this.seletedLiderActualizar.ced_lider);
+                this.seletedLiderActualizar.ced_lider = this.validaciones.STR_LETTER_WITHOUT;
+              }
+            },(err:HttpErrorResponse) => {
+              if(err.error instanceof Error){
+                alert("a ocurrido un errror cliente");
+              }else{
+                alert("a ocurrido un errror servidor");
+              }
+            });
+          },(err:HttpErrorResponse) => {
+            if(err.error instanceof Error){
+              alert("a ocurrido un errror cliente");
+            }else{
+            alert("a ocurrido un errror servidor");
+            }
+          }); 
+        },(err:HttpErrorResponse) => {
+          if(err.error instanceof Error){
+            alert("a ocurrido un errror cliente");
+          }else{
+           alert("a ocurrido un errror servidor");
+          }
+        }); 
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+  cancelar() {
+    this.seletedLiderActualizar.id_lider = this.validaciones.NULL;
+    this.ngOnInit();
+  }
+  
 
 }

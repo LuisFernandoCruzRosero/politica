@@ -89,4 +89,9 @@ findAllUsuarioCoordinadorBarrio(id_barrio:Number):Promise<UsuarioFindAll[]>{
   deleteByIdCoordinador(id_usuario:Number){
     return this.http.delete(ApiUrl + 'usuario/' + id_usuario);
   }
+
+   /* Actualiza un dato de la tabla coordinador por id */
+   updateUsuario(usuario:UsuarioFindAll){
+    return this.http.put<UsuarioFindAll>(ApiUrl + 'usuario/' + usuario.id_usuario, usuario);
+  }
 }

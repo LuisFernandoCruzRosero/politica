@@ -87,6 +87,7 @@ export class VotanteComponent implements OnInit {
 
   /* Inicializo un arreglo del objeto usuario para los coordinadores */
   coordinador:UsuarioFindAll[] = [];
+  coordinadorAux:UsuarioFindAll[] = [];
 
   /* Inicializo el objeto Agenda Para formulario Agregar*/
   seletedVotanteAgregar:Votante = new Votante(this.validaciones.NULL, 
@@ -180,12 +181,10 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
           /* Asigno al arreglo votantes todas las existenten en la tabla */
           this.votantes = resultado;
           this.votante = this.votantes;
-          console.log(this.votantes);
         /* Consulto Los datos de la tabla Comuna */
         this.comunaService.findAllComuna().then(resultado => {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
           this.comuna = resultado;
-          console.log(this.comuna);
           this.comunaBAux = this.comuna;
           this.comunaLAux = this.comuna;
           /* Consulto Los datos de la tabla barrio */
@@ -202,6 +201,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         this.mesaService.findAllMesa().then(resultado => {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
           this.mesa = resultado;
+          this.mesaAux = this.mesa;
           /* Consulto Los datos de la tabla Lider */
         this.liderService.findAllLider().then(resultado => {
           /* Asigno al arreglo lider todas las existenten en la tabla */
@@ -213,6 +213,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
           /* asigno el arreglo coordinador todos los datos de la tabla usuario que son coordinadores */
         this.loginServi.findAllUsuarioCoordinador().then(resultado=>{
             this.coordinador = resultado;
+            this.coordinadorAux = this.coordinador;
           for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
             for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
               for (let k = this.validaciones.INT_NUMBER_0; k < this.lider.length; k++) {
@@ -1070,4 +1071,302 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
       });
     }
   }
+
+  actualizar(item:Votante){
+    console.log("item.id_votante: "+ item.id_votante);
+    console.log("this.votante: "+ this.votante);
+    /* llena el objeto de comuna para actualizar */
+    for(let i = 0; i < this.votante.length; i++) {
+      if (this.votante[i].id_votante == item.id_votante) {
+        this.seletedVotanteActualizar = this.votante[i];
+        console.log("this.seletedVotanteActualizar: "+ this.seletedVotanteActualizar);
+      }
+    }
+  }
+  
+  SelectComunaLActualizar(id_comunaL:number) {
+        this.lugarAux = [];
+        let j = 0;
+        for(let i = 0; i < this.lugar.length; i++){
+          if(id_comunaL == this.lugar[i].id_comunaL){
+            this.lugarAux[j] = this.lugar[i];
+            j++;
+          }
+        }
+    console.log("comunaLugar: " + id_comunaL);
+  }
+  
+  SelectComunaBActualizar(id_comunaB:Number) {
+    this.barrioAux = [];
+    let j = 0;
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_comunaB == this.barrio[i].id_comunaB){
+        this.barrioAux[j] = this.barrio[i];
+        j++;
+      }
+    }
+    console.log("comunaBarrio: " + id_comunaB);
+  }
+  
+  SelectLugarActualizar(id_lugar:Number){
+    let l = 0;
+    this.lugarMesa = [];
+    this.mesaAux = [];
+    this.lugarMesaAux = [];
+    this.lugarmesaService.findAllLugarMesa().then(resultado =>{
+      this.lugarMesa = resultado;
+      console.log("mesaa:" + this.lugarMesa) 
+      for(let i = 0; i < this.lugar.length; i++){
+        if(id_lugar == this.lugar[i].id_lugar){
+          this.seletedVotanteActualizar.id_comunaL = this.lugar[i].id_comunaL;
+        }
+      }
+      for (let j = 0; j < this.lugarMesa.length;j++) {
+        if (this.lugarMesa[j].id_lugar == this.seletedVotanteActualizar.id_lugar) {
+          console.log("entro:123456"  ) 
+          this.lugarMesaAux[l] = this.lugarMesa[j];
+           l++;
+        }
+      }
+      let h = 0;
+      for (let k = 0; k < this.lugarMesaAux.length ;k++) {
+       for (let m = 0; m < this.mesa.length; m++) {
+          if (this.mesa[m].id_mesa == this.lugarMesaAux[k].id_mesa) {
+            this.mesaAux[h] = this.mesa[m];
+            h++;
+          }
+       }
+      }
+    });
+    console.log("Lugar: " + id_lugar);
+  }
+  
+  SelectCoordinadorActualizar(id_coordinador:Number){
+    this.liderAux = [];
+    let j = 0;
+    for(let i = 0; i < this.lider.length; i++){
+      if(id_coordinador == this.lider[i].id_usuario){
+        this.liderAux[j] = this.lider[i];
+        j++;
+      }
+    }
+    console.log("Coordinador: " + id_coordinador);
+  }
+  
+  SelectLiderActualizar(id_lider:Number){
+    for(let i = 0; i < this.lider.length; i++){
+      if(id_lider == this.lider[i].id_lider){
+        this.seletedVotanteActualizar.id_usuario = this.lider[i].id_usuario;
+      }
+    }
+    console.log("Lider: " + id_lider);
+  }
+  
+  SelectBarrioActualizar(id_barrio:Number){
+    for(let i = 0; i < this.barrio.length; i++){
+      if(id_barrio == this.barrio[i].id_barrio){
+        this.seletedVotanteActualizar.id_comunaB = this.barrio[i].id_comunaB;
+      }
+    }
+    console.log("Barrio: " + id_barrio);
+  }
+  
+  actualizacion() {
+    /* Validacion de campos Obligatorios */
+    if (this.validaciones.validaCampoObligatorio(
+      this.seletedVotanteActualizar.ced_votante) == this.validaciones.TRUE) {
+      alert('CEDULA Obligatoria..');
+    } else if (this.validaciones.validaCampoObligatorio(
+      this.seletedVotanteActualizar.nom_votante) == this.validaciones.TRUE) {
+      alert('NOMBRE obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedVotanteActualizar.id_comunaL) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COMUNA DE VOTACION obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedVotanteActualizar.id_lugar) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('LUGAR DE VOTACION obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedVotanteActualizar.id_comunaB) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COMUNA BARRIO obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedVotanteActualizar.id_barrio) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('BARRIO obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedVotanteActualizar.id_lider) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('LIDER obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedVotanteActualizar.id_usuario) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('COORDINADOR obligatotio..');
+    } else if (this.validaciones.validaNull(
+      this.seletedVotanteActualizar.id_mesa) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('MESA obligatotio..');
+    } else if (this.validaciones.validaCampoObligatorio(
+      this.seletedVotanteActualizar.tel_votante) == this.validaciones.TRUE) {
+      alert('TELEFONO obligatotio..');
+    }
+
+    /* Validaciones de Rangos */
+    else if (this.validaciones.validacionNumeros(
+      this.seletedVotanteActualizar.ced_votante) == this.validaciones.TRUE) {
+      alert('Cedula: ' + this.seletedVotanteActualizar.ced_votante + ' Invalida..');
+      this.seletedVotanteActualizar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+    } else if (this.validaciones.validacionNombre(
+      this.seletedVotanteActualizar.nom_votante) == this.validaciones.STR_LETTER_WITHOUT) {
+      alert('NOMBRE: ' + this.seletedVotanteActualizar.nom_votante + ' Invalido..');
+      this.seletedVotanteActualizar.nom_votante = this.validaciones.STR_LETTER_WITHOUT;
+    } else if (this.validaciones.validacionNumeros(
+      this.seletedVotanteActualizar.tel_votante) == this.validaciones.TRUE) {
+      alert('TELEFONO: ' + this.seletedVotanteActualizar.tel_votante + ' Invalido..')
+    } else {
+      this.digitadorService.findByIdDigitadorCedula(this.seletedVotanteActualizar.ced_votante).then(resultado =>{
+        this.digitador = resultado;
+        /* LLamo al servicio votante para buscar los digitadores existentes */
+        this.votanteService.findByIdVotanteCedula(this.seletedVotanteActualizar.ced_votante).then(resultado =>{
+          this.votante = resultado
+          /* LLamo al servicio usuario para buscar los digitadores existentes */
+          this.loginServi.findAllUsuarioCedula(this.seletedVotanteActualizar.ced_votante).then(resultado =>{
+            this.usuario = resultado;
+            /* LLamo al servicio lider para buscar los digitadores existentes */
+            this.liderService.findByIdLiderCedula(this.seletedVotanteActualizar.ced_votante).then(resultado =>{
+              this.lider = resultado;
+              if (this.digitador.length == this.validaciones.INT_NUMBER_0 && 
+                this.usuario.length == this.validaciones.INT_NUMBER_0 && 
+                this.lider.length == this.validaciones.INT_NUMBER_0) {
+                  console.log("this.digitador.length: "+this.digitador.length)
+                  if (this.votante.length == this.validaciones.INT_NUMBER_0) {
+                    this.votanteService.updateVotante({
+                      id_votante: this.seletedVotanteActualizar.id_votante,
+                      ced_votante: this.seletedVotanteActualizar.ced_votante,
+                      nom_votante: this.seletedVotanteActualizar.nom_votante,
+                      id_comunaL: this.seletedVotanteActualizar.id_comunaL,
+                      id_lugar: this.seletedVotanteActualizar.id_lugar,
+                      id_barrio: this.seletedVotanteActualizar.id_barrio,
+                      id_lider: this.seletedVotanteActualizar.id_lider,
+                      id_usuario: this.seletedVotanteActualizar.id_usuario,
+                      municipio: this.seletedVotanteActualizar.municipio,
+                      departamento: this.seletedVotanteActualizar.departamento,
+                      id_comunaB: this.seletedVotanteActualizar.id_comunaB,
+                      id_mesa: this.seletedVotanteActualizar.id_mesa,
+                      activo: this.seletedVotanteActualizar.activo,
+                      tel_votante: this.seletedVotanteActualizar.tel_votante,
+                    }).subscribe((modificado) => {
+                      /* se limpia el input de actualizar */
+                      this.seletedVotanteActualizar.id_votante = this.validaciones.NULL;
+                      /* Se da respuesta Exitosa del servidor */
+                      alert("Se actualizo el digitador con exito");
+                      /* se llama la funcion inicial para que recargue la pagina */
+                      this.ngOnInit();
+                    },(err:HttpErrorResponse) => {
+                      if(err.error instanceof Error){
+                        alert("a ocurrido un errror cliente");
+                      }else{
+                        alert("a ocurrido un errror servidor");
+                      }
+                    });
+                  } else {
+                    console.log("entro");
+                    let id_number = this.validaciones.INT_NUMBER_0; 
+                    let encuentra:Boolean = this.validaciones.FALSE;
+                    for (let i = 0; i < this.votante.length; i++ ) {
+                      if (this.seletedVotanteActualizar.id_votante == this.votante[i].id_votante &&
+                          this.seletedVotanteActualizar.ced_votante == this.votante[i].ced_votante) {
+                            encuentra = this.validaciones.TRUE;
+                            id_number = i;
+                      }
+                    }
+                    if (encuentra == this.validaciones.TRUE) {
+                      this.votanteService.updateVotante({
+                        id_votante: this.seletedVotanteActualizar.id_votante,
+                        ced_votante: this.seletedVotanteActualizar.ced_votante,
+                        nom_votante: this.seletedVotanteActualizar.nom_votante,
+                        id_comunaL: this.seletedVotanteActualizar.id_comunaL,
+                        id_lugar: this.seletedVotanteActualizar.id_lugar,
+                        id_barrio: this.seletedVotanteActualizar.id_barrio,
+                        id_lider: this.seletedVotanteActualizar.id_lider,
+                        id_usuario: this.seletedVotanteActualizar.id_usuario,
+                        municipio: this.seletedVotanteActualizar.municipio,
+                        departamento: this.seletedVotanteActualizar.departamento,
+                        id_comunaB: this.seletedVotanteActualizar.id_comunaB,
+                        id_mesa: this.seletedVotanteActualizar.id_mesa,
+                        activo: this.seletedVotanteActualizar.activo,
+                        tel_votante: this.seletedVotanteActualizar.tel_votante,
+                      }).subscribe((modificado) => {
+                        /* se limpia el input de actualizar */
+                        this.seletedVotanteActualizar.id_votante = this.validaciones.NULL;
+                        /* Se da respuesta Exitosa del servidor */
+                        alert("Se actualizo el votante con exito");
+                        /* se llama la funcion inicial para que recargue la pagina */
+                        this.ngOnInit();
+                      },(err:HttpErrorResponse) => {
+                        if(err.error instanceof Error){
+                          alert("a ocurrido un errror cliente");
+                        }else{
+                          alert("a ocurrido un errror servidor");
+                        }
+                      });
+                    } else {
+                      /* Mensaje de respuesta de lugar ya existe */
+                      alert('la Cedula: ' + this.seletedVotanteActualizar.ced_votante +'\n' +
+                            'esta registrada con el nombre: ' + this.votante[id_number].nom_votante 
+                            + '\n\n'
+                      );
+                      /* se limpia el input de actualizar */
+                      this.seletedVotanteActualizar.id_votante = this.validaciones.NULL;
+                      /* Recargo la pagina */
+                      this.ngOnInit();
+                    }
+                  }
+              } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
+                console.log("this.digitador.length: "+this.digitador.length);
+                console.log("this.votante.length: "+this.votante.length);
+                console.log("this.usuario.length: "+this.usuario.length);
+                console.log("this.lider.length: "+this.lider.length);
+                alert("la cedula ya Existe en digitador: " + this.seletedVotanteActualizar.ced_votante);
+                this.seletedVotanteActualizar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en votante: " + this.seletedVotanteActualizar.ced_votante);
+                this.seletedVotanteActualizar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.usuario.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en usuario: " + this.seletedVotanteActualizar.ced_votante);
+                this.seletedVotanteActualizar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+              } else if (this.lider.length != this.validaciones.INT_NUMBER_0) {
+                alert("la cedula ya Existe en lider: " + this.seletedVotanteActualizar.ced_votante);
+                this.seletedVotanteActualizar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
+              }
+            },(err:HttpErrorResponse) => {
+              if(err.error instanceof Error){
+                alert("a ocurrido un errror cliente");
+              }else{
+                alert("a ocurrido un errror servidor");
+              }
+            });
+          },(err:HttpErrorResponse) => {
+            if(err.error instanceof Error){
+              alert("a ocurrido un errror cliente");
+            }else{
+            alert("a ocurrido un errror servidor");
+            }
+          }); 
+        },(err:HttpErrorResponse) => {
+          if(err.error instanceof Error){
+            alert("a ocurrido un errror cliente");
+          }else{
+           alert("a ocurrido un errror servidor");
+          }
+        }); 
+      },(err:HttpErrorResponse) => {
+        if(err.error instanceof Error){
+          alert("a ocurrido un errror cliente");
+        }else{
+          alert("a ocurrido un errror servidor");
+        }
+      });
+    }
+  }
+
+  cancelar() {
+    this.seletedVotanteActualizar.id_votante = this.validaciones.NULL;
+    this.ngOnInit();
+  }
+
 }

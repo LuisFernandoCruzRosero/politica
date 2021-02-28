@@ -212,12 +212,12 @@
                                     <tr>
                                         <td>CEDULA:</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso ">
                                                 {{item.ced_votante}}
                                             </div>
                                             <ng-template #falso>
                                                 <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.ced_digitador " class="form-control " id="ced_digitador " name="ced_digitador ">
+                                                    <input type="text " [(ngModel)]="seletedVotanteActualizar.ced_votante " class="form-control " id="ced_votante " name="ced_votante ">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -226,12 +226,12 @@
                                     <tr>
                                         <td>NOMBRE:</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso20 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso20 ">
                                                 {{item.nom_votante}}
                                             </div>
                                             <ng-template #falso20>
                                                 <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.nom_digitador " class="form-control " id="nom_digitador " name="nom_digitador ">
+                                                    <input type="text " [(ngModel)]="seletedVotanteActualizar.nom_votante " class="form-control " id="nom_votante " name="nom_votante ">
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -240,28 +240,28 @@
                                     <tr>
                                         <td>COMUNA DE VOTACION</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso2 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso2 ">
                                                 {{item.comuna_lugar}}
                                             </div>
                                             <ng-template #falso2>
                                                 <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.tel_digitador " class="form-control " id="tel_digitador " name="tel_digitador ">
-                                                </div>
+                                                    <select [(ngModel)]="seletedVotanteActualizar.id_comunaL" (ngModelChange)="SelectComunaLActualizar($event)" class="form-control" name="item.id_comuna">
+                                                        <option *ngFor="let item of comunaLAux" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                                                    </select> </div>
                                             </ng-template>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>LUGAR DE VOTACION</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso3 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso3 ">
                                                 {{item.nom_lugar}}
                                             </div>
                                             <ng-template #falso3>
                                                 <div class="form-group ">
-                                                    <select [(ngModel)]="seletedListarDigitador.bar_usu " (ngModelChange)="SelectBarrio($event) " class="form-control " name="item.nom_bar ">
-                                                        <option *ngFor="let item of barrioAux " [value]="item.nom_bar ">{{item.nom_bar}}</option>
+                                                    <select [(ngModel)]="seletedVotanteActualizar.id_lugar" (ngModelChange)="SelectLugarActualizar($event)" class="form-control" name="item.id_lugar">
+                                                        <option *ngFor="let item of lugarAux" [value]="item.id_lugar">{{item.nom_lugar}}</option>
                                                     </select>
-                                                    <!-- <input type="text " [(ngModel)]="seletedListarDigitador.bar_usu " class="form-control " id="bar_usu " name="bar_usu "> -->
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -269,15 +269,14 @@
                                     <tr>
                                         <td>COMUNA BARRIO</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante; else falso4 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante; else falso4 ">
                                                 {{item.comuna_barrio}}
                                             </div>
                                             <ng-template #falso4>
                                                 <div class="form-group ">
-                                                    <select [(ngModel)]="seletedListarDigitador.ocupacion " class="form-control " name="item.nom_per_pro ">
-                                                            <option *ngFor="let item of perfilProfesional " [value]="item.nom_per_pro ">{{item.nom_per_pro}}</option>
-                                                        </select>
-                                                    <!-- <input type="text " [(ngModel)]="seletedListarDigitador.ocupacion " class="form-control " id="ocupacion " name="ocupacion "> -->
+                                                    <select [(ngModel)]="seletedVotanteActualizar.id_comunaB" (ngModelChange)="SelectComunaBActualizar($event)" class="form-control" name="item.id_comunaB">
+                                                        <option *ngFor="let item of comunaBAux" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                                                    </select>
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -286,13 +285,14 @@
                                     <tr>
                                         <td>BARRIO</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso21 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso21 ">
                                                 {{item.nom_barrio}}
                                             </div>
                                             <ng-template #falso21>
                                                 <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.departamento " class="form-control " id="departamento " name="departamento ">
-                                                </div>
+                                                    <select [(ngModel)]="seletedVotanteActualizar.id_barrio" (ngModelChange)="SelectBarrioActualizar($event)" class="form-control" name="item.id_barrio">
+                                                        <option *ngFor="let item of barrioAux" [value]="item.id_barrio">{{item.nom_barrio}}</option>
+                                                    </select> </div>
                                             </ng-template>
                                         </td>
                                     </tr>
@@ -300,13 +300,14 @@
                                     <tr>
                                         <td>LIDER</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso12 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso12 ">
                                                 {{item.nom_lider}}
                                             </div>
                                             <ng-template #falso12>
                                                 <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.municipio " class="form-control " id="municipio " name="municipio ">
-                                                </div>
+                                                    <select [(ngModel)]="seletedVotanteActualizar.id_lider" (ngModelChange)="SelectLiderActualizar($event)" class="form-control" name="item.id_lider">
+                                                        <option *ngFor="let item of liderAux" [value]="item.id_lider">{{item.nom_lider}}</option>
+                                                    </select> </div>
                                             </ng-template>
                                         </td>
                                     </tr>
@@ -314,13 +315,14 @@
                                     <tr>
                                         <td>COORDINADOR</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso14 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso14 ">
                                                 {{item.nom_usuario}}
                                             </div>
                                             <ng-template #falso14>
                                                 <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.mesa " class="form-control " id="mesa " name="mesa ">
-                                                </div>
+                                                    <select [(ngModel)]="seletedVotanteActualizar.id_usuario" (ngModelChange)="SelectCoordinadorActualizar($event)" class="form-control" name="item.id_usuario">
+                                                        <option *ngFor="let item of coordinadorAux" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+                                                    </select> </div>
                                             </ng-template>
                                         </td>
                                     </tr>
@@ -328,42 +330,29 @@
                                     <tr>
                                         <td>MUNICIPIO</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso5 ">
-                                                {{item.municipio}}
-                                            </div>
-                                            <ng-template #falso5>
-                                                <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.user_usu " class="form-control " id="user_usu " name="user_usu ">
-                                                </div>
-                                            </ng-template>
+                                            {{item.municipio}}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>DEPARTAMENTO</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso6 ">
-                                                {{item.departamento}}
-                                            </div>
-                                            <ng-template #falso6>
-                                                <div class="form-group ">
-                                                    <input type="text " [(ngModel)]="seletedListarDigitador.contrasena " class="form-control " id="contrasena " name="contrasena ">
-                                                </div>
-                                            </ng-template>
+                                            {{item.departamento}}
+
                                         </td>
                                     </tr>
 
                                     <tr>
                                         <td>MESA</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante ; else falso7 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante ; else falso7 ">
                                                 {{item.nom_mesa}}
                                             </div>
                                             <ng-template #falso7>
                                                 <div class="form-group ">
 
-                                                    <select [(ngModel)]="seletedListarDigitador.id_comuna " (ngModelChange)="selectComuna($event) " class="form-control " name="item.id_comuna ">
-                                                   <option *ngFor="let item of comuna " [value]="item.id_comuna ">{{item.nom_com}}</option>        
-                                               </select>
+                                                    <select [(ngModel)]="seletedVotanteActualizar.id_mesa" class="form-control" name="item.id_mesa">
+                                                        <option *ngFor="let item of mesaAux" [value]="item.id_mesa">{{item.nom_mesa}}</option>        
+                                                    </select>
 
                                                 </div>
                                             </ng-template>
@@ -372,14 +361,13 @@
                                     <tr>
                                         <td>TELEFONO</td>
                                         <td>
-                                            <div *ngIf="seletedVotanteListar.id_votante!=item.id_votante; else falso8 ">
+                                            <div *ngIf="seletedVotanteActualizar.id_votante!=item.id_votante; else falso8 ">
                                                 {{item.tel_votante}}
                                             </div>
                                             <ng-template #falso8>
                                                 <div class="form-group ">
-                                                    <select [(ngModel)]="seletedListarDigitador.id_sector " (ngModelChange)="selectSector($event) " class="form-control " name="tipo.id_sector ">
-                                                    <option *ngFor="let tipo of sectorAux " [value]="tipo.id_sector ">{{tipo.nom_sec}}</option>
-                                                </select>
+                                                    <input type="text" [(ngModel)]="seletedVotanteActualizar.tel_votante" class="form-control" id="tel_votante" name="tel_votante">
+
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -388,8 +376,11 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div *ngIf="seletedVotanteListar.id_votante==item.id_votante; else falso9 ">
-                            <button class="btn btn-success " (click)="actualizacion() ">Guardar</button>
+                        <div *ngIf="seletedVotanteActualizar.id_votante==item.id_votante; else falso9 ">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-success" (click)="actualizacion()">Guardar</button>
+                                <button type="button" class="btn btn-warning" (click)="cancelar()">Cancelar</button>
+                            </div>
                         </div>
                         <ng-template #falso9>
                             <div class="btn-group " role="group " aria-label="Basic example ">
