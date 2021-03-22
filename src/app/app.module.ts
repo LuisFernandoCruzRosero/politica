@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AgmCoreModule } from '@agm/core';
 
 /* Componentes */
 import { AppComponent } from './app.component';
@@ -60,7 +61,10 @@ import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.comp
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDj0UvPBwIqmJCJqMpCjWVxSCfYHvhq4sk'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

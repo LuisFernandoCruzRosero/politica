@@ -63,6 +63,106 @@
             </ul>
         </div>
     </nav>
+    <div>
+        <h4>Agregar Contabilidad </h4>
+
+        <h6>Seleccione un Usuario:</h6>
+        <select [(ngModel)]="seletedContabilidadAgregar.id_usuario" class="form-control" name="id_usuario">
+            <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+        </select>
+        <textarea rows="5" cols="50" type="text" [(ngModel)]="seletedContabilidadAgregar.descripcion" placeholder="DESCRIPCION" name="descripcion"></textarea>
+        <input type="text" [(ngModel)]="seletedContabilidadAgregar.valor" placeholder="VALOR $">
+        <input type="text" [(ngModel)]="seletedContabilidadAgregar.nombre" placeholder="NOMBRE DE PATROCINADOR">
+        <input type="text" [(ngModel)]="seletedContabilidadAgregar.identificacion" placeholder="IDENTIFICACION" name="identificacion">
+
+        <button (click)="guardar()">Agregar</button>
+
+        <div class="btn_Buscar">
+            <h4>Buscar</h4>
+            <input type="text" [(ngModel)]="seletedContabilidadBuscar.identificacion" placeholder="NUMERO DE IDENTIFICACION">
+            <button (click)="buscar()">Buscar</button>
+            <button (click)="listar()">listar</button>
+        </div>
+        <h4>Lista de Contabilidad </h4>
+    </div>
+    <div id="main-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>USUARIO</th>
+                    <th>IDENTIFICACION</th>
+                    <th>DESCRIPCION</th>
+                    <th>VALOR</th>
+                    <th>NOMBRE</th>
+                    <th>OPERACION</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of contabilidadAux">
+                    <td>{{item.id_contabilidad}}</td>
+                    <td>
+                        <div *ngIf="seletedContabilidadActualizar.id_contabilidad != item.id_contabilidad; else falso">
+                            {{item.nom_usuario}}
+                        </div>
+                        <ng-template #falso>
+                            <select [(ngModel)]="seletedContabilidadActualizar.id_usuario" class="form-control" name="id_usuario">
+                                <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedContabilidadActualizar.id_contabilidad != item.id_contabilidad; else falso1">
+                            {{item.identificacion}}
+                        </div>
+                        <ng-template #falso1>
+                            <input type="text" [(ngModel)]="seletedContabilidadActualizar.identificacion" name="identificacion">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedContabilidadActualizar.id_contabilidad != item.id_contabilidad; else falso2">
+                            {{item.descripcion}}
+                        </div>
+                        <ng-template #falso2>
+                            <input type="text" [(ngModel)]="seletedContabilidadActualizar.descripcion" name="descripcion">
+                        </ng-template>
+
+                    </td>
+                    <td>
+                        <div *ngIf="seletedContabilidadActualizar.id_contabilidad != item.id_contabilidad; else falso3">
+                            {{item.valor}}
+                        </div>
+                        <ng-template #falso3>
+                            <input type="text" [(ngModel)]="seletedContabilidadActualizar.valor" name="valor">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedContabilidadActualizar.id_contabilidad != item.id_contabilidad; else falso4">
+                            {{item.nombre}}
+                        </div>
+                        <ng-template #falso4>
+                            <input type="text" [(ngModel)]="seletedContabilidadActualizar.nombre" name="nombre">
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="seletedContabilidadActualizar.id_contabilidad == item.id_contabilidad; else falso5">
+                            <button (click)="actualizacion()">Guardar</button>
+                        </div>
+                        <ng-template #falso5>
+                            <button (click)="actualizar(item)">Actualizar</button>
+                            <button (click)="eliminar(item)">Eliminar</button>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
 </body>
 
 </html>

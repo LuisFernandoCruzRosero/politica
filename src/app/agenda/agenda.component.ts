@@ -12,6 +12,7 @@ import { DigitadorFindAll } from '../modelos/digitador-find-all';
 import { Token } from '../modelos/token';
 import { Validaciones } from '../modelos/validaciones';
 import { Agenda } from '../modelos/agenda';
+import { AgendaAux } from '../modelos/agenda-aux';
 
 
 @Component({
@@ -34,9 +35,11 @@ export class AgendaComponent implements OnInit {
  
    /* Inicializamos un arreglo del objeto Usuaio */
    usuario:UsuarioFindAll[] = [];
+   coordinador:UsuarioFindAll[] = [];
  
    /* Inicializamos un arreglo del objeto Digitador */
    digitador:DigitadorFindAll[] = [];
+   agendaAux:AgendaAux[] = [];
  
    /* Inicializo el objeto Agenda Para formulario Agregar*/
    seletedAgendaAgregar:Agenda = new Agenda(this.validaciones.NULL, this.validaciones.NULL, 
@@ -67,7 +70,7 @@ export class AgendaComponent implements OnInit {
    /* Se llama a Mesa service para poder realizar la funciones del CRUD del modulo de las mesas */
  
 
-  constructor(private loginServi:LoginService, private route:Router, private agendaService:AgendaService) {}
+  constructor(private loginServi:LoginService, private route:Router, private agendaService:AgendaService) { this.agendaAux = [] }
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
@@ -76,53 +79,79 @@ export class AgendaComponent implements OnInit {
     this.loginServi.findAllUsuario().then(resultado => {
       /* Asigno los datos de la tabla usuario al arreglo usuario */
       this.usuario = resultado;
-      /* Consulto los Datos de la tabla digitador */
-      this.loginServi.findAllDigitador().then(resultado => {
-        /* Asigno los datos de la tabla digitador al arreglo digitador */
-        this.digitador = resultado;
-        /* Consulto Los datos de la tabla Agenda */
-        this.agendaService.findAllAgenda().then(resultado => {
-          /* Asigno al arreglo Agendas todas las existenten en la tabla */
-          this.agendas = resultado;
-          /* consulta la cantidad de Agendas que existen en el sistema */
-          this.agendaService.findByIdTotalAgenda().subscribe(resultado=>{
-            this.totalAgenda = resultado;
-          });
-          try {
-            /* Consulto Tokent de Autenticidad */
-            this.token = this.loginServi.findAllToken();
-            /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
-            this.vista = this.token.tipo_usuario;
-            /* Busco el usuario logueado */
-            for (let i = this.validaciones.INT_NUMBER_0; i < this.usuario.length; i++) {
-              /* Se pregunta si el usuario logueado es de tipo 1 */
-              if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_1) {
-              /* Si la encuentro cambio el estado a true */
-              this.encontrado = this.validaciones.TRUE;
+      this.loginServi.findAllUsuarioCoordinador().then(resultado => {
+        this.coordinador = resultado;
+        
+        /* Consulto los Datos de la tabla digitador */
+        this.loginServi.findAllDigitador().then(resultado => {
+          /* Asigno los datos de la tabla digitador al arreglo digitador */
+          this.digitador = resultado;
+
+          this.agendaAux = [];
+          /* Consulto Los datos de la tabla Agenda */
+          this.agendaService.findAllAgenda().then(resultado => {
+            /* Asigno al arreglo Agendas todas las existenten en la tabla */
+            this.agendas = resultado;
+            
+            /* consulta la cantidad de Agendas que existen en el sistema */
+            this.agendaService.findByIdTotalAgenda().subscribe(resultado=>{
+              this.totalAgenda = resultado;
+              
+              for(let i=this.validaciones.INT_NUMBER_0; i<this.agendas.length; i++){
+                let cadena:String=this.agendas[i].fecha.toString().substr(0,10);
+                console.log("cadena " + cadena);
+                this.addAgendaAux({
+                  id_agenda:this.agendas[i].id_agenda,
+                  fecha:cadena,
+                  lugar:this.agendas[i].lugar,
+                  hora:this.agendas[i].hora,
+                  descripcion:this.agendas[i].descripcion,
+                  id_usuario:this.agendas[i].id_usuario, 
+                })
+              }
+            });
+            try {
+              /* Consulto Tokent de Autenticidad */
+              this.token = this.loginServi.findAllToken();
+              /* Agrego ala variable vista el valor de tipo de usuario para bloquear permisos */
+              this.vista = this.token.tipo_usuario;
+              /* Busco el usuario logueado */
+              for (let i = this.validaciones.INT_NUMBER_0; i < this.usuario.length; i++) {
+                /* Se pregunta si el usuario logueado es de tipo 1 */
+                if (this.usuario[i].login == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_1) {
+                /* Si la encuentro cambio el estado a true */
+                this.encontrado = this.validaciones.TRUE;
+                }
+              }
+              /* Busco el digitador logueado */
+              for (let i = this.validaciones.INT_NUMBER_0; i< this.digitador.length; i++) {
+                /* Se pregunta si el usuario logueado es de tipo 4 */
+                if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_4) {
+                /* Si la encuentro cambio el estado a true */
+                this.encontrado = this.validaciones.TRUE;
+                }
+              }
+            } catch (e) {
+              /* Si no encuentra el usuario */
+              if(this.encontrado == this.validaciones.FALSE){
+              /* Navega al login */
+              //this.route.navigate(['/']);
               }
             }
-            /* Busco el digitador logueado */
-            for (let i = this.validaciones.INT_NUMBER_0; i< this.digitador.length; i++) {
-              /* Se pregunta si el usuario logueado es de tipo 4 */
-              if (this.digitador[i].usu_digiador == this.token.user_usu && this.token.tipo_usuario == this.validaciones.INT_NUMBER_4) {
-              /* Si la encuentro cambio el estado a true */
-              this.encontrado = this.validaciones.TRUE;
-              }
-            }
-          } catch (e) {
-            /* Si no encuentra el usuario */
-            if(this.encontrado == this.validaciones.FALSE){
-            /* Navega al login */
-            //this.route.navigate(['/']);
-            }
+        }, (err:HttpErrorResponse) => {
+          if (err.error instanceof Error) {
+            alert("a ocurrido un errror cliente");
+          } else {
+            alert("a ocurrido un errror servidor");
           }
-      }, (err:HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          alert("a ocurrido un errror cliente");
-        } else {
-          alert("a ocurrido un errror servidor");
-        }
-      });
+        });
+        }, (err:HttpErrorResponse) => {
+          if (err.error instanceof Error) {
+            alert("a ocurrido un errror cliente");
+          } else {
+            alert("a ocurrido un errror servidor");
+          }
+        });
       }, (err:HttpErrorResponse) => {
         if (err.error instanceof Error) {
           alert("a ocurrido un errror cliente");
@@ -290,5 +319,10 @@ export class AgendaComponent implements OnInit {
     this.seletedAgendaActualizar.descripcion = this.validaciones.STR_LETTER_WITHOUT;
     /* esta funcion llena los arreglos de la data de la base de datos */
     this.ngOnInit();
+  }
+
+  /* Agregar Barrio a Arreglo local par aquitar id */
+  addAgendaAux(item:AgendaAux){
+    this.agendaAux.push(item);
   }
 }

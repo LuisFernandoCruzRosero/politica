@@ -1,7 +1,7 @@
-export class Registraduria {
+export class RegistraduriaAux {
     constructor (
         public id_registraduria:Number,
-        public id_lugar:Number,
+        public nom_lugar:String,
         public total:Number,
     ){}
 }

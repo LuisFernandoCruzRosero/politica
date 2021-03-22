@@ -66,23 +66,24 @@
 
     <div>
         <h4>Agregar Agenda </h4>
-        <input type="text" [(ngModel)]="seletedAgendaAgregar.id_usuario" placeholder="USUARIO" name="id_usuario">
-        <input type="text" [(ngModel)]="seletedAgendaAgregar.descripcion" placeholder="DESCRIPCION" name="descripcion">
-        <input type="text" [(ngModel)]="seletedAgendaAgregar.fecha" placeholder="FECHA" name="fecha">
 
-        <label for="start">Start date:</label>
+        <h6>Seleccione un Usuario:</h6>
+        <select [(ngModel)]="seletedAgendaAgregar.id_usuario" class="form-control" name="item.id_usuario">
+            <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+        </select>
+        <textarea rows="5" cols="50" type="text" [(ngModel)]="seletedAgendaAgregar.descripcion" placeholder="DESCRIPCION" name="descripcion"></textarea>
 
-        <input type="date" id="start" name="trip-start" value="2018-07-22" min="2020-09-22" max="2050-12-31">
+
+        <label for="start">Fecha de Reunion:</label>
+
+        <input type="date" [(ngModel)]="seletedAgendaAgregar.fecha" id="start" name="trip-start" value="2018-07-22" min="2020-09-22" max="2050-12-31">
 
 
         <form action="/action_page.php">
-            <label for="appt">Select a time:</label>
-            <input type="time" id="appt" name="appt">
-            <input type="submit" value="Submit">
+            <label for="appt">Hora de Reunion:</label>
+            <input type="time" [(ngModel)]="seletedAgendaAgregar.hora" id="appt" name="appt">
         </form>
-
-        <input type="text" [(ngModel)]="seletedAgendaAgregar.hora" placeholder="HORA" name="hora">
-        <input type="text" [(ngModel)]="seletedAgendaAgregar.lugar" placeholder="LUGAR" name="lugar">
+        <textarea rows="5" cols="50" [(ngModel)]="seletedAgendaAgregar.lugar" placeholder="Direccion" name="lugar"> </textarea>
         <button (click)="guardar()">Agregar</button>
 
         <div class="btn_Buscar">

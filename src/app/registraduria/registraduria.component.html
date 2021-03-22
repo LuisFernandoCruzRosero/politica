@@ -65,4 +65,72 @@
     </nav>
 </body>
 
+<div>
+    <h4>Agregar lugar </h4>
+    <h4>SELECCIONE LUGAR:</h4>
+    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+        <h6>Seleccione Lugar De votacion:</h6>
+        <select [(ngModel)]="seletedRegistraduriaAgregar.id_lugar" class="form-control" name="item.id_lugar">
+            <option *ngFor="let item of lugares" [value]="item.id_lugar">{{item.nom_lugar}}</option>
+        </select>
+    </div>
+    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+        <input [(ngModel)]="seletedRegistraduriaAgregar.total" name="total" type="text" placeholder="total">
+    </div>
+    <button (click)="guardar()">Agregar</button>
+
+    <h4>BUSCAR LUGAR </h4>
+    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+        <h6>Seleccione Lugar De votacion:</h6>
+        <select [(ngModel)]="seletedRegistraduriaBuscar.id_lugar" class="form-control" name="item.id_lugar">
+            <option *ngFor="let item of lugares" [value]="item.id_lugar">{{item.nom_lugar}}</option>
+        </select>
+    </div>
+    <button (click)="buscar()">Buscar</button>
+    <button (click)="listar()">listar</button>
+
+    <h4>Lista de Lugares </h4>
+</div>
+<div id="main-container">
+
+    <table>
+        <thead>
+            <tr>
+                <th>LUGAR</th>
+                <th>TOTAL REGISTRADURIA</th>
+                <th>OPERACIÓN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of registraduriaAux">
+                <td> {{item.nom_lugar}}</td>
+                <td>
+                    <div *ngIf="seletedRegistraduriaActualizar.id_registraduria != item.id_registraduria; else falso1">
+                        {{item.total}}
+                    </div>
+                    <ng-template #falso1>
+                        <input type="text" [(ngModel)]="seletedRegistraduriaActualizar.total" placeholder="total" name="total">
+                    </ng-template>
+                </td>
+
+                <td>
+                    <div *ngIf="seletedRegistraduriaActualizar.id_registraduria == item.id_registraduria; else falso9">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" (click)="actualizacion()">Guardar</button>
+                            <button type="button" (click)="cancelar()">Cancelar</button>
+                        </div>
+                    </div>
+                    <ng-template #falso9>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" (click)="actualizar(item)">Actualizar</button>
+                            <button type="button" (click)="eliminar(item)">Eliminar</button>
+                        </div>
+                    </ng-template>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
 </html>

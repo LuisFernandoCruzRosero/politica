@@ -63,6 +63,37 @@
             </ul>
         </div>
     </nav>
+
+    <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
+        <div *ngFor='let item of geolocalizacion'>
+            <div *ngIf="(((item.total)/2) - item.actual) >= 0; else falso">
+                <agm-marker [latitude]="item.latitud" [longitude]="item.longitud" [label]="{text:item.nom_lugar}" [iconUrl]="{url:iconMapRed.iconUrl, scaledSize:{height:30, width:30}}">
+                    <agm-info-window>
+                        <h3>{{item.nom_lugar}}</h3>
+                        <h3>Total Lugar: {{item.total}}</h3>
+                        <h3>Actual: {{item.actual}}</h3>
+                        <h3>diferencia: {{item.total - item.actual}} </h3>
+                    </agm-info-window>
+                </agm-marker>
+            </div>
+            <ng-template #falso>
+                <agm-marker [latitude]="item.latitud" [longitude]="item.longitud" [label]="{text:item.nom_lugar}" [iconUrl]="{url:iconMapGreen.iconUrl, scaledSize:{height:30, width:30}}">
+                    <agm-info-window>
+                        <h3>{{item.nom_lugar}}</h3>
+                        <h3>Total Lugar: {{item.total}}</h3>
+                        <h3>Actual: {{item.actual}}</h3>
+                        <div *ngIf='(item.total - item.actual) > 0; else falso9'>
+                            <h3>diferencia: {{item.total - item.actual}} </h3>
+                        </div>
+                        <ng-template #falso9>
+                            <h3>diferencia: {{item.actual-item.total}} </h3>
+                        </ng-template>
+                    </agm-info-window>
+                </agm-marker>
+            </ng-template>
+        </div>
+    </agm-map>
+
 </body>
 
 </html>
