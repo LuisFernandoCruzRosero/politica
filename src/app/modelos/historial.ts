@@ -1,8 +1,10 @@
 export class Historial {
     constructor (
-       public fec_historial:Date,
-       public id_lugar:Number,
-       public total:Number,
+       public id_historial:Number,
+       public fec_historial:String,
+       public total:String,
+       public ced_candidato:String,
+       public nom_candidato:String
     ){}
 }
 

@@ -231,7 +231,7 @@ export class LugarMesaComponent implements OnInit {
             
           }).subscribe((resultado) => {
             /* Se da respuesta Exitosa del servidor */
-            alert("Se Agrego la Mesa");
+            alert("Se Agrego la Mesa al Lugar");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
             /* se limpia el input de agregar de lugar */
@@ -241,13 +241,12 @@ export class LugarMesaComponent implements OnInit {
           });
         } else {
           /* Respuesta de mesa a agregar ya encontrada */
-          alert('nombre del barrio :' + this.seletedLugarMesaAgregar.id_lugar_mesa + ' Ya Existe');
+          alert('ya existe la mesa en este lugar  :' + this.seletedLugarMesaAgregar.id_lugar_mesa);
         }
       });
     } 
    /* Busqueda de Campos */
    buscar() {
-     console.log(this.seletedLugarMesaBuscar.id_lugar);
       /* valida si el campo nombre del lugarmesa del formulario buscar no esta vacio */
         /* llama el servicio para buscar todos los nombres y redtificar de que si exite */
         this.lugarmesaService.findAllByIdLugarMesa(this.seletedLugarMesaBuscar.id_lugar).then(resultado => {
@@ -335,10 +334,6 @@ export class LugarMesaComponent implements OnInit {
   actualizar(lugarmesa:LugarMesa){
     /* llena el objeto de comuna para actualizar */
     this.seletedLugarMesaActualizar = lugarmesa;
-    console.log(this.seletedLugarMesaActualizar);
-    console.log(this.lugarmesas);
-    console.log(this.mesas);
-    console.log(this.lugares);
     /* Se asigna valor por defecto de Comuna para mostrar nombre correcto */
     for (let i = this.validaciones.INT_NUMBER_0; i < this.mesas.length; i++) {
       for (let k = this.validaciones.INT_NUMBER_0; k < this.lugares.length; k++) {
@@ -390,7 +385,7 @@ export class LugarMesaComponent implements OnInit {
       } else {
         this.seletedLugarMesaActualizar.id_lugar_mesa = this.validaciones.NULL;
         /* Mensaje de respuesta de barrio ya existe */
-        alert('Ya Existe Mesa: ' + this.seletedLugarMesaActualizar.id_mesa + ' en Lugar: '+ this.seletedLugarMesaActualizar.id_lugar);
+        alert('Ya Existe Lugar-Mesa: ' + this.seletedLugarMesaActualizar.id_mesa + ' en Lugar: '+ this.seletedLugarMesaActualizar.id_lugar);
         /* Recargo la pagina */
         this.ngOnInit();
       }
@@ -401,6 +396,11 @@ export class LugarMesaComponent implements OnInit {
         alert("a ocurrido un errror servidor");
       }
     });
+  }
+
+  cancelar() {
+    this.seletedLugarMesaActualizar.id_lugar_mesa = this.validaciones.NULL;
+    this.ngOnInit();
   }
 }
 

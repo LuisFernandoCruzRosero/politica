@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Votante</title>
 </head>
 
 <body>
@@ -66,94 +66,92 @@
 
     <div class="main">
         <div class="card">
-            <b><div class="card-header">ADMINISTRACION DE VOTANTES REGISTRAR</div></b>
+            <b><div class="card-header">ADMINISTRACION DE VOTANTES</div></b>
             <form>
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <a type="button" class="enlace" href="https://wsp.registraduria.gov.co/censo/consultar/" target="_blank">BUSCAR VOTANTE EN LA REGISTRADURIA</a>
                     </div>
+
                     <div class="col-sm-12 col-md-6 col-xl-8 p-2">
                         <b><label for="form-control">INFORMACIÓN DEL LUGAR DE VOTACIÓN</label></b>
                     </div>
+
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <input type="text" [(ngModel)]="seletedVotanteAgregar.ced_votante" placeholder="Cedula" class="form-control" name="ced_votante">
                     </div>
+
                     <div class=" col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <input type="text " [(ngModel)]="seletedVotanteAgregar.nom_votante " placeholder="Nombres " class="form-control " name="nom_votante ">
-
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
-                        <input type="text " [(ngModel)]="seletedVotanteAgregar.municipio " placeholder="Municipio " class="form-control " name="municipio ">
-
+                        <input type="text " disabled="disabled" [(ngModel)]="seletedVotanteAgregar.municipio " placeholder="Municipio " class="form-control " name="municipio ">
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
-                        <input type="text " [(ngModel)]="seletedVotanteAgregar.departamento " placeholder="Departamento " class="form-control " name="departamento ">
-
+                        <input type="text " disabled="disabled" [(ngModel)]="seletedVotanteAgregar.departamento " placeholder="Departamento " class="form-control " name="departamento ">
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <input type="text " [(ngModel)]="seletedVotanteAgregar.tel_votante " placeholder="Telefono " class="form-control " name="tel_votante ">
-
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <h6>Seleccione Comuna Barrio:</h6>
                         <select [(ngModel)]="seletedVotanteAgregar.id_comunaB" (ngModelChange)="SelectComunaBAgregar($event) " class="form-control " name="item.id_comunaB ">
-                                <option *ngFor="let item of comunaBAux " [value]="item.id_comuna ">{{item.nom_comuna}}</option>
+                            <option *ngFor="let item of comunaBAux " [value]="item.id_comuna ">{{item.nom_comuna}}</option>
                         </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <h6>Seleccione El Barrio:</h6>
                         <select [(ngModel)]="seletedVotanteAgregar.id_barrio" (ngModelChange)="SelectBarrioAgregar($event) " class="form-control " name="item.nom_comuna ">
-                                <option *ngFor="let item of barrioAux " [value]="item.id_barrio ">{{item.nom_barrio}}</option>
-                            </select>
+                            <option *ngFor="let item of barrioAux " [value]="item.id_barrio ">{{item.nom_barrio}}</option>
+                        </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <h6>Seleccione Comuna Lugar:</h6>
                         <select [(ngModel)]="seletedVotanteAgregar.id_comunaL" (ngModelChange)="SelectComunaLAgregar($event)" class="form-control " name="item.id_comunaL">
-                                <option *ngFor="let item of comunaLAux" [value]="item.id_comuna ">{{item.nom_comuna}}</option>
+                            <option *ngFor="let item of comunaLAux" [value]="item.id_comuna ">{{item.nom_comuna}}</option>
                         </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <h6>Seleccione El Lugar:</h6>
                         <select [(ngModel)]="seletedVotanteAgregar.id_lugar" (ngModelChange)="SelectLugarAgregar($event)" class="form-control " name="item.id_lugar">
-                                <option *ngFor="let item of lugarAux" [value]="item.id_lugar ">{{item.nom_lugar}}</option>
-                            </select>
+                            <option *ngFor="let item of lugarAux" [value]="item.id_lugar ">{{item.nom_lugar}}</option>
+                        </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <h6>Seleccione Mesa:</h6>
                         <select [(ngModel)]="seletedVotanteAgregar.id_mesa " class="form-control " name="item.id_mesa ">
-                                <option *ngFor="let item of mesaAux " [value]="item.id_mesa ">{{item.nom_mesa}}</option>
+                            <option *ngFor="let item of mesaAux " [value]="item.id_mesa ">{{item.nom_mesa}}</option>
                         </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <h6>Seleccione Lider:</h6>
                         <select [(ngModel)]="seletedVotanteAgregar.id_lider " (ngModelChange)="SelectLiderAgregar($event) " class="form-control " name="item.id_lider ">
-                                <option *ngFor="let item of liderAux" [value]="item.id_lider ">{{item.nom_lider}}</option>
+                            <option *ngFor="let item of liderAux" [value]="item.id_lider ">{{item.nom_lider}}</option>
                         </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2 ">
                         <h6>Seleccione coordinador:</h6>
                         <select [(ngModel)]="seletedVotanteAgregar.id_usuario " (ngModelChange)="SelectCoordinadorAgregar($event) " class="form-control " name="item.id_usuario ">
-                                <option *ngFor="let item of coordinador " [value]="item.id_usuario ">{{item.nom_usuario}}</option>
+                            <option *ngFor="let item of coordinador " [value]="item.id_usuario ">{{item.nom_usuario}}</option>
                         </select>
                     </div>
                 </div>
-                <button class="btn " (click)="guardar() ">Registrar</button>
+                <button type="button " class="btn btn-success " (click)="guardar() ">Registrar</button>
             </form>
         </div>
 
         <div class="card">
             <b><div class="card-header">LISTAR VOTANTES</div></b><br>
-            <h6> <b>Buscar Por:</b> </h6>
             <form>
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
@@ -162,6 +160,7 @@
                             <option *ngFor="let item of barrio" [value]="item.id_barrio">{{item.nom_barrio}}</option>        
                         </select>
                     </div>
+
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione Lugar De votacion:</h6>
                         <select [(ngModel)]="seletedLugarBuscar.id_lugar" (ngModelChange)="selectLugarBuscar($event)" class="form-control" name="item.id_lugar">
@@ -194,10 +193,11 @@
                         <h6>Digite Cedula</h6>
                         <input type="text" [(ngModel)]="seletedVotanteBuscar.ced_votante" placeholder="Cedula" class="form-control" name="ced_votante">
                     </div>
+
                 </div>
-                <button type="button" class="btn" (click)="buscar()">Buscar</button>
-                <button type="button" class="btn" (click)="listar()">Listar</button>
-                <button type="button" class="btn" (click)="exportAsXLSX()">Exportar Exel</button>
+                <button type="button " class="btn btn-success " (click)="buscar()">Buscar</button>
+                <button type="button " class="btn btn-success " (click)="listar()">Listar</button>
+                <button type="button " class="btn btn-success " (click)="exportAsXLSX()">Exportar Exel</button>
             </form>
         </div>
 
@@ -384,7 +384,7 @@
                         </div>
                         <ng-template #falso9>
                             <div class="btn-group " role="group " aria-label="Basic example ">
-                                <button type="button " class="btn btn-success " (click)="actualizar(item) ">Editar</button>
+                                <button type="button " class="btn btn-primary" (click)="actualizar(item) ">Editar</button>
                                 <button type="button " class="btn btn-danger " (click)="eliminar(item) ">Eliminar</button>
                             </div>
                         </ng-template>

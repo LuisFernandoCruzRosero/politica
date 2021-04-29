@@ -20,18 +20,18 @@ export class Validaciones {
 
     /* Funcion Para validar campo vacio */
     validaCampoObligatorio(variable:String) {
-        if (variable.trim() == this.STR_LETTER_WITHOUT) {
-            return this.TRUE;
+        if (variable.trim() == '') {
+            return true;
         }
-        return this.FALSE;
+        return false;
     }
 
     /* Funcion Para Validar nombre */
     validacionNombre(variable:String) {
-        if (this.validaCampoObligatorio(variable) == this.TRUE) {
-            return this.STR_LETTER_WITHOUT;
+        if (this.validaCampoObligatorio(variable) == true) {
+            return '';
         } else if (this.validacionLetrasNumerosEspacios(variable)) {
-            return this.STR_LETTER_WITHOUT;
+            return '';
         }
     }
 
@@ -40,40 +40,36 @@ export class Validaciones {
         let letras:String = "abcdefghijklmnñopqrstuvwxyz0123456789 ";
         variable = variable.toLocaleLowerCase();
         for (let i = this.INT_NUMBER_0; i < variable.length; i++) {
-            if (letras.indexOf(variable.charAt(i),this.INT_NUMBER_0) == -this.INT_NUMBER_1) {
-                return this.TRUE;
+            if (letras.indexOf(variable.charAt(i),0) == -this.INT_NUMBER_1) {
+                return true;
             }
         }
-        return this.FALSE;
+        return false;
     }
 
     /* funcion para validar numeros*/
     validacionNumeros(variable:String) {
-        if (this.removerCerosInicio(variable).trim() == this.STR_LETTER_WITHOUT) {
-            return this.TRUE
-        } else {
-            let letras:String = "0123456789";
-            for (let i = this.INT_NUMBER_0; i < variable.length; i++) {
-                if (letras.indexOf(variable.charAt(i),this.INT_NUMBER_0) == -this.INT_NUMBER_1) {
-                    return this.TRUE;
-                }
+        let letras:String = "0123456789";
+        for (let i = this.INT_NUMBER_0; i < variable.length; i++) {
+            if (letras.indexOf(variable.charAt(i),0) == -this.INT_NUMBER_1) {
+                return true;
             }
-            return this.FALSE;
         }
+        return false;
     }
 
     /* funcion para validar solo numeros con decimal  */
     validacionNumerico(variable:String) {
         let stringValor:string = variable.toString();
         let valor:any = parseFloat(stringValor); 
-        if (this.validaCampoObligatorio(variable) == this.TRUE) {
-            return variable = this.STR_LETTER_WITHOUT;
+        if (this.validaCampoObligatorio(variable) == true) {
+            return variable = '';
         } else {
             let sinCerosInicio = this.removerCerosInicio(variable);
             let sinCerosFinal = this.removerCerosAlFinal(sinCerosInicio);
             if (sinCerosFinal.length != valor.toString().length) {
                 console.log('sinCerosFinal.length: ' + sinCerosFinal.length + ' != valor.toString().length: ' + valor.toString().length);
-                return variable = this.STR_LETTER_WITHOUT;
+                return variable = '';
             }
         }
     }
@@ -84,7 +80,7 @@ export class Validaciones {
         let stringValor:string = variable.toString();
         let valor:any = parseFloat(stringValor); 
         if (this.validaCampoObligatorio(variable) == true) {
-            return variable = this.STR_LETTER_WITHOUT;
+            return variable = '';
         } else {
             if (valor < this.INT_NUMBER_1) {
                 for (let i = this.INT_NUMBER_0; i < variable.length; i++) {
@@ -113,7 +109,7 @@ export class Validaciones {
     removerCerosAlFinal(variable:String) {
         let j:number = this.INT_NUMBER_0;
         if (this.validaCampoObligatorio(variable) == true) {
-            return variable = this.STR_LETTER_WITHOUT;
+            return variable = '';
         } else {
             let tienePunto:Number = variable.indexOf('.');
             if (tienePunto >= this.INT_NUMBER_0) {
@@ -140,7 +136,13 @@ export class Validaciones {
 
     validaNull(numberNull:Number) {
         if (numberNull == this.NULL || numberNull == this.INT_NUMBER_0) {
-            return this.STR_LETTER_WITHOUT;
+            return '';
+        }
+    }
+
+    validaFechaNull(numberNull:Date) {
+        if (numberNull == this.NULL) {
+            return '';
         }
     }
 }

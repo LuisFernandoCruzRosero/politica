@@ -63,63 +63,76 @@
             </ul>
         </div>
     </nav>
-    <div>
-        <h4>Agregar Comuna </h4>
-        <input type="text" [(ngModel)]="seletedComunaAgregar.nom_comuna" placeholder="NUMERO DE COMUNA" name="nom_comuna">
-        <button (click)="guardar()">Agregar</button>
 
+    <div class="main">
+        <div class="card">
+            <b><div class="card-header">AGREGAR COMUNA</div></b>
+            <form>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" [(ngModel)]="seletedComunaAgregar.nom_comuna" class="form-control" placeholder="NOMBRE DE COMUNA" name="nom_comuna">
+                    </div>
+                </div>
 
-        <div class="btn_Buscar">
-            <h4>Buscar</h4>
-            <input type="text" [(ngModel)]="seletedComunaBuscar.nom_comuna" placeholder="NUMERO DE COMUNA">
-            <button (click)="buscar()">Buscar</button>
-            <button (click)="listar()">listar</button>
+                <button type="button " class="btn btn-success " (click)="guardar()"> Registrar </button>
+            </form>
         </div>
 
-        <h4>Lista de Comunas </h4>
-        <h6>Total de Comunas:<input type="text" disabled placeholder="{{totalComuna}}"></h6>
+        <div class="card">
+            <b><div class="card-header">BUSCAR COMUNA</div></b><br>
+            <form>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" class="form-control" [(ngModel)]="seletedComunaBuscar.nom_comuna" placeholder="NOMBRE DE COMUNA" name="nom_comuna">
+                    </div>
+                </div>
+                <button type="button " class="btn btn-success " (click)="buscar()">Buscar</button>
+                <button type="button " class="btn btn-success " (click)="listar()">listar</button>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6 col-xl-2 p-2">
+            <h6>Total de Comunas:<input class="form-control" type="text" disabled placeholder="{{totalComuna}}"></h6>
+        </div>
+        <div id="main-container">
 
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>COMUNA</th>
+                        <th>OPERACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of comunas">
+                        <td>{{item.id_comuna}}</td>
+                        <td>
+                            <div *ngIf="seletedComunaActualizar.id_comuna != item.id_comuna; else falso">
+                                {{item.nom_comuna}}
+                            </div>
+                            <ng-template #falso>
+                                <input type="text" class="form-control" [(ngModel)]="seletedComunaActualizar.nom_comuna" placeholder="NOMBRE DE COMUNA" name="nom_comuna">
+                            </ng-template>
+                        </td>
+                        <td>
+                            <div *ngIf="seletedComunaActualizar.id_comuna == item.id_comuna; else falso1">
+                                <div class="btn-group " role="group " aria-label="Basic example ">
+                                    <button type="button" class="btn btn-success" (click)="actualizacion()">Guardar</button>
+                                    <button type="button" class="btn btn-warning" (click)="cancelar()">Cancelar</button>
+                                </div>
+                            </div>
+                            <ng-template #falso1>
+                                <div class="btn-group " role="group " aria-label="Basic example ">
+                                    <button type="button" class="btn btn-primary" (click)="actualizar(item)">Actualizar</button>
+                                    <button type="button" class="btn btn-danger" (click)="eliminar(item)">Eliminar</button>
+                                </div>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div id="main-container">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>COMUNA</th>
-                    <th>OPERACIÓN</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of comunas">
-                    <td>{{item.id_comuna}}</td>
-                    <td>
-                        <div *ngIf="seletedComunaActualizar.id_comuna != item.id_comuna; else falso">
-                            {{item.nom_comuna}}
-                        </div>
-                        <ng-template #falso>
-                            <input type="text" [(ngModel)]="seletedComunaActualizar.nom_comuna" placeholder="NUMERO DE COMUNA" name="nom_comuna">
-                        </ng-template>
-                    </td>
-                    <td>
-                        <div *ngIf="seletedComunaActualizar.id_comuna == item.id_comuna; else falso1">
-                            <button (click)="actualizacion()">Guardar</button>
-                        </div>
-                        <ng-template #falso1>
-                            <button (click)="actualizar(item)">Actualizar</button>
-                            <button (click)="eliminar(item)">Eliminar</button>
-                        </ng-template>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-    <br><br><br><br><br>
-
 </body>
-
-
-
 
 </html>

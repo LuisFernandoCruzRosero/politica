@@ -13,7 +13,6 @@ import { Validaciones } from '../modelos/validaciones';
 import { RegistraduriaService } from '../servicios/registraduria.service';
 import { Registraduria } from '../modelos/registraduria';
 import { RegistraduriaAux } from '../modelos/registraduria-aux';
-import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-registraduria',
@@ -166,7 +165,6 @@ export class RegistraduriaComponent implements OnInit {
       this.registraduriaService.findByIdRegistraduriaLugar(this.seletedRegistraduriaAgregar.id_lugar).then(resultado =>{
         /* Se llena el arreglo Lugares con la data seleccionada en la busqueda */
         this.registraduria = resultado;
-        console.log(this.registraduria.length);
         /* Se pregunta si Lugares contiene datos */
         if (this.registraduria.length == this.validaciones.INT_NUMBER_0) {
           /* llama el servivio de agregar un lugar en la tabla Lugar */
@@ -177,7 +175,7 @@ export class RegistraduriaComponent implements OnInit {
             total : this.seletedRegistraduriaAgregar.total,
           }).subscribe((resultado) => {
             /* Se da respuesta Exitosa del servidor */
-            alert("Se Agrego la Mesa");
+            alert("Se Agrego la informacion de la registraduria");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
             /* se limpia el input de agregar nombre de Lugar */
@@ -296,7 +294,7 @@ export class RegistraduriaComponent implements OnInit {
             /* se limpia el input de actualizar */
             this.seletedRegistraduriaActualizar.id_registraduria = this.validaciones.NULL;
             /* Se da respuesta Exitosa del servidor */
-            alert("Se actualizo la comuna con exito");
+            alert("Se actualizo la contidad del potencial electoral con exito");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
           },(err:HttpErrorResponse) => {

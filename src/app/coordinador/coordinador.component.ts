@@ -202,8 +202,6 @@ export class CoordinadorComponent implements OnInit {
           /* Asigno al arreglo Agendas todas las existenten en la tabla */
         this.mesa = resultado;
         this.mesaAux = this.mesa;
-          
-      console.log("mesa:1" + this.mesa)
           /* consulta la cantidad de Agendas que existen en el sistema */
           this.loginServi.findByIdTotalUsuarioCoordinador().subscribe(resultado=>{
             this.totalCoordinador = resultado;
@@ -223,7 +221,6 @@ export class CoordinadorComponent implements OnInit {
                                 if (this.coordinadores[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.coordinadores[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.coordinadores[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addCoordinadorAux({
                                         id_usuario:this.coordinadores[i].id_usuario,
                                         ced_usuario: this.coordinadores[i].ced_usuario,
@@ -279,7 +276,7 @@ export class CoordinadorComponent implements OnInit {
             /* Si no encuentra el usuario */
             if(this.encontrado == this.validaciones.FALSE){
             /* Navega al login */
-            //this.route.navigate(['/']);
+            this.route.navigate(['/']);
             }
           }
           }, (err:HttpErrorResponse) => {
@@ -394,7 +391,7 @@ export class CoordinadorComponent implements OnInit {
             departamento: this.seletedCoordinadorAgregar.departamento
           }).subscribe((resultado) => {
             /* Se da respuesta Exitosa del servidor */
-            alert("Se Agrego EL LIDER");
+            alert("Se Agrego EL Coordinador");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
             /* se limpia el input de agregar */
@@ -485,15 +482,12 @@ export class CoordinadorComponent implements OnInit {
     this.lugarMesaAux = [];
     this.lugarmesaService.findAllLugarMesa().then(resultado =>{
       this.lugarMesa = resultado;
-      console.log("mesaa:" + this.lugarMesa)
       for(let i = 0; i < this.lugar.length; i++){
         if(id_lugar == this.lugar[i].id_lugar){
-          console.log("entro:123"  )
           this.seletedCoordinadorAgregar.id_comunaL = this.lugar[i].id_comunaL;
         }
       }
       for (let j = 0; j < this.lugarMesa.length;j++) {
-        console.log("entro:123456"  )
         if (this.lugarMesa[j].id_lugar == this.seletedCoordinadorAgregar.id_lugar) {
             this.lugarMesaAux[l] = this.lugarMesa[j];
            l++;
@@ -546,7 +540,6 @@ export class CoordinadorComponent implements OnInit {
     
   }
 
-  
   selectCoordinadorBuscar(id_coordinador:Number) {
     this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
     this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;;
@@ -563,8 +556,6 @@ export class CoordinadorComponent implements OnInit {
 
   buscar() {
     this.coordinadorAux = [];
-
-
     if(this.seletedCoordinadorBuscar.id_usuario != this.validaciones.NULL){
       this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
       this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
@@ -586,7 +577,6 @@ export class CoordinadorComponent implements OnInit {
                                 if (this.coordinadores[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.coordinadores[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.coordinadores[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addCoordinadorAux({
                                         id_usuario:this.coordinadores[i].id_usuario,
                                         ced_usuario: this.coordinadores[i].ced_usuario,
@@ -629,9 +619,6 @@ export class CoordinadorComponent implements OnInit {
       });
     }
 
-
-
-
     if(this.seletedCoordinadorBuscar.ced_usuario != this.validaciones.STR_LETTER_WITHOUT){
       this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
       this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
@@ -653,7 +640,6 @@ export class CoordinadorComponent implements OnInit {
                                 if (this.coordinadores[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.coordinadores[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.coordinadores[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addCoordinadorAux({
                                         id_usuario:this.coordinadores[i].id_usuario,
                                         ced_usuario: this.coordinadores[i].ced_usuario,
@@ -717,7 +703,6 @@ export class CoordinadorComponent implements OnInit {
                                 if (this.coordinadores[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.coordinadores[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.coordinadores[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addCoordinadorAux({
                                         id_usuario:this.coordinadores[i].id_usuario,
                                         ced_usuario: this.coordinadores[i].ced_usuario,
@@ -748,7 +733,7 @@ export class CoordinadorComponent implements OnInit {
                 }
               }
         } else if(this.coordinadorAux.length == this.validaciones.INT_NUMBER_0){
-          alert('el lugar: ' + this.seletedCoordinadorBuscar.id_lugar + ' No tinen registrado ningun coordinador..');
+          alert('el lugar: ' + this.seletedLugarBuscar.nom_lugar + ' No tinen registrado ningun coordinador..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -780,7 +765,6 @@ export class CoordinadorComponent implements OnInit {
                                 if (this.coordinadores[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.coordinadores[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.coordinadores[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addCoordinadorAux({
                                         id_usuario:this.coordinadores[i].id_usuario,
                                         ced_usuario: this.coordinadores[i].ced_usuario,
@@ -811,7 +795,7 @@ export class CoordinadorComponent implements OnInit {
                 }
               }
         } else if(this.coordinadorAux.length == this.validaciones.INT_NUMBER_0){
-          alert('el barrio: ' + this.seletedCoordinadorBuscar.id_barrio + ' No tinen registrado ningun coordinador..');
+          alert('el barrio: ' + this.seletedBarrioBuscar.nom_barrio + ' No tinen registrado ningun coordinador..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -862,11 +846,9 @@ export class CoordinadorComponent implements OnInit {
   }
 
   actualizar(item:UsuarioFindAll){
-    console.log("item:UsuarioFindAll" + item.id_usuario);
     /* llena el objeto de comuna para actualizar */
     for(let i = 0; i < this.coordinadores.length; i++) {
         if (this.coordinadores[i].id_usuario == item.id_usuario) {
-          console.log("123entrohhhh");
         this.seletedCoordinadorActualizar = this.coordinadores[i];
       }
     }
@@ -881,7 +863,6 @@ export class CoordinadorComponent implements OnInit {
             j++;
           }
         }
-    console.log("comunaLugar: " + id_comunaL);
   }
   
   SelectComunaBActualizar(id_comunaB:Number) {
@@ -893,7 +874,6 @@ export class CoordinadorComponent implements OnInit {
         j++;
       }
     }
-    console.log("comunaBarrio: " + id_comunaB);
   }
   
   SelectLugarActualizar(id_lugar:Number){
@@ -903,7 +883,6 @@ export class CoordinadorComponent implements OnInit {
     this.lugarMesaAux = [];
     this.lugarmesaService.findAllLugarMesa().then(resultado =>{
       this.lugarMesa = resultado;
-      console.log("mesaa:" + this.lugarMesa) 
       for(let i = 0; i < this.lugar.length; i++){
         if(id_lugar == this.lugar[i].id_lugar){
           this.seletedCoordinadorActualizar.id_comunaL = this.lugar[i].id_comunaL;
@@ -911,7 +890,6 @@ export class CoordinadorComponent implements OnInit {
       }
       for (let j = 0; j < this.lugarMesa.length;j++) {
         if (this.lugarMesa[j].id_lugar == this.seletedCoordinadorActualizar.id_lugar) {
-          console.log("entro:123456"  ) 
           this.lugarMesaAux[l] = this.lugarMesa[j];
            l++;
         }
@@ -926,7 +904,6 @@ export class CoordinadorComponent implements OnInit {
        }
       }
     });
-    console.log("Lugar: " + id_lugar);
   }
   
   SelectCoordinadorActualizar(id_coordinador:Number){
@@ -938,7 +915,6 @@ export class CoordinadorComponent implements OnInit {
         j++;
       }
     }
-    console.log("Coordinador: " + id_coordinador);
   }
   
   SelectLiderActualizar(id_lider:Number){
@@ -947,7 +923,6 @@ export class CoordinadorComponent implements OnInit {
         this.seletedCoordinadorActualizar.id_usuario = this.lider[i].id_usuario;
       }
     }
-    console.log("Lider: " + id_lider);
   }
   
   SelectBarrioActualizar(id_barrio:Number){
@@ -956,7 +931,6 @@ export class CoordinadorComponent implements OnInit {
         this.seletedCoordinadorActualizar.id_comunaB = this.barrio[i].id_comunaB;
       }
     }
-    console.log("Barrio: " + id_barrio);
   }
 
   actualizacion() {
@@ -1017,7 +991,6 @@ export class CoordinadorComponent implements OnInit {
               if (this.votante.length == this.validaciones.INT_NUMBER_0 && 
                 this.digitador.length == this.validaciones.INT_NUMBER_0 && 
                 this.lider.length == this.validaciones.INT_NUMBER_0) {
-                  console.log("this.digitador.length: "+this.digitador.length)
                   if (this.usuario.length == this.validaciones.INT_NUMBER_0) {
                     this.loginServi.updateUsuario({
                       id_usuario: this.seletedCoordinadorActualizar.id_usuario,
@@ -1050,7 +1023,6 @@ export class CoordinadorComponent implements OnInit {
                       }
                     });
                   } else {
-                    console.log("entro");
                     let id_number = this.validaciones.INT_NUMBER_0; 
                     let encuentra:Boolean = this.validaciones.FALSE;
                     for (let i = 0; i < this.usuario.length; i++ ) {
@@ -1104,10 +1076,6 @@ export class CoordinadorComponent implements OnInit {
                     }
                   }
               } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
-                console.log("this.digitador.length: "+this.digitador.length);
-                console.log("this.votante.length: "+this.votante.length);
-                console.log("this.usuario.length: "+this.usuario.length);
-                console.log("this.lider.length: "+this.lider.length);
                 alert("la cedula ya Existe en digitador: " + this.seletedCoordinadorActualizar.ced_usuario);
                 this.seletedCoordinadorActualizar.ced_usuario = this.validaciones.STR_LETTER_WITHOUT;
               } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {
@@ -1156,7 +1124,4 @@ export class CoordinadorComponent implements OnInit {
     this.seletedCoordinadorActualizar.id_usuario = this.validaciones.NULL;
     this.ngOnInit();
   }
-
-  
-
 }

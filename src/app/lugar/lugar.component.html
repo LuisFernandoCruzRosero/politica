@@ -63,127 +63,163 @@
             </ul>
         </div>
     </nav>
-    <div>
-        <h4>Agregar lugar </h4>
-        <input type="text" [(ngModel)]="seletedLugarAgregar.nom_lugar" placeholder="NOMBRE LUGAR" name="nom_lugar">
-        <input type="text" [(ngModel)]="seletedLugarAgregar.latitud" placeholder="LATITUD" name="latitud">
-        <input type="text" [(ngModel)]="seletedLugarAgregar.longitud" placeholder="LONGITUD" name="longitud">
-        <h4>SELECCIONE ZONA ROJA:</h4>
-        <select [(ngModel)]="seletedZonaAgregar.id_zona" (ngModelChange)="selectZonaAgregar($event)" name="item.id_zona">
-            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
-        </select>
-        <h4>SELECCIONE COMUNA:</h4>
-        <select [(ngModel)]="seletedComunaAgregar.id_comuna" name="item.id_comuna">
-            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
-        </select>
-        <button (click)="guardar()">Agregar</button>
+    <div class="main">
+        <div class="card">
+            <b><div class="card-header">ADMINISTRACION DE LUGAR</div></b>
+            <form>
+                <div class="row">
 
-        <h4>BUSCAR LUGAR </h4>
-        <input [(ngModel)]="seletedLugarBuscar.nom_lugar" name="nom_lugar" type="text" placeholder="LUGAR">
-        <h4>SELECCIONE ZONA ROJA:</h4>
-        <select [(ngModel)]="seletedZonaBuscar.id_zona" (ngModelChange)="selectZonaBuscar($event)" name="id_zona">
-            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
-        </select>
-        <h4>SELECCIONE COMUNA:</h4>
-        <select [(ngModel)]="seletedComunaBuscar.id_comuna" (ngModelChange)="selectComunaBuscar($event)" name="id_comuna">
-            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
-        </select>
-        <button (click)="buscar()">Buscar</button>
-        <button (click)="listar()">listar</button>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" class="form-control" [(ngModel)]="seletedLugarAgregar.nom_lugar" placeholder="NOMBRE LUGAR" name="nom_lugar">
+                    </div>
 
-        <h4>Lista de Lugares </h4>
-        <h6>Total de Lugares:<input type="text" disabled placeholder="{{totalLugar}}"></h6>
-    </div>
-    <div id="main-container">
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" class="form-control" [(ngModel)]="seletedLugarAgregar.latitud" placeholder="LATITUD" name="latitud">
+                    </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>LUGAR</th>
-                    <th>LATITUD</th>
-                    <th>LONGITUD</th>
-                    <th>ZONA ROJA</th>
-                    <th>COMUNA</th>
-                    <th>OPERACIÓN</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of lugaresAux">
-                    <td>{{item.id_lugar}}</td>
-                    <td>
-                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso">
-                            {{item.nom_lugar}}
-                        </div>
-                        <ng-template #falso>
-                            <input type="text" [(ngModel)]="seletedLugarActualizar.nom_lugar" placeholder="NOMBRE DEL LUGAR" name="nom_lugar">
-                        </ng-template>
-                    </td>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" class="form-control" [(ngModel)]="seletedLugarAgregar.longitud" placeholder="LONGITUD" name="longitud">
+                    </div>
 
-                    <td>
-                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso1">
-                            {{item.latitud}}
-                        </div>
-                        <ng-template #falso1>
-                            <input type="text" [(ngModel)]="seletedLugarActualizar.latitud" placeholder="LATITUD" name="latitud">
-                        </ng-template>
-                    </td>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>SELECCIONE ZONA ROJA:</h6>
+                        <select class="form-control" [(ngModel)]="seletedZonaAgregar.id_zona" (ngModelChange)="selectZonaAgregar($event)" name="item.id_zona">
+                            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+                        </select>
+                    </div>
 
-                    <td>
-                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso2">
-                            {{item.longitud}}
-                        </div>
-                        <ng-template #falso2>
-                            <input type="text" [(ngModel)]="seletedLugarActualizar.longitud" placeholder="LONGITUD" name="longitud">
-                        </ng-template>
-                    </td>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>SELECCIONE COMUNA:</h6>
+                        <select class="form-control" [(ngModel)]="seletedComunaAgregar.id_comuna" name="item.id_comuna">
+                            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button " class="btn btn-success " (click)="guardar()">Agregar</button>
+            </form>
+        </div>
 
-                    <td>
-                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso3">
-                            <div *ngIf="item.zona_roja != false; else falso10">
-                                SI
+        <div class="card">
+            <b><div class="card-header">LISTAR LUGAR</div></b><br>
+            <form>
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>BUSCAR LUGAR </h6>
+                        <input class="form-control" [(ngModel)]="seletedLugarBuscar.nom_lugar" name="nom_lugar" type="text" placeholder="LUGAR">
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>SELECCIONE ZONA ROJA:</h6>
+                        <select class="form-control" [(ngModel)]="seletedZonaBuscar.id_zona" (ngModelChange)="selectZonaBuscar($event)" name="id_zona">
+                            <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>SELECCIONE COMUNA:</h6>
+                        <select class="form-control" [(ngModel)]="seletedComunaBuscar.id_comuna" (ngModelChange)="selectComunaBuscar($event)" name="id_comuna">
+                            <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button " class="btn btn-success " (click)="buscar()">Buscar</button>
+                <button type="button " class="btn btn-success " (click)="listar()">listar</button>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6 col-xl-2 p-2">
+            <h6>Total de Lugares:<input class="form-control" type="text" disabled placeholder="{{totalLugar}}"></h6>
+        </div>
+        <div id="main-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>LUGAR</th>
+                        <th>LATITUD</th>
+                        <th>LONGITUD</th>
+                        <th>ZONA ROJA</th>
+                        <th>COMUNA</th>
+                        <th>OPERACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of lugaresAux">
+                        <td>{{item.id_lugar}}</td>
+                        <td>
+                            <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso">
+                                {{item.nom_lugar}}
                             </div>
-                            <ng-template #falso10>
-                                NO
+                            <ng-template #falso>
+                                <input type="text" class="form-control" [(ngModel)]="seletedLugarActualizar.nom_lugar" placeholder="NOMBRE DEL LUGAR" name="nom_lugar">
                             </ng-template>
-                        </div>
-                        <ng-template #falso3>
-                            <select [(ngModel)]="seletedZonaActualizar.id_zona" (ngModelChange)="selectZonaActualizar($event)" name="id_zona">
-                                <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
-                            </select>
-                        </ng-template>
-                    </td>
+                        </td>
 
-                    <td>
-                        <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso4">
-                            {{item.nom_comuna}}
-                        </div>
-                        <ng-template #falso4>
-                            <select [(ngModel)]="seletedComunaActualizar.id_comuna" (ngModelChange)="SelectComunaActualizar($event)" name="id_comuna">
-                                    <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
-                                </select>
-                        </ng-template>
-                    </td>
-
-                    <td>
-                        <div *ngIf="seletedLugarActualizar.id_lugar == item.id_lugar; else falso9">
-                            <button type="button" (click)="actualizacion()">Guardar</button>
-
-                        </div>
-                        <ng-template #falso9>
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" (click)="actualizar(item)">Actualizar</button>
-                                <button type="button" (click)="eliminar(item)">Eliminar</button>
+                        <td>
+                            <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso1">
+                                {{item.latitud}}
                             </div>
-                        </ng-template>
-                    </td>
-                </tr>
+                            <ng-template #falso1>
+                                <input type="text" class="form-control" [(ngModel)]="seletedLugarActualizar.latitud" placeholder="LATITUD" name="latitud">
+                            </ng-template>
+                        </td>
 
-            </tbody>
-        </table>
+                        <td>
+                            <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso2">
+                                {{item.longitud}}
+                            </div>
+                            <ng-template #falso2>
+                                <input type="text" class="form-control" [(ngModel)]="seletedLugarActualizar.longitud" placeholder="LONGITUD" name="longitud">
+                            </ng-template>
+                        </td>
+
+                        <td>
+                            <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso3">
+                                <div *ngIf="item.zona_roja != false; else falso10">
+                                    SI
+                                </div>
+                                <ng-template #falso10>
+                                    NO
+                                </ng-template>
+                            </div>
+                            <ng-template #falso3>
+                                <select class="form-control" [(ngModel)]="seletedZonaActualizar.id_zona" (ngModelChange)="selectZonaActualizar($event)" name="id_zona">
+                                    <option *ngFor="let item of zona" [value]="item.id_zona">{{item.name_zona}}</option>
+                                </select>
+                            </ng-template>
+                        </td>
+
+                        <td>
+                            <div *ngIf="seletedLugarActualizar.id_lugar != item.id_lugar; else falso4">
+                                {{item.nom_comuna}}
+                            </div>
+                            <ng-template #falso4>
+                                <select class="form-control" [(ngModel)]="seletedComunaActualizar.id_comuna" (ngModelChange)="SelectComunaActualizar($event)" name="id_comuna">
+                                        <option *ngFor="let item of comunas" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                                    </select>
+                            </ng-template>
+                        </td>
+
+                        <td>
+                            <div *ngIf="seletedLugarActualizar.id_lugar == item.id_lugar; else falso9">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button " class="btn btn-success " (click)="actualizacion()">Guardar</button>
+                                    <button type="button " class="btn btn-warning" (click)="cancelar(item)">Cancelar</button>
+                                </div>
+                            </div>
+                            <ng-template #falso9>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button " class="btn btn-primary" (click)="actualizar(item)">Actualizar</button>
+                                    <button type="button " class="btn btn-danger " (click)="eliminar(item)">Eliminar</button>
+                                </div>
+                            </ng-template>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <br><br><br><br><br>
 </body>
 
 </html>

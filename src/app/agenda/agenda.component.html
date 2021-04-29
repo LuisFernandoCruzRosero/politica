@@ -64,113 +64,143 @@
         </div>
     </nav>
 
-    <div>
-        <h4>Agregar Agenda </h4>
+    <div class="main">
+        <div class="card">
+            <b><div class="card-header">ADMINISTRACION DE AGENDA</div></b>
+            <form>
+                <div class="row">
 
-        <h6>Seleccione un Usuario:</h6>
-        <select [(ngModel)]="seletedAgendaAgregar.id_usuario" class="form-control" name="item.id_usuario">
-            <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
-        </select>
-        <textarea rows="5" cols="50" type="text" [(ngModel)]="seletedAgendaAgregar.descripcion" placeholder="DESCRIPCION" name="descripcion"></textarea>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>SELECCIONE COORDINADOR:</h6>
+                        <select class="form-control" [(ngModel)]="seletedAgendaAgregar.id_usuario" class="form-control" name="id_usuario">
+                            <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+                        </select>
+                    </div>
 
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>Fecha de Reunion:</h6>
+                        <input class="form-control" type="date" [(ngModel)]="seletedAgendaAgregar.fecha" name="fecha" value="2018-07-22" min="2020-09-22" max="2050-12-31">
+                    </div>
 
-        <label for="start">Fecha de Reunion:</label>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <form action="/action_page.php">
+                            <h6>Hora de Reunion:</h6>
+                            <input class="form-control" type="time" [(ngModel)]="seletedAgendaAgregar.hora" name="hora">
+                        </form>
+                    </div>
 
-        <input type="date" [(ngModel)]="seletedAgendaAgregar.fecha" id="start" name="trip-start" value="2018-07-22" min="2020-09-22" max="2050-12-31">
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>AGREGUE DESCRIPCION:</h6>
+                        <textarea class="form-control" rows="5" cols="50" type="text" [(ngModel)]="seletedAgendaAgregar.descripcion" placeholder="DESCRIPCION" name="descripcion"></textarea>
+                    </div>
 
-
-        <form action="/action_page.php">
-            <label for="appt">Hora de Reunion:</label>
-            <input type="time" [(ngModel)]="seletedAgendaAgregar.hora" id="appt" name="appt">
-        </form>
-        <textarea rows="5" cols="50" [(ngModel)]="seletedAgendaAgregar.lugar" placeholder="Direccion" name="lugar"> </textarea>
-        <button (click)="guardar()">Agregar</button>
-
-        <div class="btn_Buscar">
-            <h4>Buscar</h4>
-            <input type="text" [(ngModel)]="seletedAgendaBuscar.descripcion" placeholder="NUMERO DE AGENDA">
-            <button (click)="buscar()">Buscar</button>
-            <button (click)="listar()">listar</button>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <h6>AGREGUE DIRECCION:</h6>
+                        <textarea class="form-control" rows="5" cols="50" [(ngModel)]="seletedAgendaAgregar.lugar" placeholder="Direccion" name="lugar"> </textarea>
+                    </div>
+                </div>
+                <button type="button " class="btn btn-success " (click)="guardar()">Agregar</button>
+            </form>
         </div>
-        <h4>Lista de Agendas </h4>
-        <h6>Total de Agendas:<input type="text" disabled placeholder="{{totalAgenda}}"></h6>
+        <div class="card">
+            <b><div class="card-header">LISTAR AGENDA</div></b><br>
+            <form>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input class="form-control" type="date" [(ngModel)]="seletedAgendaBuscar.fecha" name="fecha" min="2020-09-22" max="2050-12-31">
+                    </div>
+                </div>
+                <button type="button " class="btn btn-success " (click)="buscar()">Buscar</button>
+                <button type="button " class="btn btn-success " (click)="listar()">listar</button>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6 col-xl-2 p-2">
+            <h6>Total de Agendas:<input class="form-control" type="text" disabled placeholder="{{totalAgenda}}"></h6>
+        </div>
+        <div id="main-container">
 
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>USUARIO</th>
+                        <th>DESCRIPCION</th>
+                        <th>FECHA</th>
+                        <th>HORA</th>
+                        <th>LUGAR</th>
+                        <th>OPERACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of agendaAux">
+                        <td>{{item.id_agenda}}</td>
+                        <td>
+                            <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso">
+                                {{item.nom_usuario}}
+                            </div>
+                            <ng-template #falso>
+                                <div class="form-group">
+                                    <select [(ngModel)]="seletedAgendaActualizar.id_usuario" class="form-control" name="id_usuario">
+                                        <option *ngFor="let item of coordinadorAux" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+                                    </select>
+                                </div>
+                            </ng-template>
+                        </td>
+                        <td>
+                            <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso1">
+                                {{item.descripcion}}
+                            </div>
+                            <ng-template #falso1>
+                                <input type="text" class="form-control" [(ngModel)]="seletedAgendaActualizar.descripcion" name="descripcion">
+                            </ng-template>
+                        </td>
+                        <td>
+                            <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso2">
+                                {{item.fecha | date:'yyyy/MM/dd'}}
+                            </div>
+                            <ng-template #falso2>
+                                <input class="form-control" type="date" [(ngModel)]="seletedAgendaActualizar.fecha" value="{{seletedAgendaActualizar.fecha}}" name="fecha" min="2020-09-22" max="2050-12-31">
+                            </ng-template>
+
+                        </td>
+                        <td>
+                            <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso3">
+                                {{item.hora}}
+                            </div>
+                            <ng-template #falso3>
+                                <form action="/action_page.php">
+                                    <input class="form-control" type="time" [(ngModel)]="seletedAgendaActualizar.hora" name="hora">
+                                </form>
+                            </ng-template>
+                        </td>
+                        <td>
+                            <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso4">
+                                {{item.lugar}}
+                            </div>
+                            <ng-template #falso4>
+                                <input type="text" class="form-control" [(ngModel)]="seletedAgendaActualizar.lugar" name="lugar">
+                            </ng-template>
+                        </td>
+                        <td>
+                            <div *ngIf="seletedAgendaActualizar.id_agenda == item.id_agenda; else falso5">
+                                <div class="btn-group " role="group " aria-label="Basic example ">
+                                    <button type="button " class="btn btn-success " (click)="actualizacion()">Guardar</button>
+                                    <button type="button " class="btn btn-warning" (click)="cancelar()">Cancelar</button>
+                                </div>
+                            </div>
+                            <ng-template #falso5>
+                                <div class="btn-group " role="group " aria-label="Basic example ">
+                                    <button type="button " class="btn btn-primary" (click)="actualizar(item)">Actualizar</button>
+                                    <button type="button " class="btn btn-danger " (click)="eliminar(item)">Eliminar</button>
+                                </div>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
     </div>
-    <div id="main-container">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>USUARIO</th>
-                    <th>DESCRIPCION</th>
-                    <th>FECHA</th>
-                    <th>HORA</th>
-                    <th>LUGAR</th>
-                    <th>OPERACIÓN</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of agendas">
-                    <td>{{item.id_agenda}}</td>
-                    <td>
-                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso">
-                            {{item.id_usuario}}
-                        </div>
-                        <ng-template #falso>
-                            <input type="text" [(ngModel)]="seletedAgendaActualizar.id_usuario" name="id_usuario">
-                        </ng-template>
-                    </td>
-                    <td>
-                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso1">
-                            {{item.descripcion}}
-                        </div>
-                        <ng-template #falso1>
-                            <input type="text" [(ngModel)]="seletedAgendaActualizar.descripcion" name="descripcion">
-                        </ng-template>
-                    </td>
-                    <td>
-                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso2">
-                            {{item.fecha}}
-                        </div>
-                        <ng-template #falso2>
-                            <input type="text" [(ngModel)]="seletedAgendaActualizar.fecha" name="fecha">
-                        </ng-template>
-
-                    </td>
-                    <td>
-                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso3">
-                            {{item.hora}}
-                        </div>
-                        <ng-template #falso3>
-                            <input type="text" [(ngModel)]="seletedAgendaActualizar.hora" name="hora">
-                        </ng-template>
-                    </td>
-                    <td>
-                        <div *ngIf="seletedAgendaActualizar.id_agenda != item.id_agenda; else falso4">
-                            {{item.lugar}}
-                        </div>
-                        <ng-template #falso4>
-                            <input type="text" [(ngModel)]="seletedAgendaActualizar.lugar" name="lugar">
-                        </ng-template>
-                    </td>
-                    <td>
-                        <div *ngIf="seletedAgendaActualizar.id_agenda == item.id_agenda; else falso5">
-                            <button (click)="actualizacion()">Guardar</button>
-                        </div>
-                        <ng-template #falso5>
-                            <button (click)="actualizar(item)">Actualizar</button>
-                            <button (click)="eliminar(item)">Eliminar</button>
-                        </ng-template>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-    <br><br><br><br><br>
-
-
 </body>
 
 </html>

@@ -3,10 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 /* Componentes */
 import { LoginComponent } from './login/login.component';
-import { PerfilAdministradorComponent } from './perfil-administrador/perfil-administrador.component';
-import { PerfilCandidatoComponent } from './perfil-candidato/perfil-candidato.component';
 import { PerfilCoordinadorComponent } from './perfil-coordinador/perfil-coordinador.component';
-import { RecuperarPasswordComponent } from './recuperar-password/recuperar-password.component';
 import { AgendaComponent } from './agenda/agenda.component';
 import { BarrioComponent } from './barrio/barrio.component';
 import { ComunaComponent } from './comuna/comuna.component';
@@ -27,10 +24,7 @@ import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.comp
 /* inicializa rutas */
 const routes: Routes = [
   { path : '', component: LoginComponent },
-  { path : 'perfilAdministrador', component: PerfilAdministradorComponent },
-  { path : 'perfilCandidato', component: PerfilCandidatoComponent },
   { path : 'perfilCoordinador', component: PerfilCoordinadorComponent },
-  { path : 'recuperarPassword', component: RecuperarPasswordComponent },
   { path : 'agenda', component: AgendaComponent },
   { path : 'barrio', component: BarrioComponent },
   { path : 'comuna', component: ComunaComponent },

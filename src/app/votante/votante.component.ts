@@ -166,6 +166,9 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
 
   /* Funcion que se llama por defecto es la primera en ejecutarse */
   ngOnInit() {
+    /* se quema el departamento y el municipio */
+    this.seletedVotanteAgregar.departamento = 'NARIÑO';
+    this.seletedVotanteAgregar.municipio = 'TUMACO';
     /*se limpia arreglo aux para volver a llenar*/
     this.votanteAux = [];
     /* Consulto los Datos de la tabla usuario */
@@ -230,7 +233,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addVotanteAux({
                                         id_votante:this.votantes[i].id_votante,
                                         ced_votante: this.votantes[i].ced_votante,
@@ -361,21 +363,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
      }
    /*  Funcion Guardar Votante */
    guardar() {
-    console.log(
-      "cedula: " + this.seletedVotanteAgregar.ced_votante + "\n" +
-      "nombre: " + this.seletedVotanteAgregar.nom_votante + "\n" +
-      "id_comunaL: " + this.seletedVotanteAgregar.id_comunaL + "\n" +
-      "id_lugar: " + this.seletedVotanteAgregar.id_lugar + "\n" +
-      "id_barrio: " + this.seletedVotanteAgregar.id_barrio + "\n" +
-      "id_lider: " + this.seletedVotanteAgregar.id_lider + "\n" +
-      "id_usuario: " + this.seletedVotanteAgregar.id_usuario + "\n" +
-      "municipio: " + this.seletedVotanteAgregar.municipio + "\n" +
-      "departamento: " + this.seletedVotanteAgregar.departamento + "\n" +
-      "id_comunaB: " + this.seletedVotanteAgregar.id_comunaB + "\n" + 
-      "id_mesa: " + this.seletedVotanteAgregar.id_mesa + "\n" + 
-      "activo: " + this.seletedVotanteAgregar.activo + "\n" + 
-      "telefeno: " + this.seletedVotanteAgregar.tel_votante + "\n" 
-    );
     /* Validacion de Campos Obligatorios y invalidos */
     if (this.validaciones.validaCampoObligatorio(this.seletedVotanteAgregar.nom_votante) == this.validaciones.TRUE) {
       alert('CAMPO NOMBRE VOTANTE OBLIGATORIO..');
@@ -400,7 +387,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
       this.votanteService.findByIdVotanteCedula(this.seletedVotanteAgregar.ced_votante).then(resultado =>{
       /* Se llena el arreglo votantes con la data seleccionada en la busqueda */
       this.votantes = resultado;
-      console.log(this.votantes);
       /* LLamo al servicio digitador para buscar los votantes existentes */
       this.digitadorService.findByIdDigitadorCedula(this.seletedVotanteAgregar.ced_votante).then(resultado =>{
         /* Se llena el arreglo digitador con la data seleccionada en la busqueda */
@@ -530,7 +516,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
   }
 
   SelectLugarAgregar(id_lugar:Number){
-    console.log("id_lugar: " + id_lugar);
     let l = 0;
     this.lugarMesa = [];
     this.mesaAux = [];
@@ -618,8 +603,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
 
   buscar() {
     this.votanteAux = [];
-
-
     if(this.seletedVotanteBuscar.id_votante != this.validaciones.NULL){
       this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
       this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
@@ -645,7 +628,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addVotanteAux({
                                         id_votante:this.votantes[i].id_votante,
                                         ced_votante: this.votantes[i].ced_votante,
@@ -677,7 +659,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
             }
           }
         } else if(this.addVotanteAux.length == this.validaciones.INT_NUMBER_0){
-          alert('Cedula: ' + this.seletedVotanteBuscar.ced_votante + ' No Existe..');
+          alert('Nombre: ' + this.seletedVotanteBuscar.nom_votante + ' No Existe..');
         }
 
       },(err:HttpErrorResponse)=>{
@@ -689,9 +671,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
       });
     }
 
-
-
-
     if(this.seletedVotanteBuscar.ced_votante != this.validaciones.STR_LETTER_WITHOUT){
       this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
       this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
@@ -700,7 +679,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
       this.seletedCoordinadorBuscar.id_usuario = this.validaciones.NULL;
       this.votanteService.findByIdVotanteCedula(this.seletedVotanteBuscar.ced_votante).then(resultado=>{
         this.votantes = resultado;
-        console.log(this.votantes);
         if ( this.votantes.length != this.validaciones.INT_NUMBER_0) {
           for (let i = this.validaciones.INT_NUMBER_0; i < this.votantes.length; i++){
             for (let j = this.validaciones.INT_NUMBER_0; j < this.barrio.length; j++) {
@@ -718,7 +696,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addVotanteAux({
                                         id_votante:this.votantes[i].id_votante,
                                         ced_votante: this.votantes[i].ced_votante,
@@ -786,7 +763,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                               if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
                                 if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
                                   if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
-                                    console.log('entro');
                                     this.addVotanteAux({
                                       id_votante:this.votantes[i].id_votante,
                                       ced_votante: this.votantes[i].ced_votante,
@@ -818,7 +794,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
           }
         }
         } else if(this.addVotanteAux.length == this.validaciones.INT_NUMBER_0){
-          alert('En este Lugar: ' + this.seletedLugarBuscar.id_lugar + ' No Se a Registrado ningun digitador..');
+          alert('En este Lugar: ' + this.seletedLugarBuscar.nom_lugar + ' No Se a Registrado ningun votante..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -853,7 +829,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addVotanteAux({
                                         id_votante:this.votantes[i].id_votante,
                                         ced_votante: this.votantes[i].ced_votante,
@@ -885,7 +860,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
             }
           }
         }else if (this.votanteAux.length == this.validaciones.INT_NUMBER_0){
-          alert('En este Barrio: ' + this.seletedBarrioBuscar.id_barrio + ' No Se a Registrado ningun digitador..');
+          alert('En este Barrio: ' + this.seletedBarrioBuscar.nom_barrio + ' No Se a Registrado ningun votante..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -920,7 +895,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addVotanteAux({
                                         id_votante:this.votantes[i].id_votante,
                                         ced_votante: this.votantes[i].ced_votante,
@@ -952,7 +926,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
             }
           }
         }else if(this.votanteAux.length == this.validaciones.INT_NUMBER_0){
-          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.nom_usuario + ' No Tiene Registrado ningun votante..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -987,7 +961,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.votantes[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.votantes[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.votantes[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addVotanteAux({
                                         id_votante:this.votantes[i].id_votante,
                                         ced_votante: this.votantes[i].ced_votante,
@@ -1019,7 +992,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
             }
           }
         }else if(this.votanteAux.length == this.validaciones.INT_NUMBER_0){
-          alert('El Lider: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+          alert('El Lider: ' + this.seletedLiderBuscar.nom_lider + ' No Tiene Registrado ningun votante..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -1073,13 +1046,10 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
   }
 
   actualizar(item:Votante){
-    console.log("item.id_votante: "+ item.id_votante);
-    console.log("this.votante: "+ this.votante);
     /* llena el objeto de comuna para actualizar */
     for(let i = 0; i < this.votante.length; i++) {
       if (this.votante[i].id_votante == item.id_votante) {
         this.seletedVotanteActualizar = this.votante[i];
-        console.log("this.seletedVotanteActualizar: "+ this.seletedVotanteActualizar);
       }
     }
   }
@@ -1093,7 +1063,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
             j++;
           }
         }
-    console.log("comunaLugar: " + id_comunaL);
   }
   
   SelectComunaBActualizar(id_comunaB:Number) {
@@ -1105,7 +1074,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         j++;
       }
     }
-    console.log("comunaBarrio: " + id_comunaB);
   }
   
   SelectLugarActualizar(id_lugar:Number){
@@ -1115,7 +1083,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
     this.lugarMesaAux = [];
     this.lugarmesaService.findAllLugarMesa().then(resultado =>{
       this.lugarMesa = resultado;
-      console.log("mesaa:" + this.lugarMesa) 
       for(let i = 0; i < this.lugar.length; i++){
         if(id_lugar == this.lugar[i].id_lugar){
           this.seletedVotanteActualizar.id_comunaL = this.lugar[i].id_comunaL;
@@ -1123,7 +1090,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
       }
       for (let j = 0; j < this.lugarMesa.length;j++) {
         if (this.lugarMesa[j].id_lugar == this.seletedVotanteActualizar.id_lugar) {
-          console.log("entro:123456"  ) 
           this.lugarMesaAux[l] = this.lugarMesa[j];
            l++;
         }
@@ -1138,7 +1104,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
        }
       }
     });
-    console.log("Lugar: " + id_lugar);
   }
   
   SelectCoordinadorActualizar(id_coordinador:Number){
@@ -1150,7 +1115,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         j++;
       }
     }
-    console.log("Coordinador: " + id_coordinador);
   }
   
   SelectLiderActualizar(id_lider:Number){
@@ -1159,7 +1123,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         this.seletedVotanteActualizar.id_usuario = this.lider[i].id_usuario;
       }
     }
-    console.log("Lider: " + id_lider);
   }
   
   SelectBarrioActualizar(id_barrio:Number){
@@ -1168,7 +1131,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         this.seletedVotanteActualizar.id_comunaB = this.barrio[i].id_comunaB;
       }
     }
-    console.log("Barrio: " + id_barrio);
   }
   
   actualizacion() {
@@ -1232,7 +1194,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
               if (this.digitador.length == this.validaciones.INT_NUMBER_0 && 
                 this.usuario.length == this.validaciones.INT_NUMBER_0 && 
                 this.lider.length == this.validaciones.INT_NUMBER_0) {
-                  console.log("this.digitador.length: "+this.digitador.length)
                   if (this.votante.length == this.validaciones.INT_NUMBER_0) {
                     this.votanteService.updateVotante({
                       id_votante: this.seletedVotanteActualizar.id_votante,
@@ -1253,7 +1214,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                       /* se limpia el input de actualizar */
                       this.seletedVotanteActualizar.id_votante = this.validaciones.NULL;
                       /* Se da respuesta Exitosa del servidor */
-                      alert("Se actualizo el digitador con exito");
+                      alert("Se actualizo el votante con exito");
                       /* se llama la funcion inicial para que recargue la pagina */
                       this.ngOnInit();
                     },(err:HttpErrorResponse) => {
@@ -1264,7 +1225,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                       }
                     });
                   } else {
-                    console.log("entro");
                     let id_number = this.validaciones.INT_NUMBER_0; 
                     let encuentra:Boolean = this.validaciones.FALSE;
                     for (let i = 0; i < this.votante.length; i++ ) {
@@ -1317,10 +1277,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                     }
                   }
               } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
-                console.log("this.digitador.length: "+this.digitador.length);
-                console.log("this.votante.length: "+this.votante.length);
-                console.log("this.usuario.length: "+this.usuario.length);
-                console.log("this.lider.length: "+this.lider.length);
                 alert("la cedula ya Existe en digitador: " + this.seletedVotanteActualizar.ced_votante);
                 this.seletedVotanteActualizar.ced_votante = this.validaciones.STR_LETTER_WITHOUT;
               } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {

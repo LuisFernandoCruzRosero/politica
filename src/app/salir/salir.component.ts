@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Token } from '../modelos/token';
+import { LoginService } from '../servicios/login.service';
 
 @Component({
   selector: 'app-salir',
@@ -7,9 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SalirComponent implements OnInit {
 
-  constructor() { }
+  aut:Token
+  constructor(private loginServi:LoginService,private route:Router) { }
 
   ngOnInit() {
+    this.aut=null;
+    this.loginServi.deleteToken(this.aut);
+    this.route.navigate(['/']);
   }
 
 }

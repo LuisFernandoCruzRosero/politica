@@ -1,28 +1,32 @@
-body {
-    background-image: url('../../assets/img/fondo2.png');
-    margin-bottom: -3%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 100%;
+.main {
+    margin: 1%;
+}
+
+.row {
+    margin: 1%;
     text-align: center;
 }
 
-nav {
-    border: solid 2px black;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
-    background-color: whitesmoke;
+.card {
+    margin: 1%;
 }
 
-#main-container {
-    margin: 80px auto;
-    width: 900px;
-    background-color: gray;
+.card-header {
+    text-align: center;
+}
+
+div .btn-group {
+    width: 100%;
+}
+
+form button {
+    margin: 10px;
 }
 
 table {
     background-color: white;
     text-align: left;
-    width: 95%;
+    width: 50%;
     margin-left: 12px;
 }
 
@@ -55,37 +59,4 @@ tr:nth-child(even) {
 tr:hover td {
     background-color: rgb(14, 201, 201);
     color: white;
-}
-
-td button {
-    color: rgb(15, 15, 15);
-    background-color: white;
-    margin-right: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button {
-    margin: center;
-    border: solid 1.5px black;
-    border-radius: 5px;
-    background-color: rgb(192, 188, 188);
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    font-weight: 50%;
-}
-
-h4 {
-    color: white;
-    text-align: center;
-    font-style: italic;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: 100%;
-    margin-top: 30px;
-}
-
-input {
-    background-color: rgb(211, 207, 207);
-    margin-right: 10px;
-    margin-left: 100px;
-    margin-top: 10px;
 }

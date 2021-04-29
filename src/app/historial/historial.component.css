@@ -1,0 +1,28 @@
+.main {
+    margin: 1%;
+}
+
+.row {
+    margin: 1%;
+    text-align: center;
+}
+
+.card {
+    margin: 1%;
+}
+
+.card-header {
+    text-align: center;
+}
+
+button {
+    margin: 10px;
+}
+
+div .btn-group {
+    width: 100%;
+}
+
+b .card-header {
+    background-color: white;
+}

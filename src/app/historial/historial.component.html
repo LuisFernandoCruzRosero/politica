@@ -63,6 +63,141 @@
             </ul>
         </div>
     </nav>
+
+    <div class="main">
+        <div class="card">
+            <b><div class="card-header">AGREGAR HISTORIAL</div></b>
+            <form>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" [(ngModel)]="seletedHistorialAgregar.ced_candidato" placeholder="Cedula" class="form-control" name="ced_candidato">
+
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" [(ngModel)]="seletedHistorialAgregar.nom_candidato" placeholder="Nombres" class="form-control" name="nom_candidato">
+
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input class="form-control" type="date" [(ngModel)]="seletedHistorialAgregar.fec_historial" name="fec_historial" min="2020-09-22" max="2050-12-31">
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" [(ngModel)]="seletedHistorialAgregar.total" placeholder="TOTAL " class="form-control" name="total">
+                    </div>
+                </div>
+                <button type="button " class="btn btn-success" (click)="guardar()">Registrar</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <b><div class="card-header">BUSCAR HISTORIAL POR</div></b>
+            <form>
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" [(ngModel)]="seletedHistorialBuscar.ced_candidato" placeholder="Cedula" class="form-control" name="ced_candidato">
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input class="form-control" type="date" [(ngModel)]="seletedHistorialBuscar.fec_historial" name="fec_historial" min="2020-09-22" max="2050-12-31">
+                    </div>
+
+
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" [(ngModel)]="seletedHistorialBuscar.nom_candidato" placeholder="Nombre" class="form-control" name="nom_candidato">
+                    </div>
+
+                </div>
+                <button type="button " class="btn btn-success" (click)="buscar()">Buscar</button>
+                <button type="button " class="btn btn-success" (click)="listar()">Listar</button>
+                <button type="button " class="btn btn-success" (click)="exportAsXLSX()">Exportar Exel</button>
+            </form>
+        </div>
+
+        <b><div class="card-header">LISTAR HISTORIAL</div></b>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xl-6 p-2" *ngFor="let item of historial">
+                    <div class="card text-center">
+                        <b><div class="card-header">{{item.nom_candidato}}</div></b><br>
+                        <div class="card-body text-center">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td>CEDULA:</td>
+                                        <td>
+                                            <div *ngIf="seletedHistorialActualizar.id_historial!=item.id_historial ; else falso">
+                                                {{item.ced_candidato}}
+                                            </div>
+                                            <ng-template #falso>
+                                                <div class="form-group">
+                                                    <input type="text" [(ngModel)]="seletedHistorialActualizar.ced_candidato" class="form-control" id="ced_candidato" name="ced_candidato">
+                                                </div>
+                                            </ng-template>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>NOMBRE:</td>
+                                        <td>
+                                            <div *ngIf="seletedHistorialActualizar.id_historial!=item.id_historial ; else falso20">
+                                                {{item.nom_candidato}}
+                                            </div>
+                                            <ng-template #falso20>
+                                                <div class="form-group">
+                                                    <input type="text" [(ngModel)]="seletedHistorialActualizar.nom_candidato" class="form-control" id="nom_candidato" name="nom_candidato">
+                                                </div>
+                                            </ng-template>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td>
+                                            <div *ngIf="seletedHistorialActualizar.id_historial!=item.id_historial; else falso7">
+                                                {{item.total}}
+                                            </div>
+                                            <ng-template #falso7>
+                                                <div class="form-group">
+                                                    <input type="text" [(ngModel)]="seletedHistorialActualizar.total" class="form-control" id="total" name="total">
+                                                </div>
+                                            </ng-template>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>FECHA ELECTORAL</td>
+                                        <td>
+                                            <div *ngIf="seletedHistorialActualizar.id_historial!=item.id_historial; else falso8">
+                                                {{item.fec_historial | date:'yyyy/MM/dd'}}
+                                            </div>
+                                            <ng-template #falso8>
+                                                <div class="form-group">
+                                                    <input class="form-control" type="date" [(ngModel)]="seletedHistorialActualizar.fec_historial" name="fec_historial" min="2020-09-22" max="2050-12-31">
+                                                </div>
+                                            </ng-template>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="seletedHistorialActualizar.id_historial==item.id_historial; else falso9">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-success" (click)="actualizacion()">Guardar</button>
+                                <button type="button" class="btn btn-warning" (click)="cancelar()">Cancelar</button>
+                            </div>
+                        </div>
+                        <ng-template #falso9>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-primary" (click)="actualizar(item)">Editar</button>
+                                <button type="button" class="btn btn-danger" (click)="eliminar(item)">Eliminar</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

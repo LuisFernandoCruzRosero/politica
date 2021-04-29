@@ -296,4 +296,9 @@ export class MesaComponent implements OnInit {
     /* esta funcion llena los arreglos de la data de la base de datos */
     this.ngOnInit();
   }
+
+  cancelar() {
+    this.seletedMesaActualizar.id_mesa = this.validaciones.NULL;
+    this.ngOnInit();
+  }
 }

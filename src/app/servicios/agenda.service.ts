@@ -21,8 +21,8 @@ export class AgendaService {
     }
 
     /* Consulta una de las Agendas registradas de la tabla Agenda */
-    findByIdAgenda(descripcion:String):Promise<Agenda[]>{
-      return this.http.get<Agenda[]>(ApiUrl + 'agenda/' + descripcion).toPromise();
+    findAllAgendaFecha(fecha:String):Promise<Agenda[]>{
+      return this.http.get<Agenda[]>(ApiUrl + 'agendaFecha/' + fecha).toPromise();
     }
 
     /* Inserta un dato ala tabla Agenda */

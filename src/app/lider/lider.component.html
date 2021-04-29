@@ -67,90 +67,89 @@
 
     <div class="main">
         <div class="card">
-            <b><div class="card-header">ADMINISTRACION DE LIDER A  REGISTRAR</div></b>
+            <b><div class="card-header">ADMINISTRACION DE LIDER</div></b>
             <form>
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <a type="button" class="enlace" href="https://wsp.registraduria.gov.co/censo/consultar/" target="_blank">BUSCAR VOTANTE EN LA REGISTRADURIA</a>
                     </div>
+
                     <div class="col-sm-12 col-md-6 col-xl-8 p-2">
                         <b><label for="form-control">INFORMACIÓN DEL LUGAR DE VOTACIÓN</label></b>
                     </div>
+
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <input type="text" [(ngModel)]="seletedLiderAgregar.ced_lider" placeholder="Cedula" class="form-control" name="ced_lider">
-
                     </div>
+
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <input type="text" [(ngModel)]="seletedLiderAgregar.nom_lider" placeholder="Nombres" class="form-control" name="nom_lider">
-
-                    </div>
-
-
-                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
-                        <input type="text" [(ngModel)]="seletedLiderAgregar.municipio" placeholder="Municipio " class="form-control" name="municipio">
-
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
-                        <input type="text" [(ngModel)]="seletedLiderAgregar.departamento" placeholder="Departamento " class="form-control" name="departamento">
+                        <input type="text" disabled="disabled" [(ngModel)]="seletedLiderAgregar.municipio" placeholder="Municipio " class="form-control" name="municipio">
+                    </div>
 
+                    <div class="col-sm-12 col-md-6 col-xl-4 p-2">
+                        <input type="text" disabled="disabled" [(ngModel)]="seletedLiderAgregar.departamento" placeholder="Departamento " class="form-control" name="departamento">
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <input type="text" [(ngModel)]="seletedLiderAgregar.tel_lider" placeholder="Telefono" class="form-control" name="tel_lider">
-
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione Comuna Barrio:</h6>
                         <select [(ngModel)]="seletedLiderAgregar.id_comunaB" (ngModelChange)="SelectComunaBAgregar($event)" class="form-control" name="item.id_comunaB">
-                                <option *ngFor="let item of comunaBAux" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                            <option *ngFor="let item of comunaBAux" [value]="item.id_comuna">{{item.nom_comuna}}</option>
                         </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione El Barrio:</h6>
                         <select [(ngModel)]="seletedLiderAgregar.id_barrio" (ngModelChange)="SelectBarrioAgregar($event)" class="form-control" name="item.nom_comuna">
-                                <option *ngFor="let item of barrioAux" [value]="item.id_barrio">{{item.nom_barrio}}</option>
-                            </select>
+                            <option *ngFor="let item of barrioAux" [value]="item.id_barrio">{{item.nom_barrio}}</option>
+                        </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione Comuna Lugar:</h6>
                         <select [(ngModel)]="seletedLiderAgregar.id_comunaL" (ngModelChange)="SelectComunaLAgregar($event)" class="form-control" name="item.id_comunaL">
-                                <option *ngFor="let item of comunaLAux" [value]="item.id_comuna">{{item.nom_comuna}}</option>
+                            <option *ngFor="let item of comunaLAux" [value]="item.id_comuna">{{item.nom_comuna}}</option>
                         </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione El Lugar:</h6>
                         <select [(ngModel)]="seletedLiderAgregar.id_lugar" (ngModelChange)="SelectLugarAgregar($event)" class="form-control" name="item.id_lugar">
-                                <option *ngFor="let item of lugarAux" [value]="item.id_lugar">{{item.nom_lugar}}</option>
-                            </select>
+                            <option *ngFor="let item of lugarAux" [value]="item.id_lugar">{{item.nom_lugar}}</option>
+                        </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione Mesa:</h6>
                         <select [(ngModel)]="seletedLiderAgregar.id_mesa" class="form-control" name="item.id_mesa">
-                                <option *ngFor="let item of mesaAux" [value]="item.id_mesa">{{item.nom_mesa}}</option>
+                            <option *ngFor="let item of mesaAux" [value]="item.id_mesa">{{item.nom_mesa}}</option>
                         </select>
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione coordinador:</h6>
                         <select [(ngModel)]="seletedLiderAgregar.id_usuario" class="form-control" name="item.id_usuario">
-                                <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
+                            <option *ngFor="let item of coordinador" [value]="item.id_usuario">{{item.nom_usuario}}</option>
                         </select>
                     </div>
-                </div>
-                <button class="btn" (click)="guardar()">Registrar</button>
-            </form>
-        </div>
 
+                </div>
+
+                <button type="button " class="btn btn-success " (click)="guardar()">Registrar</button>
+
+            </form>
+
+        </div>
 
         <div class="card">
             <b><div class="card-header">LISTAR LIDERES</div></b><br>
-            <h6> <b>Buscar Por:</b> </h6>
             <form>
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
@@ -159,6 +158,7 @@
                             <option *ngFor="let item of barrio" [value]="item.id_barrio">{{item.nom_barrio}}</option>        
                         </select>
                     </div>
+
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Seleccione Lugar De votacion:</h6>
                         <select [(ngModel)]="seletedLugarBuscar.id_lugar" (ngModelChange)="selectLugarBuscar($event)" class="form-control" name="item.id_lugar">
@@ -180,16 +180,18 @@
                         </select>
                     </div>
 
-
                     <div class="col-sm-12 col-md-6 col-xl-4 p-2">
                         <h6>Digite Cedula</h6>
                         <input type="text" [(ngModel)]="seletedLiderBuscar.ced_lider" placeholder="Cedula" class="form-control" name="ced_lider">
                     </div>
+
                 </div>
-                <button type="button" class="btn" (click)="buscar()">Buscar</button>
-                <button type="button" class="btn" (click)="listar()">Listar</button>
-                <button type="button" class="btn" (click)="exportAsXLSX()">Exportar Exel</button>
+
+                <button type="button " class="btn btn-success " (click)="buscar()">Buscar</button>
+                <button type="button " class="btn btn-success " (click)="listar()">Listar</button>
+                <button type="button " class="btn btn-success " (click)="exportAsXLSX()">Exportar Exel</button>
             </form>
+
         </div>
 
         <div class="container">
@@ -238,7 +240,8 @@
                                                 <div class="form-group">
                                                     <select [(ngModel)]="seletedLiderActualizar.id_comunaL" (ngModelChange)="SelectComunaLActualizar($event)" class="form-control" name="item.id_comuna">
                                                         <option *ngFor="let item of comunaLAux" [value]="item.id_comuna">{{item.nom_comuna}}</option>
-                                                    </select> </div>
+                                                    </select>
+                                                </div>
                                             </ng-template>
                                         </td>
                                     </tr>
@@ -283,7 +286,8 @@
                                                 <div class="form-group">
                                                     <select [(ngModel)]="seletedLiderActualizar.id_barrio" (ngModelChange)="SelectBarrioActualizar($event)" class="form-control" name="item.id_barrio">
                                                         <option *ngFor="let item of barrioAux" [value]="item.id_barrio">{{item.nom_barrio}}</option>
-                                                    </select> </div>
+                                                    </select>
+                                                </div>
                                             </ng-template>
                                         </td>
                                     </tr>
@@ -297,7 +301,8 @@
                                                 <div class="form-group">
                                                     <select [(ngModel)]="seletedLiderActualizar.id_usuario" (ngModelChange)="SelectCoordinadorActualizar($event)" class="form-control" name="item.id_usuario">
                                                         <option *ngFor="let item of coordinadorAux" [value]="item.id_usuario">{{item.nom_usuario}}</option>
-                                                    </select> </div>
+                                                    </select>
+                                                </div>
                                             </ng-template>
                                         </td>
                                     </tr>
@@ -326,7 +331,6 @@
                                                     <select [(ngModel)]="seletedLiderActualizar.id_mesa" class="form-control" name="item.id_mesa">
                                                         <option *ngFor="let item of mesaAux" [value]="item.id_mesa">{{item.nom_mesa}}</option>        
                                                     </select>
-
                                                 </div>
                                             </ng-template>
                                         </td>
@@ -358,7 +362,7 @@
                         </div>
                         <ng-template #falso9>
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-success" (click)="actualizar(item)">Editar</button>
+                                <button type="button" class="btn btn-primary" (click)="actualizar(item)">Editar</button>
                                 <button type="button" class="btn btn-danger" (click)="eliminar(item)">Eliminar</button>
                             </div>
                         </ng-template>

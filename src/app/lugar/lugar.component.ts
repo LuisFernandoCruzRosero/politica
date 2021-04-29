@@ -316,7 +316,6 @@ export class LugarComponent implements OnInit {
             this.lugaresAux = [];
             /* llena los datos del arreglo Lugares con los de la busqueda */
             this.lugares = this.lugar;
-            console.log('nombre: '+this.lugares)
             /* LLena el arreglo auxiliar para llenarlo con datos validos */
             for(let i = this.validaciones.INT_NUMBER_0; i < this.lugares.length; i++){
               for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
@@ -364,7 +363,6 @@ export class LugarComponent implements OnInit {
             this.lugaresAux = [];
             /* llena los datos del arreglo Lugares con los de la busqueda */
             this.lugares = this.lugar;
-            console.log('Comuna: '+this.lugares)
             /* LLena el arreglo auxiliar para llenarlo con datos validos */
             for(let i = this.validaciones.INT_NUMBER_0; i < this.lugares.length; i++){
               for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
@@ -412,7 +410,6 @@ export class LugarComponent implements OnInit {
             this.lugaresAux = [];
             /* llena los datos del arreglo lugares con los de la busqueda */
             this.lugares = this.lugar;
-            console.log('zona: '+this.lugares)
             /* LLena el arreglo auxiliar para llenarlo con datos validos */
             for(let i = this.validaciones.INT_NUMBER_0; i < this.lugares.length; i++){
               for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
@@ -523,7 +520,6 @@ export class LugarComponent implements OnInit {
  actualizar(lugar:Lugar){
    /* llena el objeto de comuna para actualizar */
    this.seletedLugarActualizar = lugar;
-   console.log(lugar);
    /* Asigna por defecto el valor que tiene en la tabla y se asigna 1 0 2 dependiendo del estado */
    if (this.seletedLugarActualizar.zona_roja == this.validaciones.TRUE) {
      this.seletedZonaActualizar.id_zona = this.validaciones.INT_NUMBER_2;
@@ -609,7 +605,7 @@ export class LugarComponent implements OnInit {
             /* se limpia el input de actualizar */
             this.seletedLugarActualizar.id_lugar = this.validaciones.NULL;
             /* Se da respuesta Exitosa del servidor */
-            alert("Se actualizo la comuna con exito");
+            alert("Se actualizo el Lugar con exito");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
           },(err:HttpErrorResponse) => {
@@ -641,7 +637,7 @@ export class LugarComponent implements OnInit {
               /* se limpia el input de actualizar */
               this.seletedLugarActualizar.id_lugar = this.validaciones.NULL;
               /* Se da respuesta Exitosa del servidor */
-              alert("Se actualizo la comuna con exito");
+              alert("Se actualizo el Lugar con exito");
               /* se llama la funcion inicial para que recargue la pagina */
               this.ngOnInit();
             },(err:HttpErrorResponse) => {
@@ -668,5 +664,10 @@ export class LugarComponent implements OnInit {
         }
       });
     }
+  }
+
+  cancelar() {
+    this.seletedLugarActualizar.id_lugar = this.validaciones.NULL;
+    this.ngOnInit();
   }
 }

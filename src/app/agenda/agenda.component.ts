@@ -13,6 +13,7 @@ import { Token } from '../modelos/token';
 import { Validaciones } from '../modelos/validaciones';
 import { Agenda } from '../modelos/agenda';
 import { AgendaAux } from '../modelos/agenda-aux';
+import { DatePipe, formatDate } from '@angular/common';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class AgendaComponent implements OnInit {
    /* Inicializamos un arreglo del objeto Usuaio */
    usuario:UsuarioFindAll[] = [];
    coordinador:UsuarioFindAll[] = [];
+   coordinadorAux:UsuarioFindAll[] = [];
  
    /* Inicializamos un arreglo del objeto Digitador */
    digitador:DigitadorFindAll[] = [];
@@ -81,7 +83,7 @@ export class AgendaComponent implements OnInit {
       this.usuario = resultado;
       this.loginServi.findAllUsuarioCoordinador().then(resultado => {
         this.coordinador = resultado;
-        
+        this.coordinadorAux = this.coordinador;
         /* Consulto los Datos de la tabla digitador */
         this.loginServi.findAllDigitador().then(resultado => {
           /* Asigno los datos de la tabla digitador al arreglo digitador */
@@ -99,15 +101,18 @@ export class AgendaComponent implements OnInit {
               
               for(let i=this.validaciones.INT_NUMBER_0; i<this.agendas.length; i++){
                 let cadena:String=this.agendas[i].fecha.toString().substr(0,10);
-                console.log("cadena " + cadena);
-                this.addAgendaAux({
-                  id_agenda:this.agendas[i].id_agenda,
-                  fecha:cadena,
-                  lugar:this.agendas[i].lugar,
-                  hora:this.agendas[i].hora,
-                  descripcion:this.agendas[i].descripcion,
-                  id_usuario:this.agendas[i].id_usuario, 
-                })
+                for (let j = 0; j < this.usuario.length; j++) {
+                  if (this.usuario[j].id_usuario == this.agendas[i].id_usuario) {
+                    this.addAgendaAux({
+                      id_agenda:this.agendas[i].id_agenda,
+                      fecha:cadena,
+                      lugar:this.agendas[i].lugar,
+                      hora:this.agendas[i].hora,
+                      descripcion:this.agendas[i].descripcion,
+                      nom_usuario:this.usuario[j].nom_usuario, 
+                    })
+                  }
+                }
               }
             });
             try {
@@ -177,7 +182,6 @@ export class AgendaComponent implements OnInit {
       alert('CAMPO DESCRIPCION DE AGENDA OBLIGATORIO..');
     
     } else {
-      console.log(this.seletedAgendaAgregar)
       /* Se llama al servicio para buscar una Agenda en la tabla para asi insertar o no la Agenda */
       /*---this.agendaService.findByIdAgenda(this.seletedAgendaAgregar.descripcion).then(resultado => {
         /* Se Asigna al arreglo Agendas el resultado de la busqueda */
@@ -196,21 +200,29 @@ export class AgendaComponent implements OnInit {
             
           }).subscribe((resultado) => {
           /* Se da respuesta Exitosa del servidor */
-          alert("Se Agrego la agenda");
+          alert("Se Agrego la agenda");          
+          /* se limpia el input de agregar */
+          this.seletedAgendaAgregar.id_usuario = this.validaciones.NULL;
+          this.seletedAgendaAgregar.fecha = this.validaciones.NULL;
+          this.seletedAgendaAgregar.hora = this.validaciones.STR_LETTER_WITHOUT;
+          this.seletedAgendaAgregar.descripcion = this.validaciones.STR_LETTER_WITHOUT;
+          this.seletedAgendaAgregar.lugar = this.validaciones.STR_LETTER_WITHOUT;
           /* se llama la funcion inicial para que recargue la pagina */
           this.ngOnInit();
-          /* se limpia el input de agregar */
-          this.seletedAgendaAgregar.descripcion = this.validaciones.STR_LETTER_WITHOUT;
           });
        
     }
   }
 
   /* se llena el objeto actualizar de tipo mesa deacuerdo ala seleccionada en la lista */
-  actualizar(agenda:Agenda) {
+  actualizar(agenda:AgendaAux) {
   /* llena el objeto de agenda para actualizar */
-  this.seletedAgendaActualizar = agenda;
-  console.log(this.seletedAgendaActualizar)
+  for (let i = 0; i < this.agendas.length; i++ ) {
+    if (agenda.id_agenda == this.agendas[i].id_agenda) {
+      this.seletedAgendaActualizar = this.agendas[i];
+      this.seletedAgendaActualizar.fecha = agenda.fecha.substring(0,10);
+    }
+  }
   }
 
   /* Funcion que actualiza lo seleccionado en base de datos */
@@ -281,22 +293,39 @@ export class AgendaComponent implements OnInit {
 
   /* Funcion que busca lo escrito en el formulario buscar */
   buscar(){
+
     /* Se pregunta si el umput de buscar no esta vacio */
-    if (this.validaciones.validaCampoObligatorio(this.seletedAgendaBuscar.descripcion) == this.validaciones.FALSE) {
+    if (this.validaciones.validaCampoObligatorio(this.seletedAgendaBuscar.fecha) == this.validaciones.FALSE) {
       /* LLama al servicio para buscar si la mesa en el input existe */
-      this.agendaService.findByIdAgenda(this.seletedAgendaBuscar.descripcion).then(resultado => {
+      this.agendaService.findAllAgendaFecha(this.seletedAgendaBuscar.fecha).then(resultado => {
         /* Se asigna la data en el arreglo mesasBuscar */
         this.agendasBuscar = resultado;
         /* Se pregunta si mesasBuscar contiene datos */
-        if (this.agendasBuscar.length != this.validaciones.INT_NUMBER_0) {
-          /* Se asigna al arreglo mesas los datos encontrados */
-          this.agendas = this.agendasBuscar;
+        if (this.agendasBuscar.length == this.validaciones.INT_NUMBER_0) {
+           /* Se da mensaje de alerta que no existe el campo escrito */
+           alert('no hay agenda registrada en la fecha: ' + this.seletedAgendaBuscar.fecha);
+           /* Se limpia el campo */
+           this.seletedAgendaBuscar.fecha = this.validaciones.NULL;
         } else {
-          /* Se da mensaje de alerta que no existe el campo escrito */
-          alert('la agenda :' + this.seletedAgendaBuscar.descripcion + ' No Existe');
-          /* Se limpia el campo */
-          this.seletedAgendaBuscar.descripcion = this.validaciones.STR_LETTER_WITHOUT;
-        }
+          /* inicializo arreglo que se muestra en el html para llenarlo de los datos de la busqueda */
+          this.agendaAux = [];
+          /* LLena el arreglo auxiliar para llenarlo con datos validos */
+          for(let i=this.validaciones.INT_NUMBER_0; i<this.agendasBuscar.length; i++){
+            let cadena:String=this.agendasBuscar[i].fecha.toString().substr(0,10);
+            for (let j = 0; j < this.usuario.length; j++) {
+              if (this.usuario[j].id_usuario == this.agendasBuscar[i].id_usuario) {
+                this.addAgendaAux({
+                  id_agenda:this.agendasBuscar[i].id_agenda,
+                  fecha:cadena,
+                  lugar:this.agendasBuscar[i].lugar,
+                  hora:this.agendasBuscar[i].hora,
+                  descripcion:this.agendasBuscar[i].descripcion,
+                  nom_usuario:this.usuario[j].nom_usuario, 
+                })
+              }
+            }
+          }
+          }
       },(err:HttpErrorResponse) => {
         if(err.error instanceof Error){
           alert("a ocurrido un errror cliente");
@@ -306,17 +335,13 @@ export class AgendaComponent implements OnInit {
       });
     } else {
       /* Respuesta en caso de no llenar el campo de buscar mesa */
-      alert('LLene el campo: NUMERO DE MESA de Buscar');
+      alert('LLene el campo: numero de agenda de Buscar');
     }
   }
   /* Para volver a listar la data existente en la tabla mesa */
   listar() {
     /* Se llimpia el formulario buscar */
-    this.seletedAgendaBuscar.descripcion = this.validaciones.STR_LETTER_WITHOUT;
-    /* Se llimpia el formulario Agregar */
-    this.seletedAgendaAgregar.descripcion = this.validaciones.STR_LETTER_WITHOUT;
-    /* Se llimpia el formulario Actualizar */
-    this.seletedAgendaActualizar.descripcion = this.validaciones.STR_LETTER_WITHOUT;
+    this.seletedAgendaBuscar.fecha = this.validaciones.NULL;
     /* esta funcion llena los arreglos de la data de la base de datos */
     this.ngOnInit();
   }
@@ -324,5 +349,10 @@ export class AgendaComponent implements OnInit {
   /* Agregar Barrio a Arreglo local par aquitar id */
   addAgendaAux(item:AgendaAux){
     this.agendaAux.push(item);
+  }
+
+  cancelar() {
+    this.seletedAgendaActualizar.id_agenda = this.validaciones.NULL;
+    this.ngOnInit();
   }
 }

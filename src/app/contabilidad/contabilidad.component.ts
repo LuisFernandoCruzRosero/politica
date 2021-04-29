@@ -84,19 +84,15 @@ export class ContabilidadComponent implements OnInit {
       this.usuario = resultado;
       this.loginServi.findAllUsuarioCoordinador().then(resultado => {
         this.coordinador = resultado;
-        
-        
         /* Consulto los Datos de la tabla digitador */
         this.loginServi.findAllDigitador().then(resultado => {
           /* Asigno los datos de la tabla digitador al arreglo digitador */
           this.digitador = resultado;
-
           /* Consulto Los datos de la tabla Agenda */
           this.contabilidadService.findAllContabilidad().then(resultado => {
             /* Asigno al arreglo Agendas todas las existenten en la tabla */
             this.contabilidad = resultado;
              this.contabis=this.contabilidad;
-              
               for(let i=this.validaciones.INT_NUMBER_0; i<this.contabis.length; i++){
                 for(let j=this.validaciones.INT_NUMBER_0; j<this.coordinador.length; j++){
                   if(this.coordinador[j].id_usuario==this.contabis[i].id_usuario){
@@ -180,8 +176,7 @@ export class ContabilidadComponent implements OnInit {
     } else if (this.validaciones.validaCampoObligatorio(this.seletedContabilidadAgregar.descripcion) == this.validaciones.TRUE) {
       alert('CAMPO DESCRIPCION DE AGENDA OBLIGATORIO..');
     
-    } else {
-      console.log(this.seletedContabilidadAgregar)
+    } else { 
       /* Se llama al servicio para buscar una Agenda en la tabla para asi insertar o no la Agenda */
       /*---this.agendaService.findByIdAgenda(this.seletedAgendaAgregar.descripcion).then(resultado => {
         /* Se Asigna al arreglo Agendas el resultado de la busqueda */
@@ -212,10 +207,13 @@ export class ContabilidadComponent implements OnInit {
   }
 
   /* se llena el objeto actualizar de tipo mesa deacuerdo ala seleccionada en la lista */
-  actualizar(contabilidad:Contabilidad) {
+  actualizar(contabi:ContabilidadAux) {
   /* llena el objeto de agenda para actualizar */
-  this.seletedContabilidadActualizar = contabilidad;
-  console.log(this.seletedContabilidadActualizar)
+  for (let i = 0; i < this.contabilidad.length; i++) {
+    if (this.contabilidad[i].id_contabilidad == contabi.id_contabilidad) {
+      this.seletedContabilidadActualizar = this.contabilidad[i];
+    }
+  }
   }
 
   /* Funcion que actualiza lo seleccionado en base de datos */
@@ -344,6 +342,11 @@ export class ContabilidadComponent implements OnInit {
   /* Agregar Barrio a Arreglo local par aquitar id */
   addContabilidadAux(item:ContabilidadAux){
     this.contabilidadAux.push(item);
+  }
+
+  cancelar() {
+    this.seletedContabilidadActualizar.id_contabilidad = this.validaciones.NULL;
+    this.ngOnInit();
   }
 
 }

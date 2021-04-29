@@ -11,8 +11,6 @@ import { AppComponent } from './app.component';
 /* Clases */
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
-import { PerfilAdministradorComponent } from './perfil-administrador/perfil-administrador.component';
-import { PerfilCandidatoComponent } from './perfil-candidato/perfil-candidato.component';
 import { PerfilCoordinadorComponent } from './perfil-coordinador/perfil-coordinador.component';
 import { DigitadorComponent } from './digitador/digitador.component';
 import { CoordinadorComponent } from './coordinador/coordinador.component';
@@ -28,7 +26,6 @@ import { MesaComponent } from './mesa/mesa.component';
 import { LugarMesaComponent } from './lugar-mesa/lugar-mesa.component';
 import { RegistraduriaComponent } from './registraduria/registraduria.component';
 import { ErrorComponent } from './error/error.component';
-import { RecuperarPasswordComponent } from './recuperar-password/recuperar-password.component';
 import { SalirComponent } from './salir/salir.component';
 import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 
@@ -36,8 +33,6 @@ import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.comp
   declarations: [
     AppComponent,
     LoginComponent,
-    PerfilAdministradorComponent,
-    PerfilCandidatoComponent,
     PerfilCoordinadorComponent,
     DigitadorComponent,
     CoordinadorComponent,
@@ -53,7 +48,6 @@ import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.comp
     LugarMesaComponent,
     RegistraduriaComponent,
     ErrorComponent,
-    RecuperarPasswordComponent,
     SalirComponent,
     GeolocalizacionComponent
   ],

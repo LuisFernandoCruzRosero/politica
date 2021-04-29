@@ -340,24 +340,6 @@ export class DigitadorComponent implements OnInit {
 
   /*  Funcion Guardar Barrio */
   guardar() {
-    console.log(
-      "cedula: " + this.seletedDigitadorAgregar.ced_digitador + "\n" +
-      "nombre: " + this.seletedDigitadorAgregar.nom_digitador + "\n" +
-      "usuario: " + this.seletedDigitadorAgregar.usu_digiador + "\n" +
-      "contraseña: " + this.seletedDigitadorAgregar.con_digitador + "\n" +
-      "id_comunaL: " + this.seletedDigitadorAgregar.id_comunaL + "\n" +
-      "id_lugar: " + this.seletedDigitadorAgregar.id_lugar + "\n" +
-      "id_barrio: " + this.seletedDigitadorAgregar.id_barrio + "\n" +
-      "id_lider: " + this.seletedDigitadorAgregar.id_lider + "\n" +
-      "id_usuario: " + this.seletedDigitadorAgregar.id_usuario + "\n" +
-      "municipio: " + this.seletedDigitadorAgregar.municipio + "\n" +
-      "departamento: " + this.seletedDigitadorAgregar.departamento + "\n" +
-      "id_comunaB: " + this.seletedDigitadorAgregar.id_comunaB + "\n" + 
-      "id_mesa: " + this.seletedDigitadorAgregar.id_mesa + "\n" + 
-      "id_tipo_usuario: " + this.seletedDigitadorAgregar.id_tipo_usuario + "\n" + 
-      "activo: " + this.seletedDigitadorAgregar.activo + "\n" + 
-      "tel_digitador: " + this.seletedDigitadorAgregar.tel_digitador + "\n" 
-    );
     /* Validacion de Campos Obligatorios y invalidos */
     if (this.validaciones.validaCampoObligatorio(this.seletedDigitadorAgregar.ced_digitador) == this.validaciones.TRUE) {
       alert('CAMPO CEDULA OBLIGATORIO..');
@@ -522,7 +504,6 @@ export class DigitadorComponent implements OnInit {
     this.lugarMesaAux = [];
     this.lugarmesaService.findAllLugarMesa().then(resultado =>{
       this.lugarMesa = resultado;
-      console.log("mesaa:" + this.lugarMesa) 
       for(let i = 0; i < this.lugar.length; i++){
         if(id_lugar == this.lugar[i].id_lugar){
           this.seletedDigitadorAgregar.id_comunaL = this.lugar[i].id_comunaL;
@@ -530,7 +511,6 @@ export class DigitadorComponent implements OnInit {
       }
       for (let j = 0; j < this.lugarMesa.length;j++) {
         if (this.lugarMesa[j].id_lugar == this.seletedDigitadorAgregar.id_lugar) {
-          console.log("entro:123456"  ) 
           this.lugarMesaAux[l] = this.lugarMesa[j];
            l++;
         }
@@ -614,8 +594,6 @@ export class DigitadorComponent implements OnInit {
 
   buscar() {
     this.digitadorAux = [];
-
-
     if(this.seletedDigitadorBuscar.id_digitador != this.validaciones.NULL){
       this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
       this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
@@ -675,7 +653,7 @@ export class DigitadorComponent implements OnInit {
             }
           }
         } else if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
-          alert('Cedula: ' + this.seletedDigitadorBuscar.ced_digitador + ' No Existe..');
+          alert('nombre: ' + this.seletedDigitadorBuscar.nom_digitador + ' No Existe..');
         }
 
       },(err:HttpErrorResponse)=>{
@@ -686,9 +664,6 @@ export class DigitadorComponent implements OnInit {
         }
       });
     }
-
-
-
 
     if(this.seletedDigitadorBuscar.ced_digitador != this.validaciones.STR_LETTER_WITHOUT){
       this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
@@ -783,7 +758,6 @@ export class DigitadorComponent implements OnInit {
                                 if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
                                   if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('encontro1');
                                       this.addDigitadorAux({
                                         id_digitador : this.digitador[i].id_digitador,
                                         ced_digitador: this.digitador[i].ced_digitador,
@@ -820,7 +794,7 @@ export class DigitadorComponent implements OnInit {
         }
 
         if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
-          alert('En este Lugar: ' + this.seletedLugarBuscar.id_lugar + ' No Se a Registrado ningun digitador..');
+          alert('En este Lugar: ' + this.seletedLugarBuscar.nom_lugar + ' No Se a Registrado ningun digitador..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -853,7 +827,6 @@ export class DigitadorComponent implements OnInit {
                                 if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
                                   if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('encontro1');
                                       this.addDigitadorAux({
                                         id_digitador : this.digitador[i].id_digitador,
                                         ced_digitador: this.digitador[i].ced_digitador,
@@ -890,7 +863,7 @@ export class DigitadorComponent implements OnInit {
         }
 
         if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
-          alert('En este Barrio: ' + this.seletedBarrioBuscar.id_barrio + ' No Se a Registrado ningun digitador..');
+          alert('En este Barrio: ' + this.seletedBarrioBuscar.nom_barrio + ' No Se a Registrado ningun digitador..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -959,7 +932,7 @@ export class DigitadorComponent implements OnInit {
         }
 
         if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
-          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.nom_usuario + ' No Tiene Registrado ningun digitador..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -992,7 +965,6 @@ export class DigitadorComponent implements OnInit {
                                 if (this.digitador[i].id_barrio == this.barrio[n].id_barrio) {
                                   if (this.digitador[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.digitador[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('encontro1');
                                       this.addDigitadorAux({
                                         id_digitador : this.digitador[i].id_digitador,
                                         ced_digitador: this.digitador[i].ced_digitador,
@@ -1029,7 +1001,7 @@ export class DigitadorComponent implements OnInit {
         }
 
         if(this.digitadorAux.length == this.validaciones.INT_NUMBER_0){
-          alert('El Lider: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun digitador..');
+          alert('El Lider: ' + this.seletedLiderBuscar.nom_lider + ' No Tiene Registrado ningun digitador..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -1102,7 +1074,6 @@ export class DigitadorComponent implements OnInit {
             j++;
           }
         }
-    console.log("comunaLugar: " + id_comunaL);
   }
 
   SelectComunaBActualizar(id_comunaB:Number) {
@@ -1114,7 +1085,6 @@ export class DigitadorComponent implements OnInit {
         j++;
       }
     }
-    console.log("comunaBarrio: " + id_comunaB);
   }
 
   SelectLugarActualizar(id_lugar:Number){
@@ -1124,7 +1094,6 @@ export class DigitadorComponent implements OnInit {
     this.lugarMesaAux = [];
     this.lugarmesaService.findAllLugarMesa().then(resultado =>{
       this.lugarMesa = resultado;
-      console.log("mesaa:" + this.lugarMesa) 
       for(let i = 0; i < this.lugar.length; i++){
         if(id_lugar == this.lugar[i].id_lugar){
           this.seletedDigitadorActualizar.id_comunaL = this.lugar[i].id_comunaL;
@@ -1132,7 +1101,6 @@ export class DigitadorComponent implements OnInit {
       }
       for (let j = 0; j < this.lugarMesa.length;j++) {
         if (this.lugarMesa[j].id_lugar == this.seletedDigitadorActualizar.id_lugar) {
-          console.log("entro:123456"  ) 
           this.lugarMesaAux[l] = this.lugarMesa[j];
           l++;
         }
@@ -1147,7 +1115,6 @@ export class DigitadorComponent implements OnInit {
       }
       }
     });
-    console.log("Lugar: " + id_lugar);
   }
 
   SelectCoordinadorActualizar(id_coordinador:Number){
@@ -1159,7 +1126,6 @@ export class DigitadorComponent implements OnInit {
         j++;
       }
     }
-    console.log("Coordinador: " + id_coordinador);
   }
 
   SelectLiderActualizar(id_lider:Number){
@@ -1168,7 +1134,6 @@ export class DigitadorComponent implements OnInit {
         this.seletedDigitadorActualizar.id_usuario = this.lider[i].id_usuario;
       }
     }
-    console.log("Lider: " + id_lider);
   }
 
   SelectBarrioActualizar(id_barrio:Number){
@@ -1177,7 +1142,6 @@ export class DigitadorComponent implements OnInit {
         this.seletedDigitadorActualizar.id_comunaB = this.barrio[i].id_comunaB;
       }
     }
-    console.log("Barrio: " + id_barrio);
   }
 
 
@@ -1242,7 +1206,6 @@ export class DigitadorComponent implements OnInit {
               if (this.votante.length == this.validaciones.INT_NUMBER_0 && 
                 this.usuario.length == this.validaciones.INT_NUMBER_0 && 
                 this.lider.length == this.validaciones.INT_NUMBER_0) {
-                  console.log("this.digitador.length: "+this.digitador.length)
                   if (this.digitador.length == this.validaciones.INT_NUMBER_0) {
                     this.digitadorServi.updateDigitador({
                       id_digitador: this.seletedDigitadorActualizar.id_digitador,
@@ -1277,7 +1240,6 @@ export class DigitadorComponent implements OnInit {
                       }
                     });
                   } else {
-                    console.log("entro");
                     let id_number = this.validaciones.INT_NUMBER_0; 
                     let encuentra:Boolean = this.validaciones.FALSE;
                     for (let i = 0; i < this.digitador.length; i++ ) {
@@ -1333,10 +1295,6 @@ export class DigitadorComponent implements OnInit {
                     }
                   }
               } else if (this.digitador.length != this.validaciones.INT_NUMBER_0) {
-                console.log("this.digitador.length: "+this.digitador.length);
-                console.log("this.votante.length: "+this.votante.length);
-                console.log("this.usuario.length: "+this.usuario.length);
-                console.log("this.lider.length: "+this.lider.length);
                 alert("la cedula ya Existe en digitador: " + this.seletedDigitadorActualizar.ced_digitador);
                 this.seletedDigitadorActualizar.ced_digitador = this.validaciones.STR_LETTER_WITHOUT;
               } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {

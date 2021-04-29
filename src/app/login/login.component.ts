@@ -90,9 +90,9 @@ export class LoginComponent implements OnInit {
               if (this.seletedTipoUsuario.id_tipo_usuario == this.usuario[i].id_tipo_usuario) {
                 encontradoUsuarioTipoUsuario = true;
                 if (this.seletedTipoUsuario.id_tipo_usuario == 1) {
-                  this.route.navigateByUrl('/perfilAdministrador');
+                  this.route.navigateByUrl('/perfilCoordinador');
                 } else if (this.seletedTipoUsuario.id_tipo_usuario == 2) {
-                  this.route.navigateByUrl('/perfilCandidato');
+                  this.route.navigateByUrl('/perfilCoordinador');
                 } else if (this.seletedTipoUsuario.id_tipo_usuario == 3) {
                   this.route.navigateByUrl('/perfilCoordinador');
                 }
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit {
             if (this.seletedTipoUsuario.id_tipo_usuario == this.digitador[i].id_tipo_usuario) {
               encontradoUsuarioTipoUsuario = true;
               if (this.seletedTipoUsuario.id_tipo_usuario == 4) {
-                this.route.navigateByUrl('/perfilAdministrador');
+                this.route.navigateByUrl('/perfilCoordinador');
               }
             }
          }
@@ -123,7 +123,7 @@ export class LoginComponent implements OnInit {
       } else if (encontradoUsuarioContrasena == false) {
         alert('Contraseña invalid@');
         this.seletedUsuario.contrasena = '';
-      } else if (encontradoUsuarioTipoUsuario) {
+      } else if (encontradoUsuarioTipoUsuario == false) {
         alert('Tipo Usuario invalid@');
       } else {
         this.loginServi.InsertToken({

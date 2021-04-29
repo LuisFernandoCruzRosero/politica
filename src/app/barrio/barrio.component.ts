@@ -97,7 +97,7 @@ export class BarrioComponent implements OnInit {
 
   /* Se llama a login service para verificar la autenticidad de usuario */
   /* Se llama a router para poder navegar del ts a un html deacuerdo ala autenticidad */
-  /* Se llama a Barrio service para poder realizar la funciones del CRUD del modulo de las mesas */
+  /* Se llama a Barrio service para poder realizar la funciones del CRUD del modulo de las barrios */
   constructor(private loginServi:LoginService, private route:Router, private barrioService:BarrioService, 
               private comunaService:ComunaService) { this.barriosAux = [] }
 
@@ -258,7 +258,7 @@ export class BarrioComponent implements OnInit {
             id_comunaB: this.seletedComunaAgregar.id_comuna
           }).subscribe((resultado) => {
             /* Se da respuesta Exitosa del servidor */
-            alert("Se Agrego la Mesa");
+            alert("Se Agrego el Barrio");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
             /* se limpia el input de agregar nombre de barrio */
@@ -269,7 +269,7 @@ export class BarrioComponent implements OnInit {
             this.seletedBarrioAgregar.longitud = this.validaciones.STR_LETTER_WITHOUT;
           });
         } else {
-          /* Respuesta de mesa a agregar ya encontrada */
+          /* Respuesta de barrio a agregado ya encontrado */
           alert('nombre del barrio :' + this.seletedBarrioAgregar.nom_barrio + ' Ya Existe');
         }
       });
@@ -306,7 +306,6 @@ export class BarrioComponent implements OnInit {
             this.barriosAux = [];
             /* llena los datos del arreglo barrios con los de la busqueda */
             this.barrios = this.barrio;
-            console.log('nombre: '+this.barrios)
             /* LLena el arreglo auxiliar para llenarlo con datos validos */
             for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
               for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
@@ -354,7 +353,6 @@ export class BarrioComponent implements OnInit {
             this.barriosAux = [];
             /* llena los datos del arreglo barrios con los de la busqueda */
             this.barrios = this.barrio;
-            console.log('Comuna: '+this.barrios)
             /* LLena el arreglo auxiliar para llenarlo con datos validos */
             for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
               for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
@@ -402,7 +400,6 @@ export class BarrioComponent implements OnInit {
             this.barriosAux = [];
             /* llena los datos del arreglo barrios con los de la busqueda */
             this.barrios = this.barrio;
-            console.log('zona: '+this.barrios)
             /* LLena el arreglo auxiliar para llenarlo con datos validos */
             for(let i = this.validaciones.INT_NUMBER_0; i < this.barrios.length; i++){
               for (let j = this.validaciones.INT_NUMBER_0; j < this.comunas.length; j++) {
@@ -542,7 +539,7 @@ export class BarrioComponent implements OnInit {
       /* se limpia el input de actualizar */
       this.seletedBarrioActualizar.id_barrio = this.validaciones.NULL;
       /* Alerta Para indicar obligatoriedad */
-      alert('CAMPO NOMBRE MESA OBLIGATORIO..' + this.seletedBarrioActualizar.nom_barrio);
+      alert('CAMPO NOMBRE BARRIO OBLIGATORIO..' + this.seletedBarrioActualizar.nom_barrio);
       /* se limpia el input de actualizar */
       this.ngOnInit();
     } else if (this.validaciones.validacionNombre(this.seletedBarrioActualizar.nom_barrio) == this.validaciones.STR_LETTER_WITHOUT) {
@@ -597,7 +594,7 @@ export class BarrioComponent implements OnInit {
             /* se limpia el input de actualizar */
             this.seletedBarrioActualizar.id_barrio = this.validaciones.NULL;
             /* Se da respuesta Exitosa del servidor */
-            alert("Se actualizo la comuna con exito");
+            alert("Se actualizo el Barrio con exito");
             /* se llama la funcion inicial para que recargue la pagina */
             this.ngOnInit();
           },(err:HttpErrorResponse) => {
@@ -629,7 +626,7 @@ export class BarrioComponent implements OnInit {
               /* se limpia el input de actualizar */
               this.seletedBarrioActualizar.id_barrio = this.validaciones.NULL;
               /* Se da respuesta Exitosa del servidor */
-              alert("Se actualizo la comuna con exito");
+              alert("Se actualizo el barrio con exito");
               /* se llama la funcion inicial para que recargue la pagina */
               this.ngOnInit();
             },(err:HttpErrorResponse) => {
@@ -656,5 +653,10 @@ export class BarrioComponent implements OnInit {
         }
       });
     }
+  }
+
+  cancelar() {
+    this.seletedBarrioActualizar.id_barrio = this.validaciones.NULL;
+    this.ngOnInit();
   }
 }

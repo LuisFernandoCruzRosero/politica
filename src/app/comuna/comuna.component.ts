@@ -161,7 +161,7 @@ export class ComunaComponent implements OnInit {
           });
         } else {
           /* Respuesta de comuna a agregar ya encontrada */
-          alert('numero de Comuna :' + this.seletedComunaAgregar.nom_comuna + ' Ya Existe');
+          alert('Nombre de Comuna :' + this.seletedComunaAgregar.nom_comuna + ' Ya Existe');
         }
       },(err:HttpErrorResponse) => {
         if(err.error instanceof Error){
@@ -226,7 +226,7 @@ export class ComunaComponent implements OnInit {
           /* se limpia el input de actualizar */
           this.seletedComunaActualizar.id_comuna = this.validaciones.NULL;
           /* ya existe el nuevo nombre */
-          alert('Mesa a Actualizar ya existe...');
+          alert('Comuna a Actualizar ya existe...');
         }
       },(err:HttpErrorResponse) => {
         if(err.error instanceof Error){
@@ -285,7 +285,7 @@ export class ComunaComponent implements OnInit {
       });
     } else {
       /* Respuesta en caso de no llenar el campo de buscar comuna */
-      alert('LLene el campo: NUMERO DE COMUNA de Buscar');
+      alert('LLene el campo: NOMBRE DE COMUNA A BUSCAR');
     }
   }
 
@@ -299,5 +299,10 @@ export class ComunaComponent implements OnInit {
     this.seletedComunaActualizar.nom_comuna = this.validaciones.STR_LETTER_WITHOUT;
     /* esta funcion llena los arreglos de la data de la base de datos */
     this.ngOnInit();
+  }
+
+  cancelar() {
+   this.seletedComunaActualizar.id_comuna = this.validaciones.NULL;
+   this.ngOnInit();
   }
 }

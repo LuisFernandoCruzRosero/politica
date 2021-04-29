@@ -226,7 +226,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addLiderAux({
                                         id_lider:this.lideres[i].id_lider,
                                         ced_lider: this.lideres[i].ced_lider,
@@ -280,7 +279,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
             /* Si no encuentra el usuario */
             if(this.encontrado == this.validaciones.FALSE){
             /* Navega al login */
-            //this.route.navigate(['/']);
+            this.route.navigate(['/']);
             }
           }
           }, (err:HttpErrorResponse) => {
@@ -342,21 +341,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
 
   /*  Funcion Guardar Votante */
   guardar() {
-    console.log(
-      "cedula: " + this.seletedLiderAgregar.ced_lider + "\n" +
-      "nombre: " + this.seletedLiderAgregar.nom_lider + "\n" +
-      "id_comunaL: " + this.seletedLiderAgregar.id_comunaL + "\n" +
-      "id_lugar: " + this.seletedLiderAgregar.id_lugar + "\n" +
-      "id_barrio: " + this.seletedLiderAgregar.id_barrio + "\n" +
-      "id_lider: " + this.seletedLiderAgregar.id_lider + "\n" +
-      "id_usuario: " + this.seletedLiderAgregar.id_usuario + "\n" +
-      "municipio: " + this.seletedLiderAgregar.municipio + "\n" +
-      "departamento: " + this.seletedLiderAgregar.departamento + "\n" +
-      "id_comunaB: " + this.seletedLiderAgregar.id_comunaB + "\n" + 
-      "id_mesa: " + this.seletedLiderAgregar.id_mesa + "\n" + 
-      "activo: " + this.seletedLiderAgregar.activo + "\n" + 
-      "telefeno: " + this.seletedLiderAgregar.tel_lider + "\n" 
-    );
     /* Validacion de Campos Obligatorios y invalidos */
     if (this.validaciones.validaCampoObligatorio(this.seletedLiderAgregar.nom_lider) == this.validaciones.TRUE) {
       alert('CAMPO NOMBRE VOTANTE OBLIGATORIO..');
@@ -586,8 +570,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
 
   buscar() {
     this.liderAux  = [];
-
-
     if(this.seletedLiderBuscar.id_lider != this.validaciones.NULL){
       this.seletedLugarBuscar.id_lugar = this.validaciones.NULL;
       this.seletedBarrioBuscar.id_barrio = this.validaciones.NULL;
@@ -609,7 +591,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addLiderAux({
                                         id_lider:this.lideres[i].id_lider,
                                         ced_lider: this.lideres[i].ced_lider,
@@ -638,7 +619,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                 }
               }
             } else if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
-          alert('Cedula: ' + this.seletedLiderBuscar.ced_lider + ' No Existe..');
+          alert('Nombre: ' + this.seletedLiderBuscar.nom_lider + ' No Existe..');
         }
 
       },(err:HttpErrorResponse)=>{
@@ -670,7 +651,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addLiderAux({
                                         id_lider:this.lideres[i].id_lider,
                                         ced_lider: this.lideres[i].ced_lider,
@@ -732,7 +712,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addLiderAux({
                                         id_lider:this.lideres[i].id_lider,
                                         ced_lider: this.lideres[i].ced_lider,
@@ -761,7 +740,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                 }
               }
             }else if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
-          alert('En este Lugar: ' + this.seletedLugarBuscar.id_lugar + ' No Se a Registrado ningun lider..');
+          alert('En este Lugar: ' + this.seletedLugarBuscar.nom_lugar + ' No Se a Registrado ningun lider..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -793,7 +772,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addLiderAux({
                                         id_lider:this.lideres[i].id_lider,
                                         ced_lider: this.lideres[i].ced_lider,
@@ -822,7 +800,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                 }
               }
             }else if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
-          alert('En este Barrio: ' + this.seletedBarrioBuscar.id_barrio + ' No Se a Registrado ningun lider..');
+          alert('En este Barrio: ' + this.seletedBarrioBuscar.nom_barrio + ' No Se a Registrado ningun lider..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -854,7 +832,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                                 if (this.lideres[i].id_comunaL == this.comuna[m].id_comuna) {
                                   if (this.lideres[i].id_lugar == this.lugar[o].id_lugar) {
                                     if (this.lideres[i].id_mesa == this.mesa[p].id_mesa) {
-                                      console.log('entro');
                                       this.addLiderAux({
                                         id_lider:this.lideres[i].id_lider,
                                         ced_lider: this.lideres[i].ced_lider,
@@ -883,7 +860,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                 }
               }
             }else  if(this.liderAux.length == this.validaciones.INT_NUMBER_0){
-          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.id_usuario + ' No Tiene Registrado ningun lider..');
+          alert('El Coordinador: ' + this.seletedCoordinadorBuscar.nom_usuario + ' No Tiene Registrado ningun lider..');
         }
       },(err:HttpErrorResponse)=>{
         if(err.error instanceof Error){
@@ -953,7 +930,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
             j++;
           }
         }
-    console.log("comunaLugar: " + id_comunaL);
   }
   
   SelectComunaBActualizar(id_comunaB:Number) {
@@ -965,7 +941,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         j++;
       }
     }
-    console.log("comunaBarrio: " + id_comunaB);
   }
   
   SelectLugarActualizar(id_lugar:Number){
@@ -975,7 +950,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
     this.lugarMesaAux = [];
     this.lugarmesaService.findAllLugarMesa().then(resultado =>{
       this.lugarMesa = resultado;
-      console.log("mesaa:" + this.lugarMesa) 
       for(let i = 0; i < this.lugar.length; i++){
         if(id_lugar == this.lugar[i].id_lugar){
           this.seletedLiderActualizar.id_comunaL = this.lugar[i].id_comunaL;
@@ -983,7 +957,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
       }
       for (let j = 0; j < this.lugarMesa.length;j++) {
         if (this.lugarMesa[j].id_lugar == this.seletedLiderActualizar.id_lugar) {
-          console.log("entro:123456"  ) 
           this.lugarMesaAux[l] = this.lugarMesa[j];
            l++;
         }
@@ -998,7 +971,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
        }
       }
     });
-    console.log("Lugar: " + id_lugar);
   }
   
   SelectCoordinadorActualizar(id_coordinador:Number){
@@ -1010,7 +982,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         j++;
       }
     }
-    console.log("Coordinador: " + id_coordinador);
   }
   
   SelectLiderActualizar(id_lider:Number){
@@ -1019,7 +990,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         this.seletedLiderActualizar.id_usuario = this.lider[i].id_usuario;
       }
     }
-    console.log("Lider: " + id_lider);
   }
   
   SelectBarrioActualizar(id_barrio:Number){
@@ -1028,7 +998,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
         this.seletedLiderActualizar.id_comunaB = this.barrio[i].id_comunaB;
       }
     }
-    console.log("Barrio: " + id_barrio);
   }
 
 
@@ -1093,7 +1062,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
               if (this.votante.length == this.validaciones.INT_NUMBER_0 && 
                 this.usuario.length == this.validaciones.INT_NUMBER_0 && 
                 this.digitador.length == this.validaciones.INT_NUMBER_0) {
-                  console.log("this.lideres.length: "+this.digitador.length)
                   if (this.lideres.length == this.validaciones.INT_NUMBER_0) {
                       this.liderService.updateLider({
                       id_lider: this.seletedLiderActualizar.id_lider,
@@ -1113,7 +1081,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                       /* se limpia el input de actualizar */
                       this.seletedLiderActualizar.id_lider = this.validaciones.NULL;
                       /* Se da respuesta Exitosa del servidor */
-                      alert("Se actualizo el digitador con exito");
+                      alert("Se actualizo el Lider con exito");
                       /* se llama la funcion inicial para que recargue la pagina */
                       this.ngOnInit();
                     },(err:HttpErrorResponse) => {
@@ -1124,7 +1092,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                       }
                     });
                   } else {
-                    console.log("entro");
                     let id_number = this.validaciones.INT_NUMBER_0; 
                     let encuentra:Boolean = this.validaciones.FALSE;
                     for (let i = 0; i < this.lideres.length; i++ ) {
@@ -1153,7 +1120,7 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                         /* se limpia el input de actualizar */
                         this.seletedLiderActualizar.id_lider = this.validaciones.NULL;
                         /* Se da respuesta Exitosa del servidor */
-                        alert("Se actualizo el digitador con exito");
+                        alert("Se actualizo el Lider con exito");
                         /* se llama la funcion inicial para que recargue la pagina */
                         this.ngOnInit();
                       },(err:HttpErrorResponse) => {
@@ -1176,10 +1143,6 @@ seletedCoordinadorBuscar:UsuarioFindAll = new UsuarioFindAll(this.validaciones.N
                     }
                   }
               } else if (this.lideres.length != this.validaciones.INT_NUMBER_0) {
-                console.log("this.digitador.length: "+this.digitador.length);
-                console.log("this.votante.length: "+this.votante.length);
-                console.log("this.usuario.length: "+this.usuario.length);
-                console.log("this.lider.length: "+this.lider.length);
                 alert("la cedula ya Existe en digitador: " + this.seletedLiderActualizar.ced_lider);
                 this.seletedLiderActualizar.ced_lider = this.validaciones.STR_LETTER_WITHOUT;
               } else if (this.votante.length != this.validaciones.INT_NUMBER_0) {
